@@ -1,302 +1,70 @@
-// src/db/db.ts (Data Access Object - DAO)
-import fs from 'fs';
-import path from 'path';
-import { fileURLToPath } from 'url';
-import { randomUUID } from 'crypto';
+/**
+ * Database Abstraction Layer
+ * Uses factory pattern to select between JSON and Elasticsearch implementations
+ * All methods are async-compatible (JSON methods return resolved promises)
+ */
 
-
+import { getDb } from './dbFactory.js';
+import { jsonDb } from './jsonDb.js';
 import type { Job, Candidate, CandidateScore, JobUpdate } from '../types/index.js';
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
+const db = getDb();
 
-const JOBS_FILE = path.join(__dirname, '../data/jobs.json');
-const CANDIDATES_FILE = path.join(__dirname, '../data/candidates.json');
-
-// --- File I/O Helpers ---
-const readJobsFile = (): Job[] => {
-    try {
-        const data = fs.readFileSync(JOBS_FILE, 'utf8');
-        return JSON.parse(data);
-    } catch (error: any) {
-        if (error.code === 'ENOENT') {
-            console.warn("jobs.json not found. Creating empty array.");
-            return [];
-        }
-        console.error("Error reading jobs.json:", error);
-        return [];
-    }
-};
-
-const writeJobsFile = (jobs: Job[]): void => {
-    fs.writeFileSync(JOBS_FILE, JSON.stringify(jobs, null, 2), 'utf8');
-};
-
-const readCandidatesFile = (): Candidate[] => {
-    try {
-        const data = fs.readFileSync(CANDIDATES_FILE, 'utf8');
-        return JSON.parse(data);
-    } catch (error: any) {
-        if (error.code === 'ENOENT') {
-            console.warn("candidates.json not found. Creating empty array.");
-            return [];
-        }
-        console.error("Error reading candidates.json:", error);
-        return [];
-    }
-};
-
-const writeCandidatesFile = (candidates: Candidate[]): void => {
-    fs.writeFileSync(CANDIDATES_FILE, JSON.stringify(candidates, null, 2), 'utf8');
-};
-
-
-const db = {
-    // 1. CRUD: Save Job (Renamed from createJob to clarify DAO role)
+// Export a unified interface that handles both sync (JSON) and async (Elasticsearch) operations
+export default {
+    // Jobs (always use JSON for now)
     saveNewJob: (newJob: Job): void => {
-        const jobs = readJobsFile();
-        jobs.push(newJob);
-        writeJobsFile(jobs);
+        jsonDb.saveNewJob(newJob);
     },
 
-    // 2. CRUD: Get Job
     getJobById: (jobId: string): Job | undefined => {
-        const jobs = readJobsFile();
-        return jobs.find(job => job.jobId === jobId);
+        return jsonDb.getJobById(jobId);
     },
 
-    // 3. CRUD: Update Job
     updateJob: (jobId: string, updates: JobUpdate): Job | null => {
-        const jobs = readJobsFile();
-        const index = jobs.findIndex(job => job.jobId === jobId);
-
-        if (index === -1) {
-            return null;
-        }
-
-        Object.assign(jobs[index], updates);
-        writeJobsFile(jobs);
-        return jobs[index];
+        return jsonDb.updateJob(jobId, updates);
     },
 
-    // 4. Read: Get Candidates Scored for Job
-    getCandidatesByJobId: (jobId: string): CandidateScore[] => {
-        const candidates = readCandidatesFile();
-        return candidates
-            .map(candidate => {
-                const scoreData = candidate.scores?.find((s: any) => s.job_id === jobId);
-                if (!scoreData) return null;
-                
-                const result: any = {
-                    candidateId: candidate._id,
-                    full_name: candidate.full_name,
-                    headline: candidate.headline || '',
-                    github_username: candidate.github_username,
-                    open_to_work: candidate.open_to_work,
-                    score: scoreData.score,
-                    breakdown_json: scoreData.breakdown_json,
-                    enrichment: candidate.enrichment
-                };
-
-                // Include new fields if they exist
-                if ((scoreData as any).pipelineStage) {
-                    result.pipelineStage = (scoreData as any).pipelineStage;
-                }
-                if ((scoreData as any).conversationHistory) {
-                    result.conversationHistory = (scoreData as any).conversationHistory;
-                }
-                if ((scoreData as any).aiFitScore !== undefined) {
-                    result.aiFitScore = (scoreData as any).aiFitScore;
-                }
-                if ((scoreData as any).aiSummary) {
-                    result.aiSummary = (scoreData as any).aiSummary;
-                }
-                if ((scoreData as any).aiRecommendation) {
-                    result.aiRecommendation = (scoreData as any).aiRecommendation;
-                }
-
-                return result;
-            })
-            .filter((c): c is CandidateScore => c !== null);
+    getAllJobs: (): Job[] => {
+        return jsonDb.getAllJobs();
     },
 
-    // 5. Read: Get Specific Candidate Score Data
-    getCandidateScoreForJob: (candidateId: string, jobId: string): CandidateScore | null => {
-        const candidates = readCandidatesFile();
-        const candidate = candidates.find(c => c._id === candidateId);
-        if (!candidate) return null;
-        
-        const scoreData = candidate.scores?.find((s: any) => s.job_id === jobId);
-        if (!scoreData) return null;
-
-        // This structure assumes CandidateScore includes all detailed fields needed for the frontend
-        const result: any = {
-            candidateId: candidate._id,
-            full_name: candidate.full_name,
-            headline: candidate.headline || '',
-            github_username: candidate.github_username,
-            open_to_work: candidate.open_to_work,
-            score: scoreData.score,
-            breakdown_json: scoreData.breakdown_json,
-            outreach_messages: scoreData.outreach_messages,
-            enrichment: candidate.enrichment
-        };
-
-        // Include new fields if they exist
-        if ((scoreData as any).pipelineStage) {
-            result.pipelineStage = (scoreData as any).pipelineStage;
-        }
-        if ((scoreData as any).conversationHistory) {
-            result.conversationHistory = (scoreData as any).conversationHistory;
-        }
-        if ((scoreData as any).aiFitScore !== undefined) {
-            result.aiFitScore = (scoreData as any).aiFitScore;
-        }
-        if ((scoreData as any).aiSummary) {
-            result.aiSummary = (scoreData as any).aiSummary;
-        }
-        if ((scoreData as any).aiRecommendation) {
-            result.aiRecommendation = (scoreData as any).aiRecommendation;
-        }
-
-        return result;
+    // Candidates (async-compatible, works with both JSON and Elasticsearch)
+    getCandidatesByJobId: async (jobId: string): Promise<CandidateScore[]> => {
+        return await db.getCandidatesByJobId(jobId);
     },
 
-    // 6. Read: Get Candidate by ID (without job context)
-    getCandidateById: (candidateId: string): Candidate | undefined => {
-        const candidates = readCandidatesFile();
-        return candidates.find(c => c._id === candidateId);
+    getCandidateScoreForJob: async (candidateId: string, jobId: string): Promise<CandidateScore | null> => {
+        return await db.getCandidateScoreForJob(candidateId, jobId);
     },
 
-    // 7. Update: Update candidate pipeline stage for a job
-    updateCandidatePipelineStage: (candidateId: string, jobId: string, stage: string): boolean => {
-        const candidates = readCandidatesFile();
-        const candidate = candidates.find(c => c._id === candidateId);
-        if (!candidate) return false;
-
-        // Initialize scores array if it doesn't exist
-        if (!candidate.scores) {
-            candidate.scores = [];
-        }
-
-        // Find or create score entry for this job
-        let scoreEntry = candidate.scores.find((s: any) => s.job_id === jobId);
-        if (!scoreEntry) {
-            scoreEntry = { job_id: jobId, score: 0, breakdown_json: [] };
-            candidate.scores.push(scoreEntry);
-        }
-
-        // Store pipeline stage in score entry
-        (scoreEntry as any).pipelineStage = stage;
-        writeCandidatesFile(candidates);
-        return true;
+    getCandidateById: async (candidateId: string): Promise<Candidate | undefined> => {
+        return await db.getCandidateById(candidateId);
     },
 
-    // 8. Update: Batch update candidate pipeline stages
-    batchUpdateCandidateStages: (jobId: string, candidateIds: string[], stage: string): number => {
-        const candidates = readCandidatesFile();
-        let updated = 0;
-
-        candidates.forEach(candidate => {
-            if (candidateIds.includes(candidate._id)) {
-                // Initialize scores array if it doesn't exist
-                if (!candidate.scores) {
-                    candidate.scores = [];
-                }
-
-                let scoreEntry = candidate.scores.find((s: any) => s.job_id === jobId);
-                if (!scoreEntry) {
-                    scoreEntry = { job_id: jobId, score: 0, breakdown_json: [] };
-                    candidate.scores.push(scoreEntry);
-                }
-
-                (scoreEntry as any).pipelineStage = stage;
-                updated++;
-            }
-        });
-
-        if (updated > 0) {
-            writeCandidatesFile(candidates);
-        }
-        return updated;
+    updateCandidatePipelineStage: async (candidateId: string, jobId: string, stage: string): Promise<boolean> => {
+        return await db.updateCandidatePipelineStage(candidateId, jobId, stage);
     },
 
-    // 9. Update: Add message to conversation history
-    addMessageToConversation: (candidateId: string, jobId: string, message: {
+    batchUpdateCandidateStages: async (jobId: string, candidateIds: string[], stage: string): Promise<number> => {
+        return await db.batchUpdateCandidateStages(jobId, candidateIds, stage);
+    },
+
+    addMessageToConversation: async (candidateId: string, jobId: string, message: {
         id: string;
         from: "founder" | "candidate";
         content: string;
         timestamp: string;
         aiDrafted?: boolean;
-    }): boolean => {
-        const candidates = readCandidatesFile();
-        const candidate = candidates.find(c => c._id === candidateId);
-        if (!candidate) return false;
-
-        // Initialize scores array if it doesn't exist
-        if (!candidate.scores) {
-            candidate.scores = [];
-        }
-
-        // Find or create score entry for this job
-        let scoreEntry = candidate.scores.find((s: any) => s.job_id === jobId);
-        if (!scoreEntry) {
-            scoreEntry = { job_id: jobId, score: 0, breakdown_json: [] };
-            candidate.scores.push(scoreEntry);
-        }
-
-        // Initialize conversation history if it doesn't exist
-        if (!(scoreEntry as any).conversationHistory) {
-            (scoreEntry as any).conversationHistory = [];
-        }
-
-        // Add message to conversation history
-        (scoreEntry as any).conversationHistory.push(message);
-        writeCandidatesFile(candidates);
-        return true;
+    }): Promise<boolean> => {
+        return await db.addMessageToConversation(candidateId, jobId, message);
     },
 
-    // 10. Update: Store AI analysis results
-    updateCandidateAIAnalysis: (candidateId: string, jobId: string, analysis: {
+    updateCandidateAIAnalysis: async (candidateId: string, jobId: string, analysis: {
         aiFitScore?: number;
         aiSummary?: string;
         aiRecommendation?: string;
-    }): boolean => {
-        const candidates = readCandidatesFile();
-        const candidate = candidates.find(c => c._id === candidateId);
-        if (!candidate) return false;
-
-        // Initialize scores array if it doesn't exist
-        if (!candidate.scores) {
-            candidate.scores = [];
-        }
-
-        // Find or create score entry for this job
-        let scoreEntry = candidate.scores.find((s: any) => s.job_id === jobId);
-        if (!scoreEntry) {
-            scoreEntry = { job_id: jobId, score: 0, breakdown_json: [] };
-            candidate.scores.push(scoreEntry);
-        }
-
-        // Store AI analysis
-        if (analysis.aiFitScore !== undefined) {
-            (scoreEntry as any).aiFitScore = analysis.aiFitScore;
-        }
-        if (analysis.aiSummary !== undefined) {
-            (scoreEntry as any).aiSummary = analysis.aiSummary;
-        }
-        if (analysis.aiRecommendation !== undefined) {
-            (scoreEntry as any).aiRecommendation = analysis.aiRecommendation;
-        }
-
-        writeCandidatesFile(candidates);
-        return true;
+    }): Promise<boolean> => {
+        return await db.updateCandidateAIAnalysis(candidateId, jobId, analysis);
     },
-
-    // 11. Read: Get all jobs
-    getAllJobs: (): Job[] => {
-        return readJobsFile();
-    }
 };
-
-export default db;

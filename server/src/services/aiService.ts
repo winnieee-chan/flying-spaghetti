@@ -25,8 +25,8 @@ export const analyzeCandidate = async (
     confidence: number;
 }> => {
     const job = db.getJobById(jobId);
-    const candidateScore = db.getCandidateScoreForJob(candidateId, jobId);
-    const candidate = db.getCandidateById(candidateId);
+    const candidateScore = await db.getCandidateScoreForJob(candidateId, jobId);
+    const candidate = await db.getCandidateById(candidateId);
 
     if (!job || !candidateScore || !candidate) {
         throw new Error('Job or candidate not found');
@@ -73,7 +73,7 @@ Return only the JSON object, nothing else.`;
             const analysis = JSON.parse(jsonText);
 
             // Store results
-            db.updateCandidateAIAnalysis(candidateId, jobId, {
+            await db.updateCandidateAIAnalysis(candidateId, jobId, {
                 aiFitScore: analysis.fitScore,
                 aiSummary: analysis.summary,
                 aiRecommendation: analysis.recommendation,
@@ -103,7 +103,7 @@ Return only the JSON object, nothing else.`;
  */
 export const draftFirstMessage = async (jobId: string, candidateId: string): Promise<string> => {
     const job = db.getJobById(jobId);
-    const candidateScore = db.getCandidateScoreForJob(candidateId, jobId);
+    const candidateScore = await db.getCandidateScoreForJob(candidateId, jobId);
 
     if (!job || !candidateScore) {
         throw new Error('Job or candidate not found');
@@ -179,8 +179,8 @@ Return only the message text, no greeting/signature needed.`;
  * Summarize conversation
  */
 export const summarizeConversation = async (jobId: string, candidateId: string): Promise<string> => {
-    const candidateScore = db.getCandidateScoreForJob(candidateId, jobId);
-    const conversationHistory = (candidateScore as any).conversationHistory || [];
+    const candidateScore = await db.getCandidateScoreForJob(candidateId, jobId);
+    const conversationHistory = (candidateScore as any)?.conversationHistory || [];
 
     if (conversationHistory.length === 0) {
         return "No conversation history available.";
@@ -277,7 +277,7 @@ export const draftOffer = async (
     terms?: Record<string, unknown>
 ): Promise<string> => {
     const job = db.getJobById(jobId);
-    const candidateScore = db.getCandidateScoreForJob(candidateId, jobId);
+    const candidateScore = await db.getCandidateScoreForJob(candidateId, jobId);
 
     if (!job || !candidateScore) {
         throw new Error('Job or candidate not found');
@@ -355,7 +355,7 @@ export const generateDecisionSummary = async (
     decision: "hire" | "reject"
 ): Promise<string> => {
     const job = db.getJobById(jobId);
-    const candidateScore = db.getCandidateScoreForJob(candidateId, jobId);
+    const candidateScore = await db.getCandidateScoreForJob(candidateId, jobId);
 
     if (!job || !candidateScore) {
         throw new Error('Job or candidate not found');

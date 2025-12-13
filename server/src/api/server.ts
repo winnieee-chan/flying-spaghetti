@@ -11,6 +11,8 @@ import frontendJobRoutes from './routes/frontendJobRoutes.js';
 import frontendCandidateRoutes from './routes/frontendCandidateRoutes.js';
 import frontendAiRoutes from './routes/frontendAiRoutes.js';
 import { RabbitMqService } from '../services/rabbitMqService.js';
+import { getElasticsearchConfig } from '../config/elasticsearch.js';
+import { ensureIndexExists, checkElasticsearchHealth } from '../services/elasticsearchService.js';
 
 dotenv.config();
 
@@ -54,7 +56,27 @@ app.use('/', frontendAiRoutes); // POST /:jobId/cd/:candidateId/ai/*
 
 const startServer = async () => {
     try {
-      // 1. Try to initialize RabbitMQ (optional - server will start even if it fails)
+      // 1. Initialize Elasticsearch if enabled
+      const esConfig = getElasticsearchConfig();
+      if (esConfig.enabled) {
+        try {
+          const isHealthy = await checkElasticsearchHealth();
+          if (isHealthy) {
+            await ensureIndexExists();
+            console.log('✅ Elasticsearch initialized and index ready');
+          } else {
+            console.warn('⚠️  Elasticsearch is not healthy. Server will continue but Elasticsearch features may not work.');
+            console.log('   Make sure Elasticsearch is running: docker-compose up -d');
+          }
+        } catch (esError: any) {
+          console.warn('⚠️  Elasticsearch initialization failed:', esError.message);
+          console.log('   Server will continue using JSON storage');
+        }
+      } else {
+        console.log('📄 Using JSON file storage (Elasticsearch disabled)');
+      }
+
+      // 2. Try to initialize RabbitMQ (optional - server will start even if it fails)
       try {
         await RabbitMqService.init();
         console.log('✅ RabbitMQ initialized');
@@ -63,7 +85,7 @@ const startServer = async () => {
         console.log('   Server will continue without RabbitMQ');
       }
   
-      // 2. Start Express
+      // 3. Start Express
       app.listen(PORT, () => {
         console.log(`🚀 Server running on port ${PORT}`);
         console.log(`📖 API Docs available at http://localhost:${PORT}/api-docs`);

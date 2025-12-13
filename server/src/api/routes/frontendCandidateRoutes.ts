@@ -12,17 +12,19 @@ import { randomUUID } from 'crypto';
 const router = express.Router();
 
 // GET /:jdId/cd - Get candidates for a job (frontend format)
-router.get('/:jdId/cd', (req: Request, res: Response) => {
+router.get('/:jdId/cd', async (req: Request, res: Response) => {
     try {
         const { jdId } = req.params;
         
         // Get candidates from backend
-        const candidateScores = db.getCandidatesByJobId(jdId);
+        const candidateScores = await db.getCandidatesByJobId(jdId);
         
         // Get full candidate data
-        const backendCandidates = candidateScores.map(score => 
+        const backendCandidatesPromises = candidateScores.map(score => 
             db.getCandidateById(score.candidateId)
-        ).filter((c): c is NonNullable<typeof c> => c !== undefined);
+        );
+        const backendCandidates = (await Promise.all(backendCandidatesPromises))
+            .filter((c): c is NonNullable<typeof c> => c !== undefined);
 
         // Transform to frontend format
         const frontendCandidates = adaptCandidatesToFrontend(candidateScores, backendCandidates);
@@ -71,7 +73,7 @@ router.post('/:jobId/cd/external-search', (req: Request, res: Response) => {
 });
 
 // PUT /:jobId/cd/:candidateId/stage - Update candidate pipeline stage
-router.put('/:jobId/cd/:candidateId/stage', (req: Request, res: Response) => {
+router.put('/:jobId/cd/:candidateId/stage', async (req: Request, res: Response) => {
     try {
         const { jobId, candidateId } = req.params;
         const { stageId } = req.body;
@@ -83,7 +85,7 @@ router.put('/:jobId/cd/:candidateId/stage', (req: Request, res: Response) => {
         }
 
         // Update pipeline stage
-        const success = db.updateCandidatePipelineStage(candidateId, jobId, stageId);
+        const success = await db.updateCandidatePipelineStage(candidateId, jobId, stageId);
         
         if (!success) {
             return res.status(404).json({ message: 'Candidate not found' });
@@ -97,7 +99,7 @@ router.put('/:jobId/cd/:candidateId/stage', (req: Request, res: Response) => {
 });
 
 // POST /:jobId/cd/batch-move - Batch move candidates by match score
-router.post('/:jobId/cd/batch-move', (req: Request, res: Response) => {
+router.post('/:jobId/cd/batch-move', async (req: Request, res: Response) => {
     try {
         const { jobId } = req.params;
         const { criteria, targetStageId } = req.body;
@@ -109,7 +111,7 @@ router.post('/:jobId/cd/batch-move', (req: Request, res: Response) => {
         }
 
         // Get all candidates for this job
-        const candidateScores = db.getCandidatesByJobId(jobId);
+        const candidateScores = await db.getCandidatesByJobId(jobId);
 
         // Filter candidates by criteria
         const candidatesToMove = candidateScores.filter(score => {
@@ -132,7 +134,7 @@ router.post('/:jobId/cd/batch-move', (req: Request, res: Response) => {
 
         // Update pipeline stages for matching candidates
         const candidateIds = candidatesToMove.map(c => c.candidateId);
-        const count = db.batchUpdateCandidateStages(jobId, candidateIds, targetStageId);
+        const count = await db.batchUpdateCandidateStages(jobId, candidateIds, targetStageId);
 
         res.status(200).json({ count });
     } catch (error: any) {
@@ -142,7 +144,7 @@ router.post('/:jobId/cd/batch-move', (req: Request, res: Response) => {
 });
 
 // POST /:jobId/cd/:candidateId/messages - Send message to candidate
-router.post('/:jobId/cd/:candidateId/messages', (req: Request, res: Response) => {
+router.post('/:jobId/cd/:candidateId/messages', async (req: Request, res: Response) => {
     try {
         const { jobId, candidateId } = req.params;
         const { content } = req.body;
@@ -161,7 +163,7 @@ router.post('/:jobId/cd/:candidateId/messages', (req: Request, res: Response) =>
         };
 
         // Add message to conversation history
-        const success = db.addMessageToConversation(candidateId, jobId, message);
+        const success = await db.addMessageToConversation(candidateId, jobId, message);
 
         if (!success) {
             return res.status(404).json({ message: 'Candidate not found' });
