@@ -53,17 +53,20 @@ const mockData: MockData = {
 
 // Initialize with some sample data
 const initializeMockData = (): void => {
-  const jdId1 = "jd-1";
-  const jdId2 = "jd-2";
-  
   const now = new Date();
+  const oneDayAgo = new Date(now.getTime() - 1 * 24 * 60 * 60 * 1000);
   const twoDaysAgo = new Date(now.getTime() - 2 * 24 * 60 * 60 * 1000);
+  const threeDaysAgo = new Date(now.getTime() - 3 * 24 * 60 * 60 * 1000);
   const fiveDaysAgo = new Date(now.getTime() - 5 * 24 * 60 * 60 * 1000);
+  const weekAgo = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
+  const twoWeeksAgo = new Date(now.getTime() - 14 * 24 * 60 * 60 * 1000);
+  const threeWeeksAgo = new Date(now.getTime() - 21 * 24 * 60 * 60 * 1000);
+  const monthAgo = new Date(now.getTime() - 30 * 24 * 60 * 60 * 1000);
   
-  mockData.jobDescriptions.set(jdId1, {
-    id: jdId1,
+  mockData.jobDescriptions.set("jd-1", {
+    id: "jd-1",
     title: "Senior Frontend Engineer",
-    description: "We are looking for an experienced frontend engineer...",
+    description: "We are looking for an experienced frontend engineer to join our team. You will work on building beautiful, responsive user interfaces using modern JavaScript frameworks.",
     company: "Acme Corp",
     createdAt: twoDaysAgo.toISOString(),
     filters: {
@@ -74,10 +77,10 @@ const initializeMockData = (): void => {
     message: "Hello! We have an exciting opportunity that matches your profile...",
   });
 
-  mockData.jobDescriptions.set(jdId2, {
-    id: jdId2,
+  mockData.jobDescriptions.set("jd-2", {
+    id: "jd-2",
     title: "Product Manager",
-    description: "Join our team as a Product Manager...",
+    description: "Join our team as a Product Manager and help shape the future of our products. You'll work closely with engineering and design teams.",
     company: "Globex",
     createdAt: fiveDaysAgo.toISOString(),
     filters: {
@@ -88,8 +91,148 @@ const initializeMockData = (): void => {
     message: "Hi! We'd love to discuss a Product Manager role...",
   });
 
-  // Sample candidates for jd-1
-  const candidate1: Candidate = {
+  mockData.jobDescriptions.set("jd-3", {
+    id: "jd-3",
+    title: "Full Stack Developer",
+    description: "Seeking a talented full stack developer to build scalable web applications. Experience with both frontend and backend technologies required.",
+    company: "TechStart Inc",
+    createdAt: oneDayAgo.toISOString(),
+    filters: {
+      experience: ["2-3 years", "3-5 years"],
+      location: ["Austin", "Remote"],
+      skills: ["JavaScript", "Python", "PostgreSQL", "React"],
+    },
+    message: "Great opportunity for a full stack developer...",
+  });
+
+  mockData.jobDescriptions.set("jd-4", {
+    id: "jd-4",
+    title: "DevOps Engineer",
+    description: "We need a DevOps engineer to manage our cloud infrastructure and CI/CD pipelines. AWS experience preferred.",
+    company: "CloudScale Systems",
+    createdAt: threeDaysAgo.toISOString(),
+    filters: {
+      experience: ["3-5 years", "5+ years"],
+      location: ["Seattle", "Remote"],
+      skills: ["AWS", "Docker", "Kubernetes", "Terraform"],
+    },
+    message: "Join our infrastructure team...",
+  });
+
+  mockData.jobDescriptions.set("jd-5", {
+    id: "jd-5",
+    title: "UI/UX Designer",
+    description: "Looking for a creative UI/UX designer to create intuitive and beautiful user experiences. Must have a strong portfolio.",
+    company: "DesignCo",
+    createdAt: weekAgo.toISOString(),
+    filters: {
+      experience: ["2-3 years", "3-5 years"],
+      location: ["Los Angeles", "Remote"],
+      skills: ["Figma", "Sketch", "User Research", "Prototyping"],
+    },
+    message: "Exciting design opportunity...",
+  });
+
+  mockData.jobDescriptions.set("jd-6", {
+    id: "jd-6",
+    title: "Backend Engineer",
+    description: "Senior backend engineer needed to build robust APIs and microservices. Experience with distributed systems is a plus.",
+    company: "DataFlow Technologies",
+    createdAt: twoWeeksAgo.toISOString(),
+    filters: {
+      experience: ["5+ years"],
+      location: ["Boston", "Remote"],
+      skills: ["Java", "Spring Boot", "Microservices", "Kafka"],
+    },
+    message: "We're building the next generation of APIs...",
+  });
+
+  mockData.jobDescriptions.set("jd-7", {
+    id: "jd-7",
+    title: "Mobile Developer",
+    description: "Join our mobile team to build native iOS and Android applications. React Native experience is a plus.",
+    company: "AppVenture",
+    createdAt: threeDaysAgo.toISOString(),
+    filters: {
+      experience: ["2-3 years", "3-5 years"],
+      location: ["Remote"],
+      skills: ["React Native", "Swift", "Kotlin", "Mobile Development"],
+    },
+    message: "Build mobile apps that millions use...",
+  });
+
+  mockData.jobDescriptions.set("jd-8", {
+    id: "jd-8",
+    title: "Data Scientist",
+    description: "Seeking a data scientist to analyze large datasets and build machine learning models. Python and SQL required.",
+    company: "Analytics Pro",
+    createdAt: threeWeeksAgo.toISOString(),
+    filters: {
+      experience: ["3-5 years", "5+ years"],
+      location: ["Chicago", "Remote"],
+      skills: ["Python", "Machine Learning", "SQL", "TensorFlow"],
+    },
+    message: "Help us make data-driven decisions...",
+  });
+
+  mockData.jobDescriptions.set("jd-9", {
+    id: "jd-9",
+    title: "Security Engineer",
+    description: "We need a security engineer to protect our infrastructure and applications. Experience with penetration testing required.",
+    company: "SecureNet",
+    createdAt: monthAgo.toISOString(),
+    filters: {
+      experience: ["5+ years"],
+      location: ["Washington DC", "Remote"],
+      skills: ["Cybersecurity", "Penetration Testing", "OWASP", "Network Security"],
+    },
+    message: "Help keep our systems secure...",
+  });
+
+  mockData.jobDescriptions.set("jd-10", {
+    id: "jd-10",
+    title: "QA Automation Engineer",
+    description: "Looking for a QA engineer to build automated test suites and ensure quality releases. Selenium experience preferred.",
+    company: "QualityFirst",
+    createdAt: oneDayAgo.toISOString(),
+    filters: {
+      experience: ["2-3 years", "3-5 years"],
+      location: ["Remote"],
+      skills: ["Selenium", "Test Automation", "Jest", "Cypress"],
+    },
+    message: "Ensure our products are bug-free...",
+  });
+
+  mockData.jobDescriptions.set("jd-11", {
+    id: "jd-11",
+    title: "Frontend Developer",
+    description: "Entry to mid-level frontend developer position. Perfect for someone looking to grow their React skills.",
+    company: "StartupHub",
+    createdAt: weekAgo.toISOString(),
+    filters: {
+      experience: ["0-2 years", "2-3 years"],
+      location: ["San Francisco", "Remote"],
+      skills: ["React", "JavaScript", "CSS", "HTML"],
+    },
+    message: "Great opportunity to learn and grow...",
+  });
+
+  mockData.jobDescriptions.set("jd-12", {
+    id: "jd-12",
+    title: "Technical Lead",
+    description: "Senior technical lead position. You'll mentor engineers and lead technical decisions. Strong leadership skills required.",
+    company: "Enterprise Solutions",
+    createdAt: twoDaysAgo.toISOString(),
+    filters: {
+      experience: ["5+ years"],
+      location: ["New York", "Remote"],
+      skills: ["Leadership", "Architecture", "System Design", "Team Management"],
+    },
+    message: "Lead our engineering team...",
+  });
+
+  // Sample candidates for jd-1 (2 candidates)
+  mockData.candidates.set("jd-1/cd-1", {
     id: "cd-1",
     name: "John Doe",
     email: "john.doe@example.com",
@@ -98,9 +241,9 @@ const initializeMockData = (): void => {
     skills: ["React", "TypeScript", "Node.js", "GraphQL"],
     resume: "Experienced frontend engineer with 5+ years...",
     status: "pending",
-  };
+  });
 
-  const candidate2: Candidate = {
+  mockData.candidates.set("jd-1/cd-2", {
     id: "cd-2",
     name: "Jane Smith",
     email: "jane.smith@example.com",
@@ -109,13 +252,10 @@ const initializeMockData = (): void => {
     skills: ["React", "JavaScript", "CSS"],
     resume: "Frontend developer specializing in React...",
     status: "pending",
-  };
+  });
 
-  mockData.candidates.set(`${jdId1}/cd-1`, candidate1);
-  mockData.candidates.set(`${jdId1}/cd-2`, candidate2);
-
-  // Sample candidates for jd-2
-  const candidate3: Candidate = {
+  // Sample candidates for jd-2 (1 candidate)
+  mockData.candidates.set("jd-2/cd-3", {
     id: "cd-3",
     name: "Bob Johnson",
     email: "bob.johnson@example.com",
@@ -124,9 +264,98 @@ const initializeMockData = (): void => {
     skills: ["Product Strategy", "Agile", "Analytics", "Leadership"],
     resume: "Product Manager with extensive experience...",
     status: "pending",
-  };
+  });
 
-  mockData.candidates.set(`${jdId2}/cd-3`, candidate3);
+  // Add candidates to jd-3 (3 candidates)
+  mockData.candidates.set("jd-3/cd-4", {
+    id: "cd-4",
+    name: "Alice Williams",
+    email: "alice.williams@example.com",
+    experience: "3-5 years",
+    location: "Austin",
+    skills: ["JavaScript", "Python", "React"],
+    resume: "Full stack developer with 3+ years...",
+    status: "pending",
+  });
+
+  mockData.candidates.set("jd-3/cd-5", {
+    id: "cd-5",
+    name: "Charlie Brown",
+    email: "charlie.brown@example.com",
+    experience: "2-3 years",
+    location: "Remote",
+    skills: ["JavaScript", "Node.js", "PostgreSQL"],
+    resume: "Junior full stack developer...",
+    status: "pending",
+  });
+
+  mockData.candidates.set("jd-3/cd-6", {
+    id: "cd-6",
+    name: "Diana Prince",
+    email: "diana.prince@example.com",
+    experience: "3-5 years",
+    location: "Austin",
+    skills: ["Python", "Django", "React", "PostgreSQL"],
+    resume: "Experienced full stack developer...",
+    status: "pending",
+  });
+
+  // Add candidates to jd-6 (4 candidates - highest count)
+  mockData.candidates.set("jd-6/cd-7", {
+    id: "cd-7",
+    name: "Ethan Hunt",
+    email: "ethan.hunt@example.com",
+    experience: "5+ years",
+    location: "Boston",
+    skills: ["Java", "Spring Boot", "Microservices"],
+    resume: "Senior backend engineer...",
+    status: "pending",
+  });
+
+  mockData.candidates.set("jd-6/cd-8", {
+    id: "cd-8",
+    name: "Fiona Chen",
+    email: "fiona.chen@example.com",
+    experience: "5+ years",
+    location: "Remote",
+    skills: ["Java", "Distributed Systems", "Kafka"],
+    resume: "Expert in distributed systems...",
+    status: "pending",
+  });
+
+  mockData.candidates.set("jd-6/cd-9", {
+    id: "cd-9",
+    name: "George Miller",
+    email: "george.miller@example.com",
+    experience: "5+ years",
+    location: "Boston",
+    skills: ["Microservices", "Docker", "Kubernetes"],
+    resume: "Backend engineer with microservices expertise...",
+    status: "pending",
+  });
+
+  mockData.candidates.set("jd-6/cd-10", {
+    id: "cd-10",
+    name: "Helen Park",
+    email: "helen.park@example.com",
+    experience: "3-5 years",
+    location: "Remote",
+    skills: ["Java", "Spring Boot", "REST APIs"],
+    resume: "Backend developer with API expertise...",
+    status: "pending",
+  });
+
+  // Add candidate to jd-10 (1 candidate)
+  mockData.candidates.set("jd-10/cd-11", {
+    id: "cd-11",
+    name: "Ian Thompson",
+    email: "ian.thompson@example.com",
+    experience: "2-3 years",
+    location: "Remote",
+    skills: ["Selenium", "Test Automation", "Jest"],
+    resume: "QA engineer with automation experience...",
+    status: "pending",
+  });
 };
 
 // Initialize mock data on module load

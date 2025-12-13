@@ -14,9 +14,11 @@ import {
   Grid,
   Badge,
   TextInput,
+  Select,
+  Pagination,
 } from "@mantine/core";
 import { useDebouncedValue } from "@mantine/hooks";
-import { IconAlertCircle, IconPlus, IconCalendar, IconUsers, IconSearch } from "@tabler/icons-react";
+import { IconAlertCircle, IconPlus, IconCalendar, IconUsers, IconSearch, IconArrowsSort } from "@tabler/icons-react";
 import useJobStore from "../stores/jobStore";
 
 interface Job {
@@ -39,10 +41,18 @@ const Dashboard = () => {
   const { jobs, loading, error, fetchJobs } = useJobStore();
   const [searchQuery, setSearchQuery] = useState("");
   const [debouncedSearch] = useDebouncedValue(searchQuery, 300);
+  const [sortBy, setSortBy] = useState<string>("newest");
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 9;
 
   useEffect(() => {
     fetchJobs();
   }, [fetchJobs]);
+
+  // Reset to page 1 when search query changes
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [debouncedSearch]);
 
   // Filter jobs based on search query
   const filteredJobs = jobs.filter((job: Job) => {
@@ -74,6 +84,43 @@ const Dashboard = () => {
     
     return false;
   });
+
+  // Sort filtered jobs
+  const sortedJobs = [...filteredJobs].sort((a: Job, b: Job) => {
+    switch (sortBy) {
+      case "newest":
+        return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
+      case "oldest":
+        return new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime();
+      case "title-asc":
+        return a.title.localeCompare(b.title);
+      case "title-desc":
+        return b.title.localeCompare(a.title);
+      case "company-asc":
+        return a.company.localeCompare(b.company);
+      case "company-desc":
+        return b.company.localeCompare(a.company);
+      case "candidates-desc":
+        return (b.candidateCount || 0) - (a.candidateCount || 0);
+      case "candidates-asc":
+        return (a.candidateCount || 0) - (b.candidateCount || 0);
+      default:
+        return 0;
+    }
+  });
+
+  // Paginate sorted jobs
+  const totalPages = Math.ceil(sortedJobs.length / itemsPerPage);
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const endIndex = startIndex + itemsPerPage;
+  const paginatedJobs = sortedJobs.slice(startIndex, endIndex);
+
+  // Reset to page 1 if current page is out of bounds after filtering/sorting
+  useEffect(() => {
+    if (currentPage > totalPages && totalPages > 0) {
+      setCurrentPage(1);
+    }
+  }, [totalPages, currentPage]);
 
   const formatDate = (dateString: string): string => {
     const date = new Date(dateString);
@@ -123,24 +170,47 @@ const Dashboard = () => {
           </Button>
         </Group>
         
-        {/* Search Input */}
-        <TextInput
-          placeholder="Search jobs by title, company, description, or skills..."
-          leftSection={<IconSearch size={16} />}
-          value={searchQuery}
-          onChange={(e) => setSearchQuery(e.currentTarget.value)}
-          size="md"
-        />
+        {/* Search and Sort Controls */}
+        <Group gap="md" align="flex-end">
+          <TextInput
+            placeholder="Search jobs by title, company, description, or skills..."
+            leftSection={<IconSearch size={16} />}
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.currentTarget.value)}
+            size="md"
+            style={{ flex: 1 }}
+          />
+          <Select
+            placeholder="Sort by"
+            leftSection={<IconArrowsSort size={16} />}
+            value={sortBy}
+            onChange={(value) => setSortBy(value || "newest")}
+            data={[
+              { value: "newest", label: "Date: Newest First" },
+              { value: "oldest", label: "Date: Oldest First" },
+              { value: "title-asc", label: "Title: A-Z" },
+              { value: "title-desc", label: "Title: Z-A" },
+              { value: "company-asc", label: "Company: A-Z" },
+              { value: "company-desc", label: "Company: Z-A" },
+              { value: "candidates-desc", label: "Candidates: High to Low" },
+              { value: "candidates-asc", label: "Candidates: Low to High" },
+            ]}
+            size="md"
+            style={{ minWidth: 200 }}
+          />
+        </Group>
         
         {/* Results Count */}
-        {jobs.length > 0 && (
-          <Text size="sm" c="dimmed">
-            {debouncedSearch.trim() ? (
-              <>Showing {filteredJobs.length} of {jobs.length} job{jobs.length !== 1 ? "s" : ""}</>
-            ) : (
-              <>Showing {jobs.length} job{jobs.length !== 1 ? "s" : ""}</>
-            )}
-          </Text>
+        {sortedJobs.length > 0 && (
+          <Group justify="space-between" align="center">
+            <Text size="sm" c="dimmed">
+              {debouncedSearch.trim() ? (
+                <>Showing {startIndex + 1}-{Math.min(endIndex, sortedJobs.length)} of {sortedJobs.length} job{sortedJobs.length !== 1 ? "s" : ""} (of {jobs.length} total)</>
+              ) : (
+                <>Showing {startIndex + 1}-{Math.min(endIndex, sortedJobs.length)} of {sortedJobs.length} job{sortedJobs.length !== 1 ? "s" : ""}</>
+              )}
+            </Text>
+          </Group>
         )}
       </Stack>
 
@@ -196,9 +266,10 @@ const Dashboard = () => {
           </Card>
         </motion.div>
       ) : (
-        /* Job Cards Grid */
-        <Grid>
-          {filteredJobs.map((job: Job, index: number) => (
+        <Stack gap="xl">
+          {/* Job Cards Grid */}
+          <Grid>
+            {paginatedJobs.map((job: Job, index: number) => (
             <Grid.Col key={job.id} span={{ base: 12, sm: 6, lg: 4 }}>
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
@@ -247,8 +318,21 @@ const Dashboard = () => {
                 </Card>
               </motion.div>
             </Grid.Col>
-          ))}
-        </Grid>
+            ))}
+          </Grid>
+
+          {/* Pagination */}
+          {totalPages > 1 && (
+            <Group justify="center">
+              <Pagination
+                value={currentPage}
+                onChange={setCurrentPage}
+                total={totalPages}
+                size="md"
+              />
+            </Group>
+          )}
+        </Stack>
       )}
     </Container>
   );
