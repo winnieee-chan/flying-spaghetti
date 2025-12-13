@@ -24,11 +24,16 @@ const initializeMockData = () => {
   const jdId1 = "jd-1";
   const jdId2 = "jd-2";
   
+  const now = new Date();
+  const twoDaysAgo = new Date(now.getTime() - 2 * 24 * 60 * 60 * 1000);
+  const fiveDaysAgo = new Date(now.getTime() - 5 * 24 * 60 * 60 * 1000);
+  
   mockData.jobDescriptions.set(jdId1, {
     id: jdId1,
     title: "Senior Frontend Engineer",
     description: "We are looking for an experienced frontend engineer...",
     company: "Acme Corp",
+    createdAt: twoDaysAgo.toISOString(),
     filters: {
       experience: ["3-5 years", "5+ years"],
       location: ["Remote", "San Francisco"],
@@ -42,6 +47,7 @@ const initializeMockData = () => {
     title: "Product Manager",
     description: "Join our team as a Product Manager...",
     company: "Globex",
+    createdAt: fiveDaysAgo.toISOString(),
     filters: {
       experience: ["5+ years"],
       location: ["New York", "Remote"],
@@ -132,11 +138,21 @@ const handleGet = async (path) => {
       // Return all jobs as an array
       const jobs = [];
       for (const jd of mockData.jobDescriptions.values()) {
+        // Count candidates for this job
+        let candidateCount = 0;
+        for (const key of mockData.candidates.keys()) {
+          if (key.startsWith(`${jd.id}/`)) {
+            candidateCount++;
+          }
+        }
+        
         jobs.push({
           id: jd.id,
           title: jd.title,
           description: jd.description,
           company: jd.company,
+          createdAt: jd.createdAt,
+          candidateCount,
           filters: jd.filters,
           message: jd.message,
         });
