@@ -8,7 +8,8 @@
     "build": "tsc",
     "start": "node dist/api/server.js",
     "dev": "tsx watch src/api/server.ts",
-    "type-check": "tsc --noEmit"
+    "type-check": "tsc --noEmit",
+    "migrate": "tsx src/utils/migrateMockData.ts"
   },
   "keywords": [
     "express",

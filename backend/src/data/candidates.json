@@ -22,9 +22,388 @@
     },
     "notificationSettings": [
       {
-        "companyNames": ["Google"],
-        "jobRoles": ["Software Engineer"],
-        "keywords": ["Typescript", "RabbitMQ"]
+        "companyNames": [
+          "Google"
+        ],
+        "jobRoles": [
+          "Software Engineer"
+        ],
+        "keywords": [
+          "Typescript",
+          "RabbitMQ"
+        ]
+      }
+    ],
+    "scores": [
+      {
+        "job_id": "550e8400-e29b-41d4-a716-446655440010",
+        "score": 50,
+        "breakdown_json": [
+          {
+            "signal": "skill_match",
+            "value": 0,
+            "reason": "No direct skill matches"
+          },
+          {
+            "signal": "experience",
+            "value": 1,
+            "reason": "1 years of experience (required: 5)"
+          },
+          {
+            "signal": "location",
+            "value": 0,
+            "reason": "Location: Brisbane vs Sydney"
+          }
+        ],
+        "outreach_messages": [
+          "Hi Alex, I noticed your experience with Next.js and thought you might be interested in our Senior Backend Engineer role at CoolStartup Co.."
+        ],
+        "pipelineStage": "engaged",
+        "conversationHistory": [
+          {
+            "id": "msg-1765630935019-f224dcc8",
+            "from": "founder",
+            "content": "Test message from API test script",
+            "timestamp": "2025-12-13T13:02:15.020Z",
+            "aiDrafted": false
+          }
+        ]
+      },
+      {
+        "job_id": "550e8400-e29b-41d4-a716-446655440011",
+        "score": 60,
+        "breakdown_json": [
+          {
+            "signal": "skill_match",
+            "value": 0,
+            "reason": "No direct skill matches"
+          },
+          {
+            "signal": "experience",
+            "value": 1,
+            "reason": "1 years of experience (required: 8)"
+          },
+          {
+            "signal": "location",
+            "value": 1,
+            "reason": "Location: Brisbane vs Remote"
+          }
+        ],
+        "outreach_messages": [
+          "Hi Alex, I noticed your experience with Next.js and thought you might be interested in our Principal Infrastructure Engineer role at InfraGen Ltd.."
+        ]
+      },
+      {
+        "job_id": "550e8400-e29b-41d4-a716-446655440012",
+        "score": 50,
+        "breakdown_json": [
+          {
+            "signal": "skill_match",
+            "value": 0,
+            "reason": "No direct skill matches"
+          },
+          {
+            "signal": "experience",
+            "value": 1,
+            "reason": "1 years of experience (required: 5)"
+          },
+          {
+            "signal": "location",
+            "value": 0,
+            "reason": "Location: Brisbane vs Sydney"
+          }
+        ],
+        "outreach_messages": [
+          "Hi Alex, I noticed your experience with Next.js and thought you might be interested in our Senior Backend Engineer role at CoolStartup Co.."
+        ]
+      },
+      {
+        "job_id": "550e8400-e29b-41d4-a716-446655440013",
+        "score": 50,
+        "breakdown_json": [
+          {
+            "signal": "skill_match",
+            "value": 0,
+            "reason": "No direct skill matches"
+          },
+          {
+            "signal": "experience",
+            "value": 1,
+            "reason": "1 years of experience (required: 5)"
+          },
+          {
+            "signal": "location",
+            "value": 0,
+            "reason": "Location: Brisbane vs Sydney"
+          }
+        ],
+        "outreach_messages": [
+          "Hi Alex, I noticed your experience with Next.js and thought you might be interested in our Senior Backend Engineer role at CoolStartup Co.."
+        ]
+      },
+      {
+        "job_id": "48be8042-2dcb-46a1-a267-2d633fc8a5b9",
+        "score": 60,
+        "breakdown_json": [
+          {
+            "signal": "skill_match",
+            "value": 0,
+            "reason": "No direct skill matches"
+          },
+          {
+            "signal": "experience",
+            "value": 1,
+            "reason": "1 years of experience (required: 8)"
+          },
+          {
+            "signal": "location",
+            "value": 1,
+            "reason": "Location: Brisbane vs Remote"
+          }
+        ],
+        "outreach_messages": [
+          "Hi Alex, I noticed your experience with Next.js and thought you might be interested in our Senior Backend Engineer role at CoolStartup Co.."
+        ]
+      },
+      {
+        "job_id": "f9a7186c-07e9-4e64-8e33-8e26c29c51a6",
+        "score": 50,
+        "breakdown_json": [
+          {
+            "signal": "skill_match",
+            "value": 0,
+            "reason": "No direct skill matches"
+          },
+          {
+            "signal": "experience",
+            "value": 1,
+            "reason": "1 years of experience (required: 5)"
+          },
+          {
+            "signal": "location",
+            "value": 0,
+            "reason": "Location: Brisbane vs Sydney"
+          }
+        ],
+        "outreach_messages": [
+          "Hi Alex, I noticed your experience with Next.js and thought you might be interested in our Senior Backend Engineer role at CoolStartup Co.."
+        ]
+      },
+      {
+        "job_id": "bdee904e-a560-445b-b098-030eac613817",
+        "score": 50,
+        "breakdown_json": [
+          {
+            "signal": "skill_match",
+            "value": 0,
+            "reason": "No direct skill matches"
+          },
+          {
+            "signal": "experience",
+            "value": 1,
+            "reason": "1 years of experience (required: 5)"
+          },
+          {
+            "signal": "location",
+            "value": 0,
+            "reason": "Location: Brisbane vs Sydney"
+          }
+        ],
+        "outreach_messages": [
+          "Hi Alex, I noticed your experience with Next.js and thought you might be interested in our Senior Backend Engineer role at CoolStartup Co.."
+        ]
+      },
+      {
+        "job_id": "d35c8b92-737f-40d6-913e-f68cf6fd3863",
+        "score": 50,
+        "breakdown_json": [
+          {
+            "signal": "skill_match",
+            "value": 0,
+            "reason": "No direct skill matches"
+          },
+          {
+            "signal": "experience",
+            "value": 1,
+            "reason": "1 years of experience (required: 5)"
+          },
+          {
+            "signal": "location",
+            "value": 0,
+            "reason": "Location: Brisbane vs Sydney"
+          }
+        ],
+        "outreach_messages": [
+          "Hi Alex, I noticed your experience with Next.js and thought you might be interested in our Senior Backend Engineer role at CoolStartup Co.."
+        ]
+      },
+      {
+        "job_id": "2e95cd29-7674-490b-8bf9-3d6620f53515",
+        "score": 50,
+        "breakdown_json": [
+          {
+            "signal": "skill_match",
+            "value": 0,
+            "reason": "No direct skill matches"
+          },
+          {
+            "signal": "experience",
+            "value": 1,
+            "reason": "1 years of experience (required: 5)"
+          },
+          {
+            "signal": "location",
+            "value": 0,
+            "reason": "Location: Brisbane vs Sydney"
+          }
+        ],
+        "outreach_messages": [
+          "Hi Alex, I noticed your experience with Next.js and thought you might be interested in our Senior Backend Engineer role at CoolStartup Co.."
+        ]
+      },
+      {
+        "job_id": "0a085b12-e3ba-45c6-8985-45a44cfdd43f",
+        "score": 50,
+        "breakdown_json": [
+          {
+            "signal": "skill_match",
+            "value": 0,
+            "reason": "No direct skill matches"
+          },
+          {
+            "signal": "experience",
+            "value": 1,
+            "reason": "1 years of experience (required: 5)"
+          },
+          {
+            "signal": "location",
+            "value": 0,
+            "reason": "Location: Brisbane vs Sydney"
+          }
+        ],
+        "outreach_messages": [
+          "Hi Alex, I noticed your experience with Next.js and thought you might be interested in our Senior Backend Engineer role at CoolStartup Co.."
+        ]
+      },
+      {
+        "job_id": "aa082a0c-b8ed-4c8b-a294-f3687f468f1f",
+        "score": 50,
+        "breakdown_json": [
+          {
+            "signal": "skill_match",
+            "value": 0,
+            "reason": "No direct skill matches"
+          },
+          {
+            "signal": "experience",
+            "value": 1,
+            "reason": "1 years of experience (required: 5)"
+          },
+          {
+            "signal": "location",
+            "value": 0,
+            "reason": "Location: Brisbane vs Sydney"
+          }
+        ],
+        "outreach_messages": [
+          "Hi Alex, I noticed your experience with Next.js and thought you might be interested in our Senior Backend Engineer role at CoolStartup Co.."
+        ]
+      },
+      {
+        "job_id": "c2f1daac-e95b-4cf6-b5d2-f8877d01cc25",
+        "score": 50,
+        "breakdown_json": [
+          {
+            "signal": "skill_match",
+            "value": 0,
+            "reason": "No direct skill matches"
+          },
+          {
+            "signal": "experience",
+            "value": 1,
+            "reason": "1 years of experience (required: 5)"
+          },
+          {
+            "signal": "location",
+            "value": 0,
+            "reason": "Location: Brisbane vs Sydney"
+          }
+        ],
+        "outreach_messages": [
+          "Hi Alex, I noticed your experience with Next.js and thought you might be interested in our Senior Backend Engineer role at CoolStartup Co.."
+        ]
+      },
+      {
+        "job_id": "61ddf084-ba49-434e-8a42-a85e8e00c65c",
+        "score": 50,
+        "breakdown_json": [
+          {
+            "signal": "skill_match",
+            "value": 0,
+            "reason": "No direct skill matches"
+          },
+          {
+            "signal": "experience",
+            "value": 1,
+            "reason": "1 years of experience (required: 5)"
+          },
+          {
+            "signal": "location",
+            "value": 0,
+            "reason": "Location: Brisbane vs Sydney"
+          }
+        ],
+        "outreach_messages": [
+          "Hi Alex, I noticed your experience with Next.js and thought you might be interested in our Senior Backend Engineer role at CoolStartup Co.."
+        ]
+      },
+      {
+        "job_id": "0806be6e-0ae9-41ed-a6b2-b9bfece62d23",
+        "score": 65,
+        "breakdown_json": [
+          {
+            "signal": "skill_match",
+            "value": 0,
+            "reason": "No direct skill matches"
+          },
+          {
+            "signal": "experience",
+            "value": 1,
+            "reason": "1 years of experience (required: 3)"
+          },
+          {
+            "signal": "location",
+            "value": 1,
+            "reason": "Location: Brisbane vs Remote"
+          }
+        ],
+        "outreach_messages": [
+          "Hi Alex, I noticed your experience with Next.js and thought you might be interested in our Senior Backend Engineer role at CoolStartup Co.."
+        ]
+      },
+      {
+        "job_id": "5b4f8d8d-aa78-4e87-a489-77eb7dee2f43",
+        "score": 50,
+        "breakdown_json": [
+          {
+            "signal": "skill_match",
+            "value": 0,
+            "reason": "No direct skill matches"
+          },
+          {
+            "signal": "experience",
+            "value": 1,
+            "reason": "1 years of experience (required: 5)"
+          },
+          {
+            "signal": "location",
+            "value": 0,
+            "reason": "Location: Brisbane vs Sydney"
+          }
+        ],
+        "outreach_messages": [
+          "Hi Alex, I noticed your experience with Next.js and thought you might be interested in our Senior Backend Engineer role at CoolStartup Co.."
+        ]
       }
     ]
   },
@@ -49,7 +428,369 @@
       "years_of_experience": 3,
       "location": "Brisbane"
     },
-    "notificationSettings": []
+    "notificationSettings": [],
+    "scores": [
+      {
+        "job_id": "550e8400-e29b-41d4-a716-446655440010",
+        "score": 55,
+        "breakdown_json": [
+          {
+            "signal": "skill_match",
+            "value": 0,
+            "reason": "No direct skill matches"
+          },
+          {
+            "signal": "experience",
+            "value": 3,
+            "reason": "3 years of experience (required: 5)"
+          },
+          {
+            "signal": "location",
+            "value": 0,
+            "reason": "Location: Brisbane vs Sydney"
+          }
+        ],
+        "outreach_messages": [
+          "Hi Sarah, I noticed your experience with React and thought you might be interested in our Senior Backend Engineer role at CoolStartup Co.."
+        ]
+      },
+      {
+        "job_id": "550e8400-e29b-41d4-a716-446655440011",
+        "score": 70,
+        "breakdown_json": [
+          {
+            "signal": "skill_match",
+            "value": 1,
+            "reason": "Matched 1 skills: mongodb"
+          },
+          {
+            "signal": "experience",
+            "value": 3,
+            "reason": "3 years of experience (required: 8)"
+          },
+          {
+            "signal": "location",
+            "value": 1,
+            "reason": "Location: Brisbane vs Remote"
+          }
+        ],
+        "outreach_messages": [
+          "Hi Sarah, I noticed your experience with mongodb and thought you might be interested in our Principal Infrastructure Engineer role at InfraGen Ltd.."
+        ]
+      },
+      {
+        "job_id": "550e8400-e29b-41d4-a716-446655440012",
+        "score": 55,
+        "breakdown_json": [
+          {
+            "signal": "skill_match",
+            "value": 0,
+            "reason": "No direct skill matches"
+          },
+          {
+            "signal": "experience",
+            "value": 3,
+            "reason": "3 years of experience (required: 5)"
+          },
+          {
+            "signal": "location",
+            "value": 0,
+            "reason": "Location: Brisbane vs Sydney"
+          }
+        ],
+        "outreach_messages": [
+          "Hi Sarah, I noticed your experience with React and thought you might be interested in our Senior Backend Engineer role at CoolStartup Co.."
+        ]
+      },
+      {
+        "job_id": "550e8400-e29b-41d4-a716-446655440013",
+        "score": 55,
+        "breakdown_json": [
+          {
+            "signal": "skill_match",
+            "value": 0,
+            "reason": "No direct skill matches"
+          },
+          {
+            "signal": "experience",
+            "value": 3,
+            "reason": "3 years of experience (required: 5)"
+          },
+          {
+            "signal": "location",
+            "value": 0,
+            "reason": "Location: Brisbane vs Sydney"
+          }
+        ],
+        "outreach_messages": [
+          "Hi Sarah, I noticed your experience with React and thought you might be interested in our Senior Backend Engineer role at CoolStartup Co.."
+        ]
+      },
+      {
+        "job_id": "48be8042-2dcb-46a1-a267-2d633fc8a5b9",
+        "score": 70,
+        "breakdown_json": [
+          {
+            "signal": "skill_match",
+            "value": 1,
+            "reason": "Matched 1 skills: mongodb"
+          },
+          {
+            "signal": "experience",
+            "value": 3,
+            "reason": "3 years of experience (required: 8)"
+          },
+          {
+            "signal": "location",
+            "value": 1,
+            "reason": "Location: Brisbane vs Remote"
+          }
+        ],
+        "outreach_messages": [
+          "Hi Sarah, I noticed your experience with mongodb and thought you might be interested in our Senior Backend Engineer role at CoolStartup Co.."
+        ]
+      },
+      {
+        "job_id": "f9a7186c-07e9-4e64-8e33-8e26c29c51a6",
+        "score": 55,
+        "breakdown_json": [
+          {
+            "signal": "skill_match",
+            "value": 0,
+            "reason": "No direct skill matches"
+          },
+          {
+            "signal": "experience",
+            "value": 3,
+            "reason": "3 years of experience (required: 5)"
+          },
+          {
+            "signal": "location",
+            "value": 0,
+            "reason": "Location: Brisbane vs Sydney"
+          }
+        ],
+        "outreach_messages": [
+          "Hi Sarah, I noticed your experience with React and thought you might be interested in our Senior Backend Engineer role at CoolStartup Co.."
+        ]
+      },
+      {
+        "job_id": "bdee904e-a560-445b-b098-030eac613817",
+        "score": 55,
+        "breakdown_json": [
+          {
+            "signal": "skill_match",
+            "value": 0,
+            "reason": "No direct skill matches"
+          },
+          {
+            "signal": "experience",
+            "value": 3,
+            "reason": "3 years of experience (required: 5)"
+          },
+          {
+            "signal": "location",
+            "value": 0,
+            "reason": "Location: Brisbane vs Sydney"
+          }
+        ],
+        "outreach_messages": [
+          "Hi Sarah, I noticed your experience with React and thought you might be interested in our Senior Backend Engineer role at CoolStartup Co.."
+        ]
+      },
+      {
+        "job_id": "d35c8b92-737f-40d6-913e-f68cf6fd3863",
+        "score": 55,
+        "breakdown_json": [
+          {
+            "signal": "skill_match",
+            "value": 0,
+            "reason": "No direct skill matches"
+          },
+          {
+            "signal": "experience",
+            "value": 3,
+            "reason": "3 years of experience (required: 5)"
+          },
+          {
+            "signal": "location",
+            "value": 0,
+            "reason": "Location: Brisbane vs Sydney"
+          }
+        ],
+        "outreach_messages": [
+          "Hi Sarah, I noticed your experience with React and thought you might be interested in our Senior Backend Engineer role at CoolStartup Co.."
+        ]
+      },
+      {
+        "job_id": "2e95cd29-7674-490b-8bf9-3d6620f53515",
+        "score": 55,
+        "breakdown_json": [
+          {
+            "signal": "skill_match",
+            "value": 0,
+            "reason": "No direct skill matches"
+          },
+          {
+            "signal": "experience",
+            "value": 3,
+            "reason": "3 years of experience (required: 5)"
+          },
+          {
+            "signal": "location",
+            "value": 0,
+            "reason": "Location: Brisbane vs Sydney"
+          }
+        ],
+        "outreach_messages": [
+          "Hi Sarah, I noticed your experience with React and thought you might be interested in our Senior Backend Engineer role at CoolStartup Co.."
+        ]
+      },
+      {
+        "job_id": "0a085b12-e3ba-45c6-8985-45a44cfdd43f",
+        "score": 55,
+        "breakdown_json": [
+          {
+            "signal": "skill_match",
+            "value": 0,
+            "reason": "No direct skill matches"
+          },
+          {
+            "signal": "experience",
+            "value": 3,
+            "reason": "3 years of experience (required: 5)"
+          },
+          {
+            "signal": "location",
+            "value": 0,
+            "reason": "Location: Brisbane vs Sydney"
+          }
+        ],
+        "outreach_messages": [
+          "Hi Sarah, I noticed your experience with React and thought you might be interested in our Senior Backend Engineer role at CoolStartup Co.."
+        ]
+      },
+      {
+        "job_id": "aa082a0c-b8ed-4c8b-a294-f3687f468f1f",
+        "score": 55,
+        "breakdown_json": [
+          {
+            "signal": "skill_match",
+            "value": 0,
+            "reason": "No direct skill matches"
+          },
+          {
+            "signal": "experience",
+            "value": 3,
+            "reason": "3 years of experience (required: 5)"
+          },
+          {
+            "signal": "location",
+            "value": 0,
+            "reason": "Location: Brisbane vs Sydney"
+          }
+        ],
+        "outreach_messages": [
+          "Hi Sarah, I noticed your experience with React and thought you might be interested in our Senior Backend Engineer role at CoolStartup Co.."
+        ]
+      },
+      {
+        "job_id": "c2f1daac-e95b-4cf6-b5d2-f8877d01cc25",
+        "score": 55,
+        "breakdown_json": [
+          {
+            "signal": "skill_match",
+            "value": 0,
+            "reason": "No direct skill matches"
+          },
+          {
+            "signal": "experience",
+            "value": 3,
+            "reason": "3 years of experience (required: 5)"
+          },
+          {
+            "signal": "location",
+            "value": 0,
+            "reason": "Location: Brisbane vs Sydney"
+          }
+        ],
+        "outreach_messages": [
+          "Hi Sarah, I noticed your experience with React and thought you might be interested in our Senior Backend Engineer role at CoolStartup Co.."
+        ]
+      },
+      {
+        "job_id": "61ddf084-ba49-434e-8a42-a85e8e00c65c",
+        "score": 55,
+        "breakdown_json": [
+          {
+            "signal": "skill_match",
+            "value": 0,
+            "reason": "No direct skill matches"
+          },
+          {
+            "signal": "experience",
+            "value": 3,
+            "reason": "3 years of experience (required: 5)"
+          },
+          {
+            "signal": "location",
+            "value": 0,
+            "reason": "Location: Brisbane vs Sydney"
+          }
+        ],
+        "outreach_messages": [
+          "Hi Sarah, I noticed your experience with React and thought you might be interested in our Senior Backend Engineer role at CoolStartup Co.."
+        ]
+      },
+      {
+        "job_id": "0806be6e-0ae9-41ed-a6b2-b9bfece62d23",
+        "score": 75,
+        "breakdown_json": [
+          {
+            "signal": "skill_match",
+            "value": 0,
+            "reason": "No direct skill matches"
+          },
+          {
+            "signal": "experience",
+            "value": 3,
+            "reason": "3 years of experience (required: 3)"
+          },
+          {
+            "signal": "location",
+            "value": 1,
+            "reason": "Location: Brisbane vs Remote"
+          }
+        ],
+        "outreach_messages": [
+          "Hi Sarah, I noticed your experience with React and thought you might be interested in our Senior Backend Engineer role at CoolStartup Co.."
+        ]
+      },
+      {
+        "job_id": "5b4f8d8d-aa78-4e87-a489-77eb7dee2f43",
+        "score": 55,
+        "breakdown_json": [
+          {
+            "signal": "skill_match",
+            "value": 0,
+            "reason": "No direct skill matches"
+          },
+          {
+            "signal": "experience",
+            "value": 3,
+            "reason": "3 years of experience (required: 5)"
+          },
+          {
+            "signal": "location",
+            "value": 0,
+            "reason": "Location: Brisbane vs Sydney"
+          }
+        ],
+        "outreach_messages": [
+          "Hi Sarah, I noticed your experience with React and thought you might be interested in our Senior Backend Engineer role at CoolStartup Co.."
+        ]
+      }
+    ]
   },
   {
     "_id": "550e8400-e29b-41d4-a716-446655440003",
@@ -72,7 +813,369 @@
       "years_of_experience": 4,
       "location": "Sydney"
     },
-    "notificationSettings": []
+    "notificationSettings": [],
+    "scores": [
+      {
+        "job_id": "550e8400-e29b-41d4-a716-446655440010",
+        "score": 85,
+        "breakdown_json": [
+          {
+            "signal": "skill_match",
+            "value": 2,
+            "reason": "Matched 2 skills: python, postgresql"
+          },
+          {
+            "signal": "experience",
+            "value": 4,
+            "reason": "4 years of experience (required: 5)"
+          },
+          {
+            "signal": "location",
+            "value": 1,
+            "reason": "Location: Sydney vs Sydney"
+          }
+        ],
+        "outreach_messages": [
+          "Hi David, I noticed your experience with python and thought you might be interested in our Senior Backend Engineer role at CoolStartup Co.."
+        ]
+      },
+      {
+        "job_id": "550e8400-e29b-41d4-a716-446655440011",
+        "score": 80,
+        "breakdown_json": [
+          {
+            "signal": "skill_match",
+            "value": 2,
+            "reason": "Matched 2 skills: django, redis"
+          },
+          {
+            "signal": "experience",
+            "value": 4,
+            "reason": "4 years of experience (required: 8)"
+          },
+          {
+            "signal": "location",
+            "value": 1,
+            "reason": "Location: Sydney vs Remote"
+          }
+        ],
+        "outreach_messages": [
+          "Hi David, I noticed your experience with django and thought you might be interested in our Principal Infrastructure Engineer role at InfraGen Ltd.."
+        ]
+      },
+      {
+        "job_id": "550e8400-e29b-41d4-a716-446655440012",
+        "score": 85,
+        "breakdown_json": [
+          {
+            "signal": "skill_match",
+            "value": 2,
+            "reason": "Matched 2 skills: python, postgresql"
+          },
+          {
+            "signal": "experience",
+            "value": 4,
+            "reason": "4 years of experience (required: 5)"
+          },
+          {
+            "signal": "location",
+            "value": 1,
+            "reason": "Location: Sydney vs Sydney"
+          }
+        ],
+        "outreach_messages": [
+          "Hi David, I noticed your experience with python and thought you might be interested in our Senior Backend Engineer role at CoolStartup Co.."
+        ]
+      },
+      {
+        "job_id": "550e8400-e29b-41d4-a716-446655440013",
+        "score": 85,
+        "breakdown_json": [
+          {
+            "signal": "skill_match",
+            "value": 2,
+            "reason": "Matched 2 skills: python, postgresql"
+          },
+          {
+            "signal": "experience",
+            "value": 4,
+            "reason": "4 years of experience (required: 5)"
+          },
+          {
+            "signal": "location",
+            "value": 1,
+            "reason": "Location: Sydney vs Sydney"
+          }
+        ],
+        "outreach_messages": [
+          "Hi David, I noticed your experience with python and thought you might be interested in our Senior Backend Engineer role at CoolStartup Co.."
+        ]
+      },
+      {
+        "job_id": "48be8042-2dcb-46a1-a267-2d633fc8a5b9",
+        "score": 80,
+        "breakdown_json": [
+          {
+            "signal": "skill_match",
+            "value": 2,
+            "reason": "Matched 2 skills: django, redis"
+          },
+          {
+            "signal": "experience",
+            "value": 4,
+            "reason": "4 years of experience (required: 8)"
+          },
+          {
+            "signal": "location",
+            "value": 1,
+            "reason": "Location: Sydney vs Remote"
+          }
+        ],
+        "outreach_messages": [
+          "Hi David, I noticed your experience with django and thought you might be interested in our Senior Backend Engineer role at CoolStartup Co.."
+        ]
+      },
+      {
+        "job_id": "f9a7186c-07e9-4e64-8e33-8e26c29c51a6",
+        "score": 85,
+        "breakdown_json": [
+          {
+            "signal": "skill_match",
+            "value": 2,
+            "reason": "Matched 2 skills: python, postgresql"
+          },
+          {
+            "signal": "experience",
+            "value": 4,
+            "reason": "4 years of experience (required: 5)"
+          },
+          {
+            "signal": "location",
+            "value": 1,
+            "reason": "Location: Sydney vs Sydney"
+          }
+        ],
+        "outreach_messages": [
+          "Hi David, I noticed your experience with python and thought you might be interested in our Senior Backend Engineer role at CoolStartup Co.."
+        ]
+      },
+      {
+        "job_id": "bdee904e-a560-445b-b098-030eac613817",
+        "score": 85,
+        "breakdown_json": [
+          {
+            "signal": "skill_match",
+            "value": 2,
+            "reason": "Matched 2 skills: python, postgresql"
+          },
+          {
+            "signal": "experience",
+            "value": 4,
+            "reason": "4 years of experience (required: 5)"
+          },
+          {
+            "signal": "location",
+            "value": 1,
+            "reason": "Location: Sydney vs Sydney"
+          }
+        ],
+        "outreach_messages": [
+          "Hi David, I noticed your experience with python and thought you might be interested in our Senior Backend Engineer role at CoolStartup Co.."
+        ]
+      },
+      {
+        "job_id": "d35c8b92-737f-40d6-913e-f68cf6fd3863",
+        "score": 85,
+        "breakdown_json": [
+          {
+            "signal": "skill_match",
+            "value": 2,
+            "reason": "Matched 2 skills: python, postgresql"
+          },
+          {
+            "signal": "experience",
+            "value": 4,
+            "reason": "4 years of experience (required: 5)"
+          },
+          {
+            "signal": "location",
+            "value": 1,
+            "reason": "Location: Sydney vs Sydney"
+          }
+        ],
+        "outreach_messages": [
+          "Hi David, I noticed your experience with python and thought you might be interested in our Senior Backend Engineer role at CoolStartup Co.."
+        ]
+      },
+      {
+        "job_id": "2e95cd29-7674-490b-8bf9-3d6620f53515",
+        "score": 85,
+        "breakdown_json": [
+          {
+            "signal": "skill_match",
+            "value": 2,
+            "reason": "Matched 2 skills: python, postgresql"
+          },
+          {
+            "signal": "experience",
+            "value": 4,
+            "reason": "4 years of experience (required: 5)"
+          },
+          {
+            "signal": "location",
+            "value": 1,
+            "reason": "Location: Sydney vs Sydney"
+          }
+        ],
+        "outreach_messages": [
+          "Hi David, I noticed your experience with python and thought you might be interested in our Senior Backend Engineer role at CoolStartup Co.."
+        ]
+      },
+      {
+        "job_id": "0a085b12-e3ba-45c6-8985-45a44cfdd43f",
+        "score": 85,
+        "breakdown_json": [
+          {
+            "signal": "skill_match",
+            "value": 2,
+            "reason": "Matched 2 skills: python, postgresql"
+          },
+          {
+            "signal": "experience",
+            "value": 4,
+            "reason": "4 years of experience (required: 5)"
+          },
+          {
+            "signal": "location",
+            "value": 1,
+            "reason": "Location: Sydney vs Sydney"
+          }
+        ],
+        "outreach_messages": [
+          "Hi David, I noticed your experience with python and thought you might be interested in our Senior Backend Engineer role at CoolStartup Co.."
+        ]
+      },
+      {
+        "job_id": "aa082a0c-b8ed-4c8b-a294-f3687f468f1f",
+        "score": 85,
+        "breakdown_json": [
+          {
+            "signal": "skill_match",
+            "value": 2,
+            "reason": "Matched 2 skills: python, postgresql"
+          },
+          {
+            "signal": "experience",
+            "value": 4,
+            "reason": "4 years of experience (required: 5)"
+          },
+          {
+            "signal": "location",
+            "value": 1,
+            "reason": "Location: Sydney vs Sydney"
+          }
+        ],
+        "outreach_messages": [
+          "Hi David, I noticed your experience with python and thought you might be interested in our Senior Backend Engineer role at CoolStartup Co.."
+        ]
+      },
+      {
+        "job_id": "c2f1daac-e95b-4cf6-b5d2-f8877d01cc25",
+        "score": 85,
+        "breakdown_json": [
+          {
+            "signal": "skill_match",
+            "value": 2,
+            "reason": "Matched 2 skills: python, postgresql"
+          },
+          {
+            "signal": "experience",
+            "value": 4,
+            "reason": "4 years of experience (required: 5)"
+          },
+          {
+            "signal": "location",
+            "value": 1,
+            "reason": "Location: Sydney vs Sydney"
+          }
+        ],
+        "outreach_messages": [
+          "Hi David, I noticed your experience with python and thought you might be interested in our Senior Backend Engineer role at CoolStartup Co.."
+        ]
+      },
+      {
+        "job_id": "61ddf084-ba49-434e-8a42-a85e8e00c65c",
+        "score": 95,
+        "breakdown_json": [
+          {
+            "signal": "skill_match",
+            "value": 3,
+            "reason": "Matched 3 skills: python, postgresql, docker"
+          },
+          {
+            "signal": "experience",
+            "value": 4,
+            "reason": "4 years of experience (required: 5)"
+          },
+          {
+            "signal": "location",
+            "value": 1,
+            "reason": "Location: Sydney vs Sydney"
+          }
+        ],
+        "outreach_messages": [
+          "Hi David, I noticed your experience with python and thought you might be interested in our Senior Backend Engineer role at CoolStartup Co.."
+        ]
+      },
+      {
+        "job_id": "0806be6e-0ae9-41ed-a6b2-b9bfece62d23",
+        "score": 75,
+        "breakdown_json": [
+          {
+            "signal": "skill_match",
+            "value": 0,
+            "reason": "No direct skill matches"
+          },
+          {
+            "signal": "experience",
+            "value": 4,
+            "reason": "4 years of experience (required: 3)"
+          },
+          {
+            "signal": "location",
+            "value": 1,
+            "reason": "Location: Sydney vs Remote"
+          }
+        ],
+        "outreach_messages": [
+          "Hi David, I noticed your experience with Python and thought you might be interested in our Senior Backend Engineer role at CoolStartup Co.."
+        ]
+      },
+      {
+        "job_id": "5b4f8d8d-aa78-4e87-a489-77eb7dee2f43",
+        "score": 95,
+        "breakdown_json": [
+          {
+            "signal": "skill_match",
+            "value": 3,
+            "reason": "Matched 3 skills: python, postgresql, docker"
+          },
+          {
+            "signal": "experience",
+            "value": 4,
+            "reason": "4 years of experience (required: 5)"
+          },
+          {
+            "signal": "location",
+            "value": 1,
+            "reason": "Location: Sydney vs Sydney"
+          }
+        ],
+        "outreach_messages": [
+          "Hi David, I noticed your experience with python and thought you might be interested in our Senior Backend Engineer role at CoolStartup Co.."
+        ]
+      }
+    ]
   },
   {
     "_id": "550e8400-e29b-41d4-a716-446655440004",
@@ -95,7 +1198,369 @@
       "years_of_experience": 2,
       "location": "Melbourne"
     },
-    "notificationSettings": []
+    "notificationSettings": [],
+    "scores": [
+      {
+        "job_id": "550e8400-e29b-41d4-a716-446655440010",
+        "score": 50,
+        "breakdown_json": [
+          {
+            "signal": "skill_match",
+            "value": 0,
+            "reason": "No direct skill matches"
+          },
+          {
+            "signal": "experience",
+            "value": 2,
+            "reason": "2 years of experience (required: 5)"
+          },
+          {
+            "signal": "location",
+            "value": 0,
+            "reason": "Location: Melbourne vs Sydney"
+          }
+        ],
+        "outreach_messages": [
+          "Hi Emily, I noticed your experience with Vue.js and thought you might be interested in our Senior Backend Engineer role at CoolStartup Co.."
+        ]
+      },
+      {
+        "job_id": "550e8400-e29b-41d4-a716-446655440011",
+        "score": 70,
+        "breakdown_json": [
+          {
+            "signal": "skill_match",
+            "value": 1,
+            "reason": "Matched 1 skills: google cloud"
+          },
+          {
+            "signal": "experience",
+            "value": 2,
+            "reason": "2 years of experience (required: 8)"
+          },
+          {
+            "signal": "location",
+            "value": 1,
+            "reason": "Location: Melbourne vs Remote"
+          }
+        ],
+        "outreach_messages": [
+          "Hi Emily, I noticed your experience with google cloud and thought you might be interested in our Principal Infrastructure Engineer role at InfraGen Ltd.."
+        ]
+      },
+      {
+        "job_id": "550e8400-e29b-41d4-a716-446655440012",
+        "score": 50,
+        "breakdown_json": [
+          {
+            "signal": "skill_match",
+            "value": 0,
+            "reason": "No direct skill matches"
+          },
+          {
+            "signal": "experience",
+            "value": 2,
+            "reason": "2 years of experience (required: 5)"
+          },
+          {
+            "signal": "location",
+            "value": 0,
+            "reason": "Location: Melbourne vs Sydney"
+          }
+        ],
+        "outreach_messages": [
+          "Hi Emily, I noticed your experience with Vue.js and thought you might be interested in our Senior Backend Engineer role at CoolStartup Co.."
+        ]
+      },
+      {
+        "job_id": "550e8400-e29b-41d4-a716-446655440013",
+        "score": 50,
+        "breakdown_json": [
+          {
+            "signal": "skill_match",
+            "value": 0,
+            "reason": "No direct skill matches"
+          },
+          {
+            "signal": "experience",
+            "value": 2,
+            "reason": "2 years of experience (required: 5)"
+          },
+          {
+            "signal": "location",
+            "value": 0,
+            "reason": "Location: Melbourne vs Sydney"
+          }
+        ],
+        "outreach_messages": [
+          "Hi Emily, I noticed your experience with Vue.js and thought you might be interested in our Senior Backend Engineer role at CoolStartup Co.."
+        ]
+      },
+      {
+        "job_id": "48be8042-2dcb-46a1-a267-2d633fc8a5b9",
+        "score": 70,
+        "breakdown_json": [
+          {
+            "signal": "skill_match",
+            "value": 1,
+            "reason": "Matched 1 skills: google cloud"
+          },
+          {
+            "signal": "experience",
+            "value": 2,
+            "reason": "2 years of experience (required: 8)"
+          },
+          {
+            "signal": "location",
+            "value": 1,
+            "reason": "Location: Melbourne vs Remote"
+          }
+        ],
+        "outreach_messages": [
+          "Hi Emily, I noticed your experience with google cloud and thought you might be interested in our Senior Backend Engineer role at CoolStartup Co.."
+        ]
+      },
+      {
+        "job_id": "f9a7186c-07e9-4e64-8e33-8e26c29c51a6",
+        "score": 50,
+        "breakdown_json": [
+          {
+            "signal": "skill_match",
+            "value": 0,
+            "reason": "No direct skill matches"
+          },
+          {
+            "signal": "experience",
+            "value": 2,
+            "reason": "2 years of experience (required: 5)"
+          },
+          {
+            "signal": "location",
+            "value": 0,
+            "reason": "Location: Melbourne vs Sydney"
+          }
+        ],
+        "outreach_messages": [
+          "Hi Emily, I noticed your experience with Vue.js and thought you might be interested in our Senior Backend Engineer role at CoolStartup Co.."
+        ]
+      },
+      {
+        "job_id": "bdee904e-a560-445b-b098-030eac613817",
+        "score": 50,
+        "breakdown_json": [
+          {
+            "signal": "skill_match",
+            "value": 0,
+            "reason": "No direct skill matches"
+          },
+          {
+            "signal": "experience",
+            "value": 2,
+            "reason": "2 years of experience (required: 5)"
+          },
+          {
+            "signal": "location",
+            "value": 0,
+            "reason": "Location: Melbourne vs Sydney"
+          }
+        ],
+        "outreach_messages": [
+          "Hi Emily, I noticed your experience with Vue.js and thought you might be interested in our Senior Backend Engineer role at CoolStartup Co.."
+        ]
+      },
+      {
+        "job_id": "d35c8b92-737f-40d6-913e-f68cf6fd3863",
+        "score": 50,
+        "breakdown_json": [
+          {
+            "signal": "skill_match",
+            "value": 0,
+            "reason": "No direct skill matches"
+          },
+          {
+            "signal": "experience",
+            "value": 2,
+            "reason": "2 years of experience (required: 5)"
+          },
+          {
+            "signal": "location",
+            "value": 0,
+            "reason": "Location: Melbourne vs Sydney"
+          }
+        ],
+        "outreach_messages": [
+          "Hi Emily, I noticed your experience with Vue.js and thought you might be interested in our Senior Backend Engineer role at CoolStartup Co.."
+        ]
+      },
+      {
+        "job_id": "2e95cd29-7674-490b-8bf9-3d6620f53515",
+        "score": 50,
+        "breakdown_json": [
+          {
+            "signal": "skill_match",
+            "value": 0,
+            "reason": "No direct skill matches"
+          },
+          {
+            "signal": "experience",
+            "value": 2,
+            "reason": "2 years of experience (required: 5)"
+          },
+          {
+            "signal": "location",
+            "value": 0,
+            "reason": "Location: Melbourne vs Sydney"
+          }
+        ],
+        "outreach_messages": [
+          "Hi Emily, I noticed your experience with Vue.js and thought you might be interested in our Senior Backend Engineer role at CoolStartup Co.."
+        ]
+      },
+      {
+        "job_id": "0a085b12-e3ba-45c6-8985-45a44cfdd43f",
+        "score": 50,
+        "breakdown_json": [
+          {
+            "signal": "skill_match",
+            "value": 0,
+            "reason": "No direct skill matches"
+          },
+          {
+            "signal": "experience",
+            "value": 2,
+            "reason": "2 years of experience (required: 5)"
+          },
+          {
+            "signal": "location",
+            "value": 0,
+            "reason": "Location: Melbourne vs Sydney"
+          }
+        ],
+        "outreach_messages": [
+          "Hi Emily, I noticed your experience with Vue.js and thought you might be interested in our Senior Backend Engineer role at CoolStartup Co.."
+        ]
+      },
+      {
+        "job_id": "aa082a0c-b8ed-4c8b-a294-f3687f468f1f",
+        "score": 50,
+        "breakdown_json": [
+          {
+            "signal": "skill_match",
+            "value": 0,
+            "reason": "No direct skill matches"
+          },
+          {
+            "signal": "experience",
+            "value": 2,
+            "reason": "2 years of experience (required: 5)"
+          },
+          {
+            "signal": "location",
+            "value": 0,
+            "reason": "Location: Melbourne vs Sydney"
+          }
+        ],
+        "outreach_messages": [
+          "Hi Emily, I noticed your experience with Vue.js and thought you might be interested in our Senior Backend Engineer role at CoolStartup Co.."
+        ]
+      },
+      {
+        "job_id": "c2f1daac-e95b-4cf6-b5d2-f8877d01cc25",
+        "score": 50,
+        "breakdown_json": [
+          {
+            "signal": "skill_match",
+            "value": 0,
+            "reason": "No direct skill matches"
+          },
+          {
+            "signal": "experience",
+            "value": 2,
+            "reason": "2 years of experience (required: 5)"
+          },
+          {
+            "signal": "location",
+            "value": 0,
+            "reason": "Location: Melbourne vs Sydney"
+          }
+        ],
+        "outreach_messages": [
+          "Hi Emily, I noticed your experience with Vue.js and thought you might be interested in our Senior Backend Engineer role at CoolStartup Co.."
+        ]
+      },
+      {
+        "job_id": "61ddf084-ba49-434e-8a42-a85e8e00c65c",
+        "score": 50,
+        "breakdown_json": [
+          {
+            "signal": "skill_match",
+            "value": 0,
+            "reason": "No direct skill matches"
+          },
+          {
+            "signal": "experience",
+            "value": 2,
+            "reason": "2 years of experience (required: 5)"
+          },
+          {
+            "signal": "location",
+            "value": 0,
+            "reason": "Location: Melbourne vs Sydney"
+          }
+        ],
+        "outreach_messages": [
+          "Hi Emily, I noticed your experience with Vue.js and thought you might be interested in our Senior Backend Engineer role at CoolStartup Co.."
+        ]
+      },
+      {
+        "job_id": "0806be6e-0ae9-41ed-a6b2-b9bfece62d23",
+        "score": 65,
+        "breakdown_json": [
+          {
+            "signal": "skill_match",
+            "value": 0,
+            "reason": "No direct skill matches"
+          },
+          {
+            "signal": "experience",
+            "value": 2,
+            "reason": "2 years of experience (required: 3)"
+          },
+          {
+            "signal": "location",
+            "value": 1,
+            "reason": "Location: Melbourne vs Remote"
+          }
+        ],
+        "outreach_messages": [
+          "Hi Emily, I noticed your experience with Vue.js and thought you might be interested in our Senior Backend Engineer role at CoolStartup Co.."
+        ]
+      },
+      {
+        "job_id": "5b4f8d8d-aa78-4e87-a489-77eb7dee2f43",
+        "score": 50,
+        "breakdown_json": [
+          {
+            "signal": "skill_match",
+            "value": 0,
+            "reason": "No direct skill matches"
+          },
+          {
+            "signal": "experience",
+            "value": 2,
+            "reason": "2 years of experience (required: 5)"
+          },
+          {
+            "signal": "location",
+            "value": 0,
+            "reason": "Location: Melbourne vs Sydney"
+          }
+        ],
+        "outreach_messages": [
+          "Hi Emily, I noticed your experience with Vue.js and thought you might be interested in our Senior Backend Engineer role at CoolStartup Co.."
+        ]
+      }
+    ]
   },
   {
     "_id": "550e8400-e29b-41d4-a716-446655440005",
@@ -118,7 +1583,369 @@
       "years_of_experience": 5,
       "location": "Singapore"
     },
-    "notificationSettings": []
+    "notificationSettings": [],
+    "scores": [
+      {
+        "job_id": "550e8400-e29b-41d4-a716-446655440010",
+        "score": 65,
+        "breakdown_json": [
+          {
+            "signal": "skill_match",
+            "value": 0,
+            "reason": "No direct skill matches"
+          },
+          {
+            "signal": "experience",
+            "value": 5,
+            "reason": "5 years of experience (required: 5)"
+          },
+          {
+            "signal": "location",
+            "value": 0,
+            "reason": "Location: Singapore vs Sydney"
+          }
+        ],
+        "outreach_messages": [
+          "Hi Marcus, I noticed your experience with C# and thought you might be interested in our Senior Backend Engineer role at CoolStartup Co.."
+        ]
+      },
+      {
+        "job_id": "550e8400-e29b-41d4-a716-446655440011",
+        "score": 60,
+        "breakdown_json": [
+          {
+            "signal": "skill_match",
+            "value": 0,
+            "reason": "No direct skill matches"
+          },
+          {
+            "signal": "experience",
+            "value": 5,
+            "reason": "5 years of experience (required: 8)"
+          },
+          {
+            "signal": "location",
+            "value": 1,
+            "reason": "Location: Singapore vs Remote"
+          }
+        ],
+        "outreach_messages": [
+          "Hi Marcus, I noticed your experience with C# and thought you might be interested in our Principal Infrastructure Engineer role at InfraGen Ltd.."
+        ]
+      },
+      {
+        "job_id": "550e8400-e29b-41d4-a716-446655440012",
+        "score": 65,
+        "breakdown_json": [
+          {
+            "signal": "skill_match",
+            "value": 0,
+            "reason": "No direct skill matches"
+          },
+          {
+            "signal": "experience",
+            "value": 5,
+            "reason": "5 years of experience (required: 5)"
+          },
+          {
+            "signal": "location",
+            "value": 0,
+            "reason": "Location: Singapore vs Sydney"
+          }
+        ],
+        "outreach_messages": [
+          "Hi Marcus, I noticed your experience with C# and thought you might be interested in our Senior Backend Engineer role at CoolStartup Co.."
+        ]
+      },
+      {
+        "job_id": "550e8400-e29b-41d4-a716-446655440013",
+        "score": 65,
+        "breakdown_json": [
+          {
+            "signal": "skill_match",
+            "value": 0,
+            "reason": "No direct skill matches"
+          },
+          {
+            "signal": "experience",
+            "value": 5,
+            "reason": "5 years of experience (required: 5)"
+          },
+          {
+            "signal": "location",
+            "value": 0,
+            "reason": "Location: Singapore vs Sydney"
+          }
+        ],
+        "outreach_messages": [
+          "Hi Marcus, I noticed your experience with C# and thought you might be interested in our Senior Backend Engineer role at CoolStartup Co.."
+        ]
+      },
+      {
+        "job_id": "48be8042-2dcb-46a1-a267-2d633fc8a5b9",
+        "score": 60,
+        "breakdown_json": [
+          {
+            "signal": "skill_match",
+            "value": 0,
+            "reason": "No direct skill matches"
+          },
+          {
+            "signal": "experience",
+            "value": 5,
+            "reason": "5 years of experience (required: 8)"
+          },
+          {
+            "signal": "location",
+            "value": 1,
+            "reason": "Location: Singapore vs Remote"
+          }
+        ],
+        "outreach_messages": [
+          "Hi Marcus, I noticed your experience with C# and thought you might be interested in our Senior Backend Engineer role at CoolStartup Co.."
+        ]
+      },
+      {
+        "job_id": "f9a7186c-07e9-4e64-8e33-8e26c29c51a6",
+        "score": 65,
+        "breakdown_json": [
+          {
+            "signal": "skill_match",
+            "value": 0,
+            "reason": "No direct skill matches"
+          },
+          {
+            "signal": "experience",
+            "value": 5,
+            "reason": "5 years of experience (required: 5)"
+          },
+          {
+            "signal": "location",
+            "value": 0,
+            "reason": "Location: Singapore vs Sydney"
+          }
+        ],
+        "outreach_messages": [
+          "Hi Marcus, I noticed your experience with C# and thought you might be interested in our Senior Backend Engineer role at CoolStartup Co.."
+        ]
+      },
+      {
+        "job_id": "bdee904e-a560-445b-b098-030eac613817",
+        "score": 65,
+        "breakdown_json": [
+          {
+            "signal": "skill_match",
+            "value": 0,
+            "reason": "No direct skill matches"
+          },
+          {
+            "signal": "experience",
+            "value": 5,
+            "reason": "5 years of experience (required: 5)"
+          },
+          {
+            "signal": "location",
+            "value": 0,
+            "reason": "Location: Singapore vs Sydney"
+          }
+        ],
+        "outreach_messages": [
+          "Hi Marcus, I noticed your experience with C# and thought you might be interested in our Senior Backend Engineer role at CoolStartup Co.."
+        ]
+      },
+      {
+        "job_id": "d35c8b92-737f-40d6-913e-f68cf6fd3863",
+        "score": 65,
+        "breakdown_json": [
+          {
+            "signal": "skill_match",
+            "value": 0,
+            "reason": "No direct skill matches"
+          },
+          {
+            "signal": "experience",
+            "value": 5,
+            "reason": "5 years of experience (required: 5)"
+          },
+          {
+            "signal": "location",
+            "value": 0,
+            "reason": "Location: Singapore vs Sydney"
+          }
+        ],
+        "outreach_messages": [
+          "Hi Marcus, I noticed your experience with C# and thought you might be interested in our Senior Backend Engineer role at CoolStartup Co.."
+        ]
+      },
+      {
+        "job_id": "2e95cd29-7674-490b-8bf9-3d6620f53515",
+        "score": 65,
+        "breakdown_json": [
+          {
+            "signal": "skill_match",
+            "value": 0,
+            "reason": "No direct skill matches"
+          },
+          {
+            "signal": "experience",
+            "value": 5,
+            "reason": "5 years of experience (required: 5)"
+          },
+          {
+            "signal": "location",
+            "value": 0,
+            "reason": "Location: Singapore vs Sydney"
+          }
+        ],
+        "outreach_messages": [
+          "Hi Marcus, I noticed your experience with C# and thought you might be interested in our Senior Backend Engineer role at CoolStartup Co.."
+        ]
+      },
+      {
+        "job_id": "0a085b12-e3ba-45c6-8985-45a44cfdd43f",
+        "score": 65,
+        "breakdown_json": [
+          {
+            "signal": "skill_match",
+            "value": 0,
+            "reason": "No direct skill matches"
+          },
+          {
+            "signal": "experience",
+            "value": 5,
+            "reason": "5 years of experience (required: 5)"
+          },
+          {
+            "signal": "location",
+            "value": 0,
+            "reason": "Location: Singapore vs Sydney"
+          }
+        ],
+        "outreach_messages": [
+          "Hi Marcus, I noticed your experience with C# and thought you might be interested in our Senior Backend Engineer role at CoolStartup Co.."
+        ]
+      },
+      {
+        "job_id": "aa082a0c-b8ed-4c8b-a294-f3687f468f1f",
+        "score": 65,
+        "breakdown_json": [
+          {
+            "signal": "skill_match",
+            "value": 0,
+            "reason": "No direct skill matches"
+          },
+          {
+            "signal": "experience",
+            "value": 5,
+            "reason": "5 years of experience (required: 5)"
+          },
+          {
+            "signal": "location",
+            "value": 0,
+            "reason": "Location: Singapore vs Sydney"
+          }
+        ],
+        "outreach_messages": [
+          "Hi Marcus, I noticed your experience with C# and thought you might be interested in our Senior Backend Engineer role at CoolStartup Co.."
+        ]
+      },
+      {
+        "job_id": "c2f1daac-e95b-4cf6-b5d2-f8877d01cc25",
+        "score": 65,
+        "breakdown_json": [
+          {
+            "signal": "skill_match",
+            "value": 0,
+            "reason": "No direct skill matches"
+          },
+          {
+            "signal": "experience",
+            "value": 5,
+            "reason": "5 years of experience (required: 5)"
+          },
+          {
+            "signal": "location",
+            "value": 0,
+            "reason": "Location: Singapore vs Sydney"
+          }
+        ],
+        "outreach_messages": [
+          "Hi Marcus, I noticed your experience with C# and thought you might be interested in our Senior Backend Engineer role at CoolStartup Co.."
+        ]
+      },
+      {
+        "job_id": "61ddf084-ba49-434e-8a42-a85e8e00c65c",
+        "score": 75,
+        "breakdown_json": [
+          {
+            "signal": "skill_match",
+            "value": 1,
+            "reason": "Matched 1 skills: docker"
+          },
+          {
+            "signal": "experience",
+            "value": 5,
+            "reason": "5 years of experience (required: 5)"
+          },
+          {
+            "signal": "location",
+            "value": 0,
+            "reason": "Location: Singapore vs Sydney"
+          }
+        ],
+        "outreach_messages": [
+          "Hi Marcus, I noticed your experience with docker and thought you might be interested in our Senior Backend Engineer role at CoolStartup Co.."
+        ]
+      },
+      {
+        "job_id": "0806be6e-0ae9-41ed-a6b2-b9bfece62d23",
+        "score": 75,
+        "breakdown_json": [
+          {
+            "signal": "skill_match",
+            "value": 0,
+            "reason": "No direct skill matches"
+          },
+          {
+            "signal": "experience",
+            "value": 5,
+            "reason": "5 years of experience (required: 3)"
+          },
+          {
+            "signal": "location",
+            "value": 1,
+            "reason": "Location: Singapore vs Remote"
+          }
+        ],
+        "outreach_messages": [
+          "Hi Marcus, I noticed your experience with C# and thought you might be interested in our Senior Backend Engineer role at CoolStartup Co.."
+        ]
+      },
+      {
+        "job_id": "5b4f8d8d-aa78-4e87-a489-77eb7dee2f43",
+        "score": 75,
+        "breakdown_json": [
+          {
+            "signal": "skill_match",
+            "value": 1,
+            "reason": "Matched 1 skills: docker"
+          },
+          {
+            "signal": "experience",
+            "value": 5,
+            "reason": "5 years of experience (required: 5)"
+          },
+          {
+            "signal": "location",
+            "value": 0,
+            "reason": "Location: Singapore vs Sydney"
+          }
+        ],
+        "outreach_messages": [
+          "Hi Marcus, I noticed your experience with docker and thought you might be interested in our Senior Backend Engineer role at CoolStartup Co.."
+        ]
+      }
+    ]
   },
   {
     "_id": "550e8400-e29b-41d4-a716-446655440006",
@@ -141,7 +1968,369 @@
       "years_of_experience": 4,
       "location": "Penang"
     },
-    "notificationSettings": []
+    "notificationSettings": [],
+    "scores": [
+      {
+        "job_id": "550e8400-e29b-41d4-a716-446655440010",
+        "score": 55,
+        "breakdown_json": [
+          {
+            "signal": "skill_match",
+            "value": 0,
+            "reason": "No direct skill matches"
+          },
+          {
+            "signal": "experience",
+            "value": 4,
+            "reason": "4 years of experience (required: 5)"
+          },
+          {
+            "signal": "location",
+            "value": 0,
+            "reason": "Location: Penang vs Sydney"
+          }
+        ],
+        "outreach_messages": [
+          "Hi Jessica, I noticed your experience with Go and thought you might be interested in our Senior Backend Engineer role at CoolStartup Co.."
+        ]
+      },
+      {
+        "job_id": "550e8400-e29b-41d4-a716-446655440011",
+        "score": 80,
+        "breakdown_json": [
+          {
+            "signal": "skill_match",
+            "value": 2,
+            "reason": "Matched 2 skills: go, kubernetes"
+          },
+          {
+            "signal": "experience",
+            "value": 4,
+            "reason": "4 years of experience (required: 8)"
+          },
+          {
+            "signal": "location",
+            "value": 1,
+            "reason": "Location: Penang vs Remote"
+          }
+        ],
+        "outreach_messages": [
+          "Hi Jessica, I noticed your experience with go and thought you might be interested in our Principal Infrastructure Engineer role at InfraGen Ltd.."
+        ]
+      },
+      {
+        "job_id": "550e8400-e29b-41d4-a716-446655440012",
+        "score": 55,
+        "breakdown_json": [
+          {
+            "signal": "skill_match",
+            "value": 0,
+            "reason": "No direct skill matches"
+          },
+          {
+            "signal": "experience",
+            "value": 4,
+            "reason": "4 years of experience (required: 5)"
+          },
+          {
+            "signal": "location",
+            "value": 0,
+            "reason": "Location: Penang vs Sydney"
+          }
+        ],
+        "outreach_messages": [
+          "Hi Jessica, I noticed your experience with Go and thought you might be interested in our Senior Backend Engineer role at CoolStartup Co.."
+        ]
+      },
+      {
+        "job_id": "550e8400-e29b-41d4-a716-446655440013",
+        "score": 55,
+        "breakdown_json": [
+          {
+            "signal": "skill_match",
+            "value": 0,
+            "reason": "No direct skill matches"
+          },
+          {
+            "signal": "experience",
+            "value": 4,
+            "reason": "4 years of experience (required: 5)"
+          },
+          {
+            "signal": "location",
+            "value": 0,
+            "reason": "Location: Penang vs Sydney"
+          }
+        ],
+        "outreach_messages": [
+          "Hi Jessica, I noticed your experience with Go and thought you might be interested in our Senior Backend Engineer role at CoolStartup Co.."
+        ]
+      },
+      {
+        "job_id": "48be8042-2dcb-46a1-a267-2d633fc8a5b9",
+        "score": 80,
+        "breakdown_json": [
+          {
+            "signal": "skill_match",
+            "value": 2,
+            "reason": "Matched 2 skills: go, kubernetes"
+          },
+          {
+            "signal": "experience",
+            "value": 4,
+            "reason": "4 years of experience (required: 8)"
+          },
+          {
+            "signal": "location",
+            "value": 1,
+            "reason": "Location: Penang vs Remote"
+          }
+        ],
+        "outreach_messages": [
+          "Hi Jessica, I noticed your experience with go and thought you might be interested in our Senior Backend Engineer role at CoolStartup Co.."
+        ]
+      },
+      {
+        "job_id": "f9a7186c-07e9-4e64-8e33-8e26c29c51a6",
+        "score": 55,
+        "breakdown_json": [
+          {
+            "signal": "skill_match",
+            "value": 0,
+            "reason": "No direct skill matches"
+          },
+          {
+            "signal": "experience",
+            "value": 4,
+            "reason": "4 years of experience (required: 5)"
+          },
+          {
+            "signal": "location",
+            "value": 0,
+            "reason": "Location: Penang vs Sydney"
+          }
+        ],
+        "outreach_messages": [
+          "Hi Jessica, I noticed your experience with Go and thought you might be interested in our Senior Backend Engineer role at CoolStartup Co.."
+        ]
+      },
+      {
+        "job_id": "bdee904e-a560-445b-b098-030eac613817",
+        "score": 55,
+        "breakdown_json": [
+          {
+            "signal": "skill_match",
+            "value": 0,
+            "reason": "No direct skill matches"
+          },
+          {
+            "signal": "experience",
+            "value": 4,
+            "reason": "4 years of experience (required: 5)"
+          },
+          {
+            "signal": "location",
+            "value": 0,
+            "reason": "Location: Penang vs Sydney"
+          }
+        ],
+        "outreach_messages": [
+          "Hi Jessica, I noticed your experience with Go and thought you might be interested in our Senior Backend Engineer role at CoolStartup Co.."
+        ]
+      },
+      {
+        "job_id": "d35c8b92-737f-40d6-913e-f68cf6fd3863",
+        "score": 55,
+        "breakdown_json": [
+          {
+            "signal": "skill_match",
+            "value": 0,
+            "reason": "No direct skill matches"
+          },
+          {
+            "signal": "experience",
+            "value": 4,
+            "reason": "4 years of experience (required: 5)"
+          },
+          {
+            "signal": "location",
+            "value": 0,
+            "reason": "Location: Penang vs Sydney"
+          }
+        ],
+        "outreach_messages": [
+          "Hi Jessica, I noticed your experience with Go and thought you might be interested in our Senior Backend Engineer role at CoolStartup Co.."
+        ]
+      },
+      {
+        "job_id": "2e95cd29-7674-490b-8bf9-3d6620f53515",
+        "score": 55,
+        "breakdown_json": [
+          {
+            "signal": "skill_match",
+            "value": 0,
+            "reason": "No direct skill matches"
+          },
+          {
+            "signal": "experience",
+            "value": 4,
+            "reason": "4 years of experience (required: 5)"
+          },
+          {
+            "signal": "location",
+            "value": 0,
+            "reason": "Location: Penang vs Sydney"
+          }
+        ],
+        "outreach_messages": [
+          "Hi Jessica, I noticed your experience with Go and thought you might be interested in our Senior Backend Engineer role at CoolStartup Co.."
+        ]
+      },
+      {
+        "job_id": "0a085b12-e3ba-45c6-8985-45a44cfdd43f",
+        "score": 55,
+        "breakdown_json": [
+          {
+            "signal": "skill_match",
+            "value": 0,
+            "reason": "No direct skill matches"
+          },
+          {
+            "signal": "experience",
+            "value": 4,
+            "reason": "4 years of experience (required: 5)"
+          },
+          {
+            "signal": "location",
+            "value": 0,
+            "reason": "Location: Penang vs Sydney"
+          }
+        ],
+        "outreach_messages": [
+          "Hi Jessica, I noticed your experience with Go and thought you might be interested in our Senior Backend Engineer role at CoolStartup Co.."
+        ]
+      },
+      {
+        "job_id": "aa082a0c-b8ed-4c8b-a294-f3687f468f1f",
+        "score": 55,
+        "breakdown_json": [
+          {
+            "signal": "skill_match",
+            "value": 0,
+            "reason": "No direct skill matches"
+          },
+          {
+            "signal": "experience",
+            "value": 4,
+            "reason": "4 years of experience (required: 5)"
+          },
+          {
+            "signal": "location",
+            "value": 0,
+            "reason": "Location: Penang vs Sydney"
+          }
+        ],
+        "outreach_messages": [
+          "Hi Jessica, I noticed your experience with Go and thought you might be interested in our Senior Backend Engineer role at CoolStartup Co.."
+        ]
+      },
+      {
+        "job_id": "c2f1daac-e95b-4cf6-b5d2-f8877d01cc25",
+        "score": 55,
+        "breakdown_json": [
+          {
+            "signal": "skill_match",
+            "value": 0,
+            "reason": "No direct skill matches"
+          },
+          {
+            "signal": "experience",
+            "value": 4,
+            "reason": "4 years of experience (required: 5)"
+          },
+          {
+            "signal": "location",
+            "value": 0,
+            "reason": "Location: Penang vs Sydney"
+          }
+        ],
+        "outreach_messages": [
+          "Hi Jessica, I noticed your experience with Go and thought you might be interested in our Senior Backend Engineer role at CoolStartup Co.."
+        ]
+      },
+      {
+        "job_id": "61ddf084-ba49-434e-8a42-a85e8e00c65c",
+        "score": 65,
+        "breakdown_json": [
+          {
+            "signal": "skill_match",
+            "value": 1,
+            "reason": "Matched 1 skills: kubernetes"
+          },
+          {
+            "signal": "experience",
+            "value": 4,
+            "reason": "4 years of experience (required: 5)"
+          },
+          {
+            "signal": "location",
+            "value": 0,
+            "reason": "Location: Penang vs Sydney"
+          }
+        ],
+        "outreach_messages": [
+          "Hi Jessica, I noticed your experience with kubernetes and thought you might be interested in our Senior Backend Engineer role at CoolStartup Co.."
+        ]
+      },
+      {
+        "job_id": "0806be6e-0ae9-41ed-a6b2-b9bfece62d23",
+        "score": 75,
+        "breakdown_json": [
+          {
+            "signal": "skill_match",
+            "value": 0,
+            "reason": "No direct skill matches"
+          },
+          {
+            "signal": "experience",
+            "value": 4,
+            "reason": "4 years of experience (required: 3)"
+          },
+          {
+            "signal": "location",
+            "value": 1,
+            "reason": "Location: Penang vs Remote"
+          }
+        ],
+        "outreach_messages": [
+          "Hi Jessica, I noticed your experience with Go and thought you might be interested in our Senior Backend Engineer role at CoolStartup Co.."
+        ]
+      },
+      {
+        "job_id": "5b4f8d8d-aa78-4e87-a489-77eb7dee2f43",
+        "score": 65,
+        "breakdown_json": [
+          {
+            "signal": "skill_match",
+            "value": 1,
+            "reason": "Matched 1 skills: kubernetes"
+          },
+          {
+            "signal": "experience",
+            "value": 4,
+            "reason": "4 years of experience (required: 5)"
+          },
+          {
+            "signal": "location",
+            "value": 0,
+            "reason": "Location: Penang vs Sydney"
+          }
+        ],
+        "outreach_messages": [
+          "Hi Jessica, I noticed your experience with kubernetes and thought you might be interested in our Senior Backend Engineer role at CoolStartup Co.."
+        ]
+      }
+    ]
   },
   {
     "_id": "550e8400-e29b-41d4-a716-446655440007",
@@ -164,7 +2353,369 @@
       "years_of_experience": 6,
       "location": "Osaka"
     },
-    "notificationSettings": []
+    "notificationSettings": [],
+    "scores": [
+      {
+        "job_id": "550e8400-e29b-41d4-a716-446655440010",
+        "score": 65,
+        "breakdown_json": [
+          {
+            "signal": "skill_match",
+            "value": 0,
+            "reason": "No direct skill matches"
+          },
+          {
+            "signal": "experience",
+            "value": 6,
+            "reason": "6 years of experience (required: 5)"
+          },
+          {
+            "signal": "location",
+            "value": 0,
+            "reason": "Location: Osaka vs Sydney"
+          }
+        ],
+        "outreach_messages": [
+          "Hi Samuel, I noticed your experience with Java and thought you might be interested in our Senior Backend Engineer role at CoolStartup Co.."
+        ]
+      },
+      {
+        "job_id": "550e8400-e29b-41d4-a716-446655440011",
+        "score": 65,
+        "breakdown_json": [
+          {
+            "signal": "skill_match",
+            "value": 0,
+            "reason": "No direct skill matches"
+          },
+          {
+            "signal": "experience",
+            "value": 6,
+            "reason": "6 years of experience (required: 8)"
+          },
+          {
+            "signal": "location",
+            "value": 1,
+            "reason": "Location: Osaka vs Remote"
+          }
+        ],
+        "outreach_messages": [
+          "Hi Samuel, I noticed your experience with Java and thought you might be interested in our Principal Infrastructure Engineer role at InfraGen Ltd.."
+        ]
+      },
+      {
+        "job_id": "550e8400-e29b-41d4-a716-446655440012",
+        "score": 65,
+        "breakdown_json": [
+          {
+            "signal": "skill_match",
+            "value": 0,
+            "reason": "No direct skill matches"
+          },
+          {
+            "signal": "experience",
+            "value": 6,
+            "reason": "6 years of experience (required: 5)"
+          },
+          {
+            "signal": "location",
+            "value": 0,
+            "reason": "Location: Osaka vs Sydney"
+          }
+        ],
+        "outreach_messages": [
+          "Hi Samuel, I noticed your experience with Java and thought you might be interested in our Senior Backend Engineer role at CoolStartup Co.."
+        ]
+      },
+      {
+        "job_id": "550e8400-e29b-41d4-a716-446655440013",
+        "score": 65,
+        "breakdown_json": [
+          {
+            "signal": "skill_match",
+            "value": 0,
+            "reason": "No direct skill matches"
+          },
+          {
+            "signal": "experience",
+            "value": 6,
+            "reason": "6 years of experience (required: 5)"
+          },
+          {
+            "signal": "location",
+            "value": 0,
+            "reason": "Location: Osaka vs Sydney"
+          }
+        ],
+        "outreach_messages": [
+          "Hi Samuel, I noticed your experience with Java and thought you might be interested in our Senior Backend Engineer role at CoolStartup Co.."
+        ]
+      },
+      {
+        "job_id": "48be8042-2dcb-46a1-a267-2d633fc8a5b9",
+        "score": 65,
+        "breakdown_json": [
+          {
+            "signal": "skill_match",
+            "value": 0,
+            "reason": "No direct skill matches"
+          },
+          {
+            "signal": "experience",
+            "value": 6,
+            "reason": "6 years of experience (required: 8)"
+          },
+          {
+            "signal": "location",
+            "value": 1,
+            "reason": "Location: Osaka vs Remote"
+          }
+        ],
+        "outreach_messages": [
+          "Hi Samuel, I noticed your experience with Java and thought you might be interested in our Senior Backend Engineer role at CoolStartup Co.."
+        ]
+      },
+      {
+        "job_id": "f9a7186c-07e9-4e64-8e33-8e26c29c51a6",
+        "score": 65,
+        "breakdown_json": [
+          {
+            "signal": "skill_match",
+            "value": 0,
+            "reason": "No direct skill matches"
+          },
+          {
+            "signal": "experience",
+            "value": 6,
+            "reason": "6 years of experience (required: 5)"
+          },
+          {
+            "signal": "location",
+            "value": 0,
+            "reason": "Location: Osaka vs Sydney"
+          }
+        ],
+        "outreach_messages": [
+          "Hi Samuel, I noticed your experience with Java and thought you might be interested in our Senior Backend Engineer role at CoolStartup Co.."
+        ]
+      },
+      {
+        "job_id": "bdee904e-a560-445b-b098-030eac613817",
+        "score": 65,
+        "breakdown_json": [
+          {
+            "signal": "skill_match",
+            "value": 0,
+            "reason": "No direct skill matches"
+          },
+          {
+            "signal": "experience",
+            "value": 6,
+            "reason": "6 years of experience (required: 5)"
+          },
+          {
+            "signal": "location",
+            "value": 0,
+            "reason": "Location: Osaka vs Sydney"
+          }
+        ],
+        "outreach_messages": [
+          "Hi Samuel, I noticed your experience with Java and thought you might be interested in our Senior Backend Engineer role at CoolStartup Co.."
+        ]
+      },
+      {
+        "job_id": "d35c8b92-737f-40d6-913e-f68cf6fd3863",
+        "score": 65,
+        "breakdown_json": [
+          {
+            "signal": "skill_match",
+            "value": 0,
+            "reason": "No direct skill matches"
+          },
+          {
+            "signal": "experience",
+            "value": 6,
+            "reason": "6 years of experience (required: 5)"
+          },
+          {
+            "signal": "location",
+            "value": 0,
+            "reason": "Location: Osaka vs Sydney"
+          }
+        ],
+        "outreach_messages": [
+          "Hi Samuel, I noticed your experience with Java and thought you might be interested in our Senior Backend Engineer role at CoolStartup Co.."
+        ]
+      },
+      {
+        "job_id": "2e95cd29-7674-490b-8bf9-3d6620f53515",
+        "score": 65,
+        "breakdown_json": [
+          {
+            "signal": "skill_match",
+            "value": 0,
+            "reason": "No direct skill matches"
+          },
+          {
+            "signal": "experience",
+            "value": 6,
+            "reason": "6 years of experience (required: 5)"
+          },
+          {
+            "signal": "location",
+            "value": 0,
+            "reason": "Location: Osaka vs Sydney"
+          }
+        ],
+        "outreach_messages": [
+          "Hi Samuel, I noticed your experience with Java and thought you might be interested in our Senior Backend Engineer role at CoolStartup Co.."
+        ]
+      },
+      {
+        "job_id": "0a085b12-e3ba-45c6-8985-45a44cfdd43f",
+        "score": 65,
+        "breakdown_json": [
+          {
+            "signal": "skill_match",
+            "value": 0,
+            "reason": "No direct skill matches"
+          },
+          {
+            "signal": "experience",
+            "value": 6,
+            "reason": "6 years of experience (required: 5)"
+          },
+          {
+            "signal": "location",
+            "value": 0,
+            "reason": "Location: Osaka vs Sydney"
+          }
+        ],
+        "outreach_messages": [
+          "Hi Samuel, I noticed your experience with Java and thought you might be interested in our Senior Backend Engineer role at CoolStartup Co.."
+        ]
+      },
+      {
+        "job_id": "aa082a0c-b8ed-4c8b-a294-f3687f468f1f",
+        "score": 65,
+        "breakdown_json": [
+          {
+            "signal": "skill_match",
+            "value": 0,
+            "reason": "No direct skill matches"
+          },
+          {
+            "signal": "experience",
+            "value": 6,
+            "reason": "6 years of experience (required: 5)"
+          },
+          {
+            "signal": "location",
+            "value": 0,
+            "reason": "Location: Osaka vs Sydney"
+          }
+        ],
+        "outreach_messages": [
+          "Hi Samuel, I noticed your experience with Java and thought you might be interested in our Senior Backend Engineer role at CoolStartup Co.."
+        ]
+      },
+      {
+        "job_id": "c2f1daac-e95b-4cf6-b5d2-f8877d01cc25",
+        "score": 65,
+        "breakdown_json": [
+          {
+            "signal": "skill_match",
+            "value": 0,
+            "reason": "No direct skill matches"
+          },
+          {
+            "signal": "experience",
+            "value": 6,
+            "reason": "6 years of experience (required: 5)"
+          },
+          {
+            "signal": "location",
+            "value": 0,
+            "reason": "Location: Osaka vs Sydney"
+          }
+        ],
+        "outreach_messages": [
+          "Hi Samuel, I noticed your experience with Java and thought you might be interested in our Senior Backend Engineer role at CoolStartup Co.."
+        ]
+      },
+      {
+        "job_id": "61ddf084-ba49-434e-8a42-a85e8e00c65c",
+        "score": 65,
+        "breakdown_json": [
+          {
+            "signal": "skill_match",
+            "value": 0,
+            "reason": "No direct skill matches"
+          },
+          {
+            "signal": "experience",
+            "value": 6,
+            "reason": "6 years of experience (required: 5)"
+          },
+          {
+            "signal": "location",
+            "value": 0,
+            "reason": "Location: Osaka vs Sydney"
+          }
+        ],
+        "outreach_messages": [
+          "Hi Samuel, I noticed your experience with Java and thought you might be interested in our Senior Backend Engineer role at CoolStartup Co.."
+        ]
+      },
+      {
+        "job_id": "0806be6e-0ae9-41ed-a6b2-b9bfece62d23",
+        "score": 75,
+        "breakdown_json": [
+          {
+            "signal": "skill_match",
+            "value": 0,
+            "reason": "No direct skill matches"
+          },
+          {
+            "signal": "experience",
+            "value": 6,
+            "reason": "6 years of experience (required: 3)"
+          },
+          {
+            "signal": "location",
+            "value": 1,
+            "reason": "Location: Osaka vs Remote"
+          }
+        ],
+        "outreach_messages": [
+          "Hi Samuel, I noticed your experience with Java and thought you might be interested in our Senior Backend Engineer role at CoolStartup Co.."
+        ]
+      },
+      {
+        "job_id": "5b4f8d8d-aa78-4e87-a489-77eb7dee2f43",
+        "score": 65,
+        "breakdown_json": [
+          {
+            "signal": "skill_match",
+            "value": 0,
+            "reason": "No direct skill matches"
+          },
+          {
+            "signal": "experience",
+            "value": 6,
+            "reason": "6 years of experience (required: 5)"
+          },
+          {
+            "signal": "location",
+            "value": 0,
+            "reason": "Location: Osaka vs Sydney"
+          }
+        ],
+        "outreach_messages": [
+          "Hi Samuel, I noticed your experience with Java and thought you might be interested in our Senior Backend Engineer role at CoolStartup Co.."
+        ]
+      }
+    ]
   },
   {
     "_id": "550e8400-e29b-41d4-a716-446655440008",
@@ -187,7 +2738,369 @@
       "years_of_experience": 3,
       "location": "Tokyo"
     },
-    "notificationSettings": []
+    "notificationSettings": [],
+    "scores": [
+      {
+        "job_id": "550e8400-e29b-41d4-a716-446655440010",
+        "score": 55,
+        "breakdown_json": [
+          {
+            "signal": "skill_match",
+            "value": 0,
+            "reason": "No direct skill matches"
+          },
+          {
+            "signal": "experience",
+            "value": 3,
+            "reason": "3 years of experience (required: 5)"
+          },
+          {
+            "signal": "location",
+            "value": 0,
+            "reason": "Location: Tokyo vs Sydney"
+          }
+        ],
+        "outreach_messages": [
+          "Hi Zoe, I noticed your experience with React Native and thought you might be interested in our Senior Backend Engineer role at CoolStartup Co.."
+        ]
+      },
+      {
+        "job_id": "550e8400-e29b-41d4-a716-446655440011",
+        "score": 60,
+        "breakdown_json": [
+          {
+            "signal": "skill_match",
+            "value": 0,
+            "reason": "No direct skill matches"
+          },
+          {
+            "signal": "experience",
+            "value": 3,
+            "reason": "3 years of experience (required: 8)"
+          },
+          {
+            "signal": "location",
+            "value": 1,
+            "reason": "Location: Tokyo vs Remote"
+          }
+        ],
+        "outreach_messages": [
+          "Hi Zoe, I noticed your experience with React Native and thought you might be interested in our Principal Infrastructure Engineer role at InfraGen Ltd.."
+        ]
+      },
+      {
+        "job_id": "550e8400-e29b-41d4-a716-446655440012",
+        "score": 55,
+        "breakdown_json": [
+          {
+            "signal": "skill_match",
+            "value": 0,
+            "reason": "No direct skill matches"
+          },
+          {
+            "signal": "experience",
+            "value": 3,
+            "reason": "3 years of experience (required: 5)"
+          },
+          {
+            "signal": "location",
+            "value": 0,
+            "reason": "Location: Tokyo vs Sydney"
+          }
+        ],
+        "outreach_messages": [
+          "Hi Zoe, I noticed your experience with React Native and thought you might be interested in our Senior Backend Engineer role at CoolStartup Co.."
+        ]
+      },
+      {
+        "job_id": "550e8400-e29b-41d4-a716-446655440013",
+        "score": 55,
+        "breakdown_json": [
+          {
+            "signal": "skill_match",
+            "value": 0,
+            "reason": "No direct skill matches"
+          },
+          {
+            "signal": "experience",
+            "value": 3,
+            "reason": "3 years of experience (required: 5)"
+          },
+          {
+            "signal": "location",
+            "value": 0,
+            "reason": "Location: Tokyo vs Sydney"
+          }
+        ],
+        "outreach_messages": [
+          "Hi Zoe, I noticed your experience with React Native and thought you might be interested in our Senior Backend Engineer role at CoolStartup Co.."
+        ]
+      },
+      {
+        "job_id": "48be8042-2dcb-46a1-a267-2d633fc8a5b9",
+        "score": 60,
+        "breakdown_json": [
+          {
+            "signal": "skill_match",
+            "value": 0,
+            "reason": "No direct skill matches"
+          },
+          {
+            "signal": "experience",
+            "value": 3,
+            "reason": "3 years of experience (required: 8)"
+          },
+          {
+            "signal": "location",
+            "value": 1,
+            "reason": "Location: Tokyo vs Remote"
+          }
+        ],
+        "outreach_messages": [
+          "Hi Zoe, I noticed your experience with React Native and thought you might be interested in our Senior Backend Engineer role at CoolStartup Co.."
+        ]
+      },
+      {
+        "job_id": "f9a7186c-07e9-4e64-8e33-8e26c29c51a6",
+        "score": 55,
+        "breakdown_json": [
+          {
+            "signal": "skill_match",
+            "value": 0,
+            "reason": "No direct skill matches"
+          },
+          {
+            "signal": "experience",
+            "value": 3,
+            "reason": "3 years of experience (required: 5)"
+          },
+          {
+            "signal": "location",
+            "value": 0,
+            "reason": "Location: Tokyo vs Sydney"
+          }
+        ],
+        "outreach_messages": [
+          "Hi Zoe, I noticed your experience with React Native and thought you might be interested in our Senior Backend Engineer role at CoolStartup Co.."
+        ]
+      },
+      {
+        "job_id": "bdee904e-a560-445b-b098-030eac613817",
+        "score": 55,
+        "breakdown_json": [
+          {
+            "signal": "skill_match",
+            "value": 0,
+            "reason": "No direct skill matches"
+          },
+          {
+            "signal": "experience",
+            "value": 3,
+            "reason": "3 years of experience (required: 5)"
+          },
+          {
+            "signal": "location",
+            "value": 0,
+            "reason": "Location: Tokyo vs Sydney"
+          }
+        ],
+        "outreach_messages": [
+          "Hi Zoe, I noticed your experience with React Native and thought you might be interested in our Senior Backend Engineer role at CoolStartup Co.."
+        ]
+      },
+      {
+        "job_id": "d35c8b92-737f-40d6-913e-f68cf6fd3863",
+        "score": 55,
+        "breakdown_json": [
+          {
+            "signal": "skill_match",
+            "value": 0,
+            "reason": "No direct skill matches"
+          },
+          {
+            "signal": "experience",
+            "value": 3,
+            "reason": "3 years of experience (required: 5)"
+          },
+          {
+            "signal": "location",
+            "value": 0,
+            "reason": "Location: Tokyo vs Sydney"
+          }
+        ],
+        "outreach_messages": [
+          "Hi Zoe, I noticed your experience with React Native and thought you might be interested in our Senior Backend Engineer role at CoolStartup Co.."
+        ]
+      },
+      {
+        "job_id": "2e95cd29-7674-490b-8bf9-3d6620f53515",
+        "score": 55,
+        "breakdown_json": [
+          {
+            "signal": "skill_match",
+            "value": 0,
+            "reason": "No direct skill matches"
+          },
+          {
+            "signal": "experience",
+            "value": 3,
+            "reason": "3 years of experience (required: 5)"
+          },
+          {
+            "signal": "location",
+            "value": 0,
+            "reason": "Location: Tokyo vs Sydney"
+          }
+        ],
+        "outreach_messages": [
+          "Hi Zoe, I noticed your experience with React Native and thought you might be interested in our Senior Backend Engineer role at CoolStartup Co.."
+        ]
+      },
+      {
+        "job_id": "0a085b12-e3ba-45c6-8985-45a44cfdd43f",
+        "score": 55,
+        "breakdown_json": [
+          {
+            "signal": "skill_match",
+            "value": 0,
+            "reason": "No direct skill matches"
+          },
+          {
+            "signal": "experience",
+            "value": 3,
+            "reason": "3 years of experience (required: 5)"
+          },
+          {
+            "signal": "location",
+            "value": 0,
+            "reason": "Location: Tokyo vs Sydney"
+          }
+        ],
+        "outreach_messages": [
+          "Hi Zoe, I noticed your experience with React Native and thought you might be interested in our Senior Backend Engineer role at CoolStartup Co.."
+        ]
+      },
+      {
+        "job_id": "aa082a0c-b8ed-4c8b-a294-f3687f468f1f",
+        "score": 55,
+        "breakdown_json": [
+          {
+            "signal": "skill_match",
+            "value": 0,
+            "reason": "No direct skill matches"
+          },
+          {
+            "signal": "experience",
+            "value": 3,
+            "reason": "3 years of experience (required: 5)"
+          },
+          {
+            "signal": "location",
+            "value": 0,
+            "reason": "Location: Tokyo vs Sydney"
+          }
+        ],
+        "outreach_messages": [
+          "Hi Zoe, I noticed your experience with React Native and thought you might be interested in our Senior Backend Engineer role at CoolStartup Co.."
+        ]
+      },
+      {
+        "job_id": "c2f1daac-e95b-4cf6-b5d2-f8877d01cc25",
+        "score": 55,
+        "breakdown_json": [
+          {
+            "signal": "skill_match",
+            "value": 0,
+            "reason": "No direct skill matches"
+          },
+          {
+            "signal": "experience",
+            "value": 3,
+            "reason": "3 years of experience (required: 5)"
+          },
+          {
+            "signal": "location",
+            "value": 0,
+            "reason": "Location: Tokyo vs Sydney"
+          }
+        ],
+        "outreach_messages": [
+          "Hi Zoe, I noticed your experience with React Native and thought you might be interested in our Senior Backend Engineer role at CoolStartup Co.."
+        ]
+      },
+      {
+        "job_id": "61ddf084-ba49-434e-8a42-a85e8e00c65c",
+        "score": 55,
+        "breakdown_json": [
+          {
+            "signal": "skill_match",
+            "value": 0,
+            "reason": "No direct skill matches"
+          },
+          {
+            "signal": "experience",
+            "value": 3,
+            "reason": "3 years of experience (required: 5)"
+          },
+          {
+            "signal": "location",
+            "value": 0,
+            "reason": "Location: Tokyo vs Sydney"
+          }
+        ],
+        "outreach_messages": [
+          "Hi Zoe, I noticed your experience with React Native and thought you might be interested in our Senior Backend Engineer role at CoolStartup Co.."
+        ]
+      },
+      {
+        "job_id": "0806be6e-0ae9-41ed-a6b2-b9bfece62d23",
+        "score": 75,
+        "breakdown_json": [
+          {
+            "signal": "skill_match",
+            "value": 0,
+            "reason": "No direct skill matches"
+          },
+          {
+            "signal": "experience",
+            "value": 3,
+            "reason": "3 years of experience (required: 3)"
+          },
+          {
+            "signal": "location",
+            "value": 1,
+            "reason": "Location: Tokyo vs Remote"
+          }
+        ],
+        "outreach_messages": [
+          "Hi Zoe, I noticed your experience with React Native and thought you might be interested in our Senior Backend Engineer role at CoolStartup Co.."
+        ]
+      },
+      {
+        "job_id": "5b4f8d8d-aa78-4e87-a489-77eb7dee2f43",
+        "score": 55,
+        "breakdown_json": [
+          {
+            "signal": "skill_match",
+            "value": 0,
+            "reason": "No direct skill matches"
+          },
+          {
+            "signal": "experience",
+            "value": 3,
+            "reason": "3 years of experience (required: 5)"
+          },
+          {
+            "signal": "location",
+            "value": 0,
+            "reason": "Location: Tokyo vs Sydney"
+          }
+        ],
+        "outreach_messages": [
+          "Hi Zoe, I noticed your experience with React Native and thought you might be interested in our Senior Backend Engineer role at CoolStartup Co.."
+        ]
+      }
+    ]
   },
   {
     "_id": "550e8400-e29b-41d4-a716-446655440009",
@@ -210,7 +3123,369 @@
       "years_of_experience": 5,
       "location": "Brisbane"
     },
-    "notificationSettings": []
+    "notificationSettings": [],
+    "scores": [
+      {
+        "job_id": "550e8400-e29b-41d4-a716-446655440010",
+        "score": 75,
+        "breakdown_json": [
+          {
+            "signal": "skill_match",
+            "value": 1,
+            "reason": "Matched 1 skills: postgresql"
+          },
+          {
+            "signal": "experience",
+            "value": 5,
+            "reason": "5 years of experience (required: 5)"
+          },
+          {
+            "signal": "location",
+            "value": 0,
+            "reason": "Location: Brisbane vs Sydney"
+          }
+        ],
+        "outreach_messages": [
+          "Hi Liam, I noticed your experience with postgresql and thought you might be interested in our Senior Backend Engineer role at CoolStartup Co.."
+        ]
+      },
+      {
+        "job_id": "550e8400-e29b-41d4-a716-446655440011",
+        "score": 70,
+        "breakdown_json": [
+          {
+            "signal": "skill_match",
+            "value": 1,
+            "reason": "Matched 1 skills: redis"
+          },
+          {
+            "signal": "experience",
+            "value": 5,
+            "reason": "5 years of experience (required: 8)"
+          },
+          {
+            "signal": "location",
+            "value": 1,
+            "reason": "Location: Brisbane vs Remote"
+          }
+        ],
+        "outreach_messages": [
+          "Hi Liam, I noticed your experience with redis and thought you might be interested in our Principal Infrastructure Engineer role at InfraGen Ltd.."
+        ]
+      },
+      {
+        "job_id": "550e8400-e29b-41d4-a716-446655440012",
+        "score": 75,
+        "breakdown_json": [
+          {
+            "signal": "skill_match",
+            "value": 1,
+            "reason": "Matched 1 skills: postgresql"
+          },
+          {
+            "signal": "experience",
+            "value": 5,
+            "reason": "5 years of experience (required: 5)"
+          },
+          {
+            "signal": "location",
+            "value": 0,
+            "reason": "Location: Brisbane vs Sydney"
+          }
+        ],
+        "outreach_messages": [
+          "Hi Liam, I noticed your experience with postgresql and thought you might be interested in our Senior Backend Engineer role at CoolStartup Co.."
+        ]
+      },
+      {
+        "job_id": "550e8400-e29b-41d4-a716-446655440013",
+        "score": 75,
+        "breakdown_json": [
+          {
+            "signal": "skill_match",
+            "value": 1,
+            "reason": "Matched 1 skills: postgresql"
+          },
+          {
+            "signal": "experience",
+            "value": 5,
+            "reason": "5 years of experience (required: 5)"
+          },
+          {
+            "signal": "location",
+            "value": 0,
+            "reason": "Location: Brisbane vs Sydney"
+          }
+        ],
+        "outreach_messages": [
+          "Hi Liam, I noticed your experience with postgresql and thought you might be interested in our Senior Backend Engineer role at CoolStartup Co.."
+        ]
+      },
+      {
+        "job_id": "48be8042-2dcb-46a1-a267-2d633fc8a5b9",
+        "score": 70,
+        "breakdown_json": [
+          {
+            "signal": "skill_match",
+            "value": 1,
+            "reason": "Matched 1 skills: redis"
+          },
+          {
+            "signal": "experience",
+            "value": 5,
+            "reason": "5 years of experience (required: 8)"
+          },
+          {
+            "signal": "location",
+            "value": 1,
+            "reason": "Location: Brisbane vs Remote"
+          }
+        ],
+        "outreach_messages": [
+          "Hi Liam, I noticed your experience with redis and thought you might be interested in our Senior Backend Engineer role at CoolStartup Co.."
+        ]
+      },
+      {
+        "job_id": "f9a7186c-07e9-4e64-8e33-8e26c29c51a6",
+        "score": 75,
+        "breakdown_json": [
+          {
+            "signal": "skill_match",
+            "value": 1,
+            "reason": "Matched 1 skills: postgresql"
+          },
+          {
+            "signal": "experience",
+            "value": 5,
+            "reason": "5 years of experience (required: 5)"
+          },
+          {
+            "signal": "location",
+            "value": 0,
+            "reason": "Location: Brisbane vs Sydney"
+          }
+        ],
+        "outreach_messages": [
+          "Hi Liam, I noticed your experience with postgresql and thought you might be interested in our Senior Backend Engineer role at CoolStartup Co.."
+        ]
+      },
+      {
+        "job_id": "bdee904e-a560-445b-b098-030eac613817",
+        "score": 75,
+        "breakdown_json": [
+          {
+            "signal": "skill_match",
+            "value": 1,
+            "reason": "Matched 1 skills: postgresql"
+          },
+          {
+            "signal": "experience",
+            "value": 5,
+            "reason": "5 years of experience (required: 5)"
+          },
+          {
+            "signal": "location",
+            "value": 0,
+            "reason": "Location: Brisbane vs Sydney"
+          }
+        ],
+        "outreach_messages": [
+          "Hi Liam, I noticed your experience with postgresql and thought you might be interested in our Senior Backend Engineer role at CoolStartup Co.."
+        ]
+      },
+      {
+        "job_id": "d35c8b92-737f-40d6-913e-f68cf6fd3863",
+        "score": 75,
+        "breakdown_json": [
+          {
+            "signal": "skill_match",
+            "value": 1,
+            "reason": "Matched 1 skills: postgresql"
+          },
+          {
+            "signal": "experience",
+            "value": 5,
+            "reason": "5 years of experience (required: 5)"
+          },
+          {
+            "signal": "location",
+            "value": 0,
+            "reason": "Location: Brisbane vs Sydney"
+          }
+        ],
+        "outreach_messages": [
+          "Hi Liam, I noticed your experience with postgresql and thought you might be interested in our Senior Backend Engineer role at CoolStartup Co.."
+        ]
+      },
+      {
+        "job_id": "2e95cd29-7674-490b-8bf9-3d6620f53515",
+        "score": 75,
+        "breakdown_json": [
+          {
+            "signal": "skill_match",
+            "value": 1,
+            "reason": "Matched 1 skills: postgresql"
+          },
+          {
+            "signal": "experience",
+            "value": 5,
+            "reason": "5 years of experience (required: 5)"
+          },
+          {
+            "signal": "location",
+            "value": 0,
+            "reason": "Location: Brisbane vs Sydney"
+          }
+        ],
+        "outreach_messages": [
+          "Hi Liam, I noticed your experience with postgresql and thought you might be interested in our Senior Backend Engineer role at CoolStartup Co.."
+        ]
+      },
+      {
+        "job_id": "0a085b12-e3ba-45c6-8985-45a44cfdd43f",
+        "score": 75,
+        "breakdown_json": [
+          {
+            "signal": "skill_match",
+            "value": 1,
+            "reason": "Matched 1 skills: postgresql"
+          },
+          {
+            "signal": "experience",
+            "value": 5,
+            "reason": "5 years of experience (required: 5)"
+          },
+          {
+            "signal": "location",
+            "value": 0,
+            "reason": "Location: Brisbane vs Sydney"
+          }
+        ],
+        "outreach_messages": [
+          "Hi Liam, I noticed your experience with postgresql and thought you might be interested in our Senior Backend Engineer role at CoolStartup Co.."
+        ]
+      },
+      {
+        "job_id": "aa082a0c-b8ed-4c8b-a294-f3687f468f1f",
+        "score": 75,
+        "breakdown_json": [
+          {
+            "signal": "skill_match",
+            "value": 1,
+            "reason": "Matched 1 skills: postgresql"
+          },
+          {
+            "signal": "experience",
+            "value": 5,
+            "reason": "5 years of experience (required: 5)"
+          },
+          {
+            "signal": "location",
+            "value": 0,
+            "reason": "Location: Brisbane vs Sydney"
+          }
+        ],
+        "outreach_messages": [
+          "Hi Liam, I noticed your experience with postgresql and thought you might be interested in our Senior Backend Engineer role at CoolStartup Co.."
+        ]
+      },
+      {
+        "job_id": "c2f1daac-e95b-4cf6-b5d2-f8877d01cc25",
+        "score": 75,
+        "breakdown_json": [
+          {
+            "signal": "skill_match",
+            "value": 1,
+            "reason": "Matched 1 skills: postgresql"
+          },
+          {
+            "signal": "experience",
+            "value": 5,
+            "reason": "5 years of experience (required: 5)"
+          },
+          {
+            "signal": "location",
+            "value": 0,
+            "reason": "Location: Brisbane vs Sydney"
+          }
+        ],
+        "outreach_messages": [
+          "Hi Liam, I noticed your experience with postgresql and thought you might be interested in our Senior Backend Engineer role at CoolStartup Co.."
+        ]
+      },
+      {
+        "job_id": "61ddf084-ba49-434e-8a42-a85e8e00c65c",
+        "score": 75,
+        "breakdown_json": [
+          {
+            "signal": "skill_match",
+            "value": 1,
+            "reason": "Matched 1 skills: postgresql"
+          },
+          {
+            "signal": "experience",
+            "value": 5,
+            "reason": "5 years of experience (required: 5)"
+          },
+          {
+            "signal": "location",
+            "value": 0,
+            "reason": "Location: Brisbane vs Sydney"
+          }
+        ],
+        "outreach_messages": [
+          "Hi Liam, I noticed your experience with postgresql and thought you might be interested in our Senior Backend Engineer role at CoolStartup Co.."
+        ]
+      },
+      {
+        "job_id": "0806be6e-0ae9-41ed-a6b2-b9bfece62d23",
+        "score": 75,
+        "breakdown_json": [
+          {
+            "signal": "skill_match",
+            "value": 0,
+            "reason": "No direct skill matches"
+          },
+          {
+            "signal": "experience",
+            "value": 5,
+            "reason": "5 years of experience (required: 3)"
+          },
+          {
+            "signal": "location",
+            "value": 1,
+            "reason": "Location: Brisbane vs Remote"
+          }
+        ],
+        "outreach_messages": [
+          "Hi Liam, I noticed your experience with Ruby on Rails and thought you might be interested in our Senior Backend Engineer role at CoolStartup Co.."
+        ]
+      },
+      {
+        "job_id": "5b4f8d8d-aa78-4e87-a489-77eb7dee2f43",
+        "score": 75,
+        "breakdown_json": [
+          {
+            "signal": "skill_match",
+            "value": 1,
+            "reason": "Matched 1 skills: postgresql"
+          },
+          {
+            "signal": "experience",
+            "value": 5,
+            "reason": "5 years of experience (required: 5)"
+          },
+          {
+            "signal": "location",
+            "value": 0,
+            "reason": "Location: Brisbane vs Sydney"
+          }
+        ],
+        "outreach_messages": [
+          "Hi Liam, I noticed your experience with postgresql and thought you might be interested in our Senior Backend Engineer role at CoolStartup Co.."
+        ]
+      }
+    ]
   },
   {
     "_id": "550e8400-e29b-41d4-a716-446655440010",
@@ -233,6 +3508,368 @@
       "years_of_experience": 2,
       "location": "Sydney"
     },
-    "notificationSettings": []
+    "notificationSettings": [],
+    "scores": [
+      {
+        "job_id": "550e8400-e29b-41d4-a716-446655440010",
+        "score": 60,
+        "breakdown_json": [
+          {
+            "signal": "skill_match",
+            "value": 0,
+            "reason": "No direct skill matches"
+          },
+          {
+            "signal": "experience",
+            "value": 2,
+            "reason": "2 years of experience (required: 5)"
+          },
+          {
+            "signal": "location",
+            "value": 1,
+            "reason": "Location: Sydney vs Sydney"
+          }
+        ],
+        "outreach_messages": [
+          "Hi Chloe, I noticed your experience with PHP and thought you might be interested in our Senior Backend Engineer role at CoolStartup Co.."
+        ]
+      },
+      {
+        "job_id": "550e8400-e29b-41d4-a716-446655440011",
+        "score": 60,
+        "breakdown_json": [
+          {
+            "signal": "skill_match",
+            "value": 0,
+            "reason": "No direct skill matches"
+          },
+          {
+            "signal": "experience",
+            "value": 2,
+            "reason": "2 years of experience (required: 8)"
+          },
+          {
+            "signal": "location",
+            "value": 1,
+            "reason": "Location: Sydney vs Remote"
+          }
+        ],
+        "outreach_messages": [
+          "Hi Chloe, I noticed your experience with PHP and thought you might be interested in our Principal Infrastructure Engineer role at InfraGen Ltd.."
+        ]
+      },
+      {
+        "job_id": "550e8400-e29b-41d4-a716-446655440012",
+        "score": 60,
+        "breakdown_json": [
+          {
+            "signal": "skill_match",
+            "value": 0,
+            "reason": "No direct skill matches"
+          },
+          {
+            "signal": "experience",
+            "value": 2,
+            "reason": "2 years of experience (required: 5)"
+          },
+          {
+            "signal": "location",
+            "value": 1,
+            "reason": "Location: Sydney vs Sydney"
+          }
+        ],
+        "outreach_messages": [
+          "Hi Chloe, I noticed your experience with PHP and thought you might be interested in our Senior Backend Engineer role at CoolStartup Co.."
+        ]
+      },
+      {
+        "job_id": "550e8400-e29b-41d4-a716-446655440013",
+        "score": 60,
+        "breakdown_json": [
+          {
+            "signal": "skill_match",
+            "value": 0,
+            "reason": "No direct skill matches"
+          },
+          {
+            "signal": "experience",
+            "value": 2,
+            "reason": "2 years of experience (required: 5)"
+          },
+          {
+            "signal": "location",
+            "value": 1,
+            "reason": "Location: Sydney vs Sydney"
+          }
+        ],
+        "outreach_messages": [
+          "Hi Chloe, I noticed your experience with PHP and thought you might be interested in our Senior Backend Engineer role at CoolStartup Co.."
+        ]
+      },
+      {
+        "job_id": "48be8042-2dcb-46a1-a267-2d633fc8a5b9",
+        "score": 60,
+        "breakdown_json": [
+          {
+            "signal": "skill_match",
+            "value": 0,
+            "reason": "No direct skill matches"
+          },
+          {
+            "signal": "experience",
+            "value": 2,
+            "reason": "2 years of experience (required: 8)"
+          },
+          {
+            "signal": "location",
+            "value": 1,
+            "reason": "Location: Sydney vs Remote"
+          }
+        ],
+        "outreach_messages": [
+          "Hi Chloe, I noticed your experience with PHP and thought you might be interested in our Senior Backend Engineer role at CoolStartup Co.."
+        ]
+      },
+      {
+        "job_id": "f9a7186c-07e9-4e64-8e33-8e26c29c51a6",
+        "score": 60,
+        "breakdown_json": [
+          {
+            "signal": "skill_match",
+            "value": 0,
+            "reason": "No direct skill matches"
+          },
+          {
+            "signal": "experience",
+            "value": 2,
+            "reason": "2 years of experience (required: 5)"
+          },
+          {
+            "signal": "location",
+            "value": 1,
+            "reason": "Location: Sydney vs Sydney"
+          }
+        ],
+        "outreach_messages": [
+          "Hi Chloe, I noticed your experience with PHP and thought you might be interested in our Senior Backend Engineer role at CoolStartup Co.."
+        ]
+      },
+      {
+        "job_id": "bdee904e-a560-445b-b098-030eac613817",
+        "score": 60,
+        "breakdown_json": [
+          {
+            "signal": "skill_match",
+            "value": 0,
+            "reason": "No direct skill matches"
+          },
+          {
+            "signal": "experience",
+            "value": 2,
+            "reason": "2 years of experience (required: 5)"
+          },
+          {
+            "signal": "location",
+            "value": 1,
+            "reason": "Location: Sydney vs Sydney"
+          }
+        ],
+        "outreach_messages": [
+          "Hi Chloe, I noticed your experience with PHP and thought you might be interested in our Senior Backend Engineer role at CoolStartup Co.."
+        ]
+      },
+      {
+        "job_id": "d35c8b92-737f-40d6-913e-f68cf6fd3863",
+        "score": 60,
+        "breakdown_json": [
+          {
+            "signal": "skill_match",
+            "value": 0,
+            "reason": "No direct skill matches"
+          },
+          {
+            "signal": "experience",
+            "value": 2,
+            "reason": "2 years of experience (required: 5)"
+          },
+          {
+            "signal": "location",
+            "value": 1,
+            "reason": "Location: Sydney vs Sydney"
+          }
+        ],
+        "outreach_messages": [
+          "Hi Chloe, I noticed your experience with PHP and thought you might be interested in our Senior Backend Engineer role at CoolStartup Co.."
+        ]
+      },
+      {
+        "job_id": "2e95cd29-7674-490b-8bf9-3d6620f53515",
+        "score": 60,
+        "breakdown_json": [
+          {
+            "signal": "skill_match",
+            "value": 0,
+            "reason": "No direct skill matches"
+          },
+          {
+            "signal": "experience",
+            "value": 2,
+            "reason": "2 years of experience (required: 5)"
+          },
+          {
+            "signal": "location",
+            "value": 1,
+            "reason": "Location: Sydney vs Sydney"
+          }
+        ],
+        "outreach_messages": [
+          "Hi Chloe, I noticed your experience with PHP and thought you might be interested in our Senior Backend Engineer role at CoolStartup Co.."
+        ]
+      },
+      {
+        "job_id": "0a085b12-e3ba-45c6-8985-45a44cfdd43f",
+        "score": 60,
+        "breakdown_json": [
+          {
+            "signal": "skill_match",
+            "value": 0,
+            "reason": "No direct skill matches"
+          },
+          {
+            "signal": "experience",
+            "value": 2,
+            "reason": "2 years of experience (required: 5)"
+          },
+          {
+            "signal": "location",
+            "value": 1,
+            "reason": "Location: Sydney vs Sydney"
+          }
+        ],
+        "outreach_messages": [
+          "Hi Chloe, I noticed your experience with PHP and thought you might be interested in our Senior Backend Engineer role at CoolStartup Co.."
+        ]
+      },
+      {
+        "job_id": "aa082a0c-b8ed-4c8b-a294-f3687f468f1f",
+        "score": 60,
+        "breakdown_json": [
+          {
+            "signal": "skill_match",
+            "value": 0,
+            "reason": "No direct skill matches"
+          },
+          {
+            "signal": "experience",
+            "value": 2,
+            "reason": "2 years of experience (required: 5)"
+          },
+          {
+            "signal": "location",
+            "value": 1,
+            "reason": "Location: Sydney vs Sydney"
+          }
+        ],
+        "outreach_messages": [
+          "Hi Chloe, I noticed your experience with PHP and thought you might be interested in our Senior Backend Engineer role at CoolStartup Co.."
+        ]
+      },
+      {
+        "job_id": "c2f1daac-e95b-4cf6-b5d2-f8877d01cc25",
+        "score": 60,
+        "breakdown_json": [
+          {
+            "signal": "skill_match",
+            "value": 0,
+            "reason": "No direct skill matches"
+          },
+          {
+            "signal": "experience",
+            "value": 2,
+            "reason": "2 years of experience (required: 5)"
+          },
+          {
+            "signal": "location",
+            "value": 1,
+            "reason": "Location: Sydney vs Sydney"
+          }
+        ],
+        "outreach_messages": [
+          "Hi Chloe, I noticed your experience with PHP and thought you might be interested in our Senior Backend Engineer role at CoolStartup Co.."
+        ]
+      },
+      {
+        "job_id": "61ddf084-ba49-434e-8a42-a85e8e00c65c",
+        "score": 60,
+        "breakdown_json": [
+          {
+            "signal": "skill_match",
+            "value": 0,
+            "reason": "No direct skill matches"
+          },
+          {
+            "signal": "experience",
+            "value": 2,
+            "reason": "2 years of experience (required: 5)"
+          },
+          {
+            "signal": "location",
+            "value": 1,
+            "reason": "Location: Sydney vs Sydney"
+          }
+        ],
+        "outreach_messages": [
+          "Hi Chloe, I noticed your experience with PHP and thought you might be interested in our Senior Backend Engineer role at CoolStartup Co.."
+        ]
+      },
+      {
+        "job_id": "0806be6e-0ae9-41ed-a6b2-b9bfece62d23",
+        "score": 65,
+        "breakdown_json": [
+          {
+            "signal": "skill_match",
+            "value": 0,
+            "reason": "No direct skill matches"
+          },
+          {
+            "signal": "experience",
+            "value": 2,
+            "reason": "2 years of experience (required: 3)"
+          },
+          {
+            "signal": "location",
+            "value": 1,
+            "reason": "Location: Sydney vs Remote"
+          }
+        ],
+        "outreach_messages": [
+          "Hi Chloe, I noticed your experience with PHP and thought you might be interested in our Senior Backend Engineer role at CoolStartup Co.."
+        ]
+      },
+      {
+        "job_id": "5b4f8d8d-aa78-4e87-a489-77eb7dee2f43",
+        "score": 60,
+        "breakdown_json": [
+          {
+            "signal": "skill_match",
+            "value": 0,
+            "reason": "No direct skill matches"
+          },
+          {
+            "signal": "experience",
+            "value": 2,
+            "reason": "2 years of experience (required: 5)"
+          },
+          {
+            "signal": "location",
+            "value": 1,
+            "reason": "Location: Sydney vs Sydney"
+          }
+        ],
+        "outreach_messages": [
+          "Hi Chloe, I noticed your experience with PHP and thought you might be interested in our Senior Backend Engineer role at CoolStartup Co.."
+        ]
+      }
+    ]
   }
 ]
