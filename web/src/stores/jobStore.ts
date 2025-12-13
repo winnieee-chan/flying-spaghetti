@@ -16,6 +16,13 @@ interface JobFilters {
   skills?: string[];
 }
 
+export interface PipelineStage {
+  id: string;
+  name: string;
+  order: number;
+  color?: string;
+}
+
 interface Job {
   id: string;
   title: string;
@@ -25,6 +32,7 @@ interface Job {
   candidateCount?: number;
   filters?: JobFilters;
   message?: string;
+  pipelineStages?: PipelineStage[];
 }
 
 export interface Candidate {
@@ -41,6 +49,7 @@ export interface Candidate {
   headline?: string;         // e.g. "Senior Engineer at Google"
   source?: 'seeded' | 'external';  // Where candidate came from
   matchScore?: number;       // 0-100 relevance score
+  pipelineStage?: string;    // stage id, defaults to "new"
 }
 
 // CandidateFilters is imported from candidateUtils
@@ -79,6 +88,12 @@ interface JobStore {
   searchExternalCandidates: (jobId: string, query: string) => Promise<Candidate[]>;
   getStarredCandidates: (jobId: string) => Candidate[];
   setSearchQuery: (query: string) => void;
+  
+  // Pipeline actions
+  getPipelineStages: (jobId: string) => PipelineStage[];
+  updatePipelineStages: (jobId: string, stages: PipelineStage[]) => Promise<void>;
+  updateCandidateStage: (jobId: string, candidateId: string, stageId: string) => Promise<void>;
+  batchMoveCandidates: (jobId: string, criteria: { minMatchScore?: number; maxMatchScore?: number }, targetStageId: string) => Promise<number>;
 }
 
 const useJobStore = create<JobStore>((set, get) => ({
@@ -332,6 +347,97 @@ const useJobStore = create<JobStore>((set, get) => ({
    */
   setSearchQuery: (query: string) => {
     set({ searchQuery: query });
+  },
+
+  /**
+   * Get pipeline stages for a job (with defaults)
+   */
+  getPipelineStages: (jobId: string) => {
+    const { currentJob } = get();
+    if (currentJob?.id === jobId && currentJob.pipelineStages) {
+      return currentJob.pipelineStages.sort((a, b) => a.order - b.order);
+    }
+    // Default stages
+    return [
+      { id: "new", name: "New", order: 0 },
+      { id: "screening", name: "Screening", order: 1 },
+      { id: "interview", name: "Interview", order: 2 },
+      { id: "offer", name: "Offer", order: 3 },
+      { id: "hired", name: "Hired", order: 4 },
+    ];
+  },
+
+  /**
+   * Update pipeline stages for a job
+   */
+  updatePipelineStages: async (jobId: string, stages: PipelineStage[]) => {
+    set({ loading: true, error: null });
+    try {
+      const updatedJob = await api.put<Job>(`/${jobId}`, { pipelineStages: stages });
+      set((state) => {
+        const updatedJobs = state.jobs.map((job) =>
+          job.id === jobId ? updatedJob : job
+        );
+        return {
+          jobs: updatedJobs,
+          currentJob: state.currentJob?.id === jobId ? updatedJob : state.currentJob,
+          loading: false,
+        };
+      });
+    } catch (error) {
+      const errorMessage = error instanceof Error ? error.message : "Unknown error";
+      set({ error: errorMessage, loading: false });
+      throw error;
+    }
+  },
+
+  /**
+   * Update a candidate's pipeline stage
+   */
+  updateCandidateStage: async (jobId: string, candidateId: string, stageId: string) => {
+    set({ loading: true, error: null });
+    try {
+      await api.put(`/${jobId}/cd/${candidateId}/stage`, { stageId });
+      // Update local state
+      set((state) => ({
+        candidates: state.candidates.map((c) =>
+          c.id === candidateId ? { ...c, pipelineStage: stageId } : c
+        ),
+        filteredCandidates: state.filteredCandidates.map((c) =>
+          c.id === candidateId ? { ...c, pipelineStage: stageId } : c
+        ),
+        selectedCandidate:
+          state.selectedCandidate?.id === candidateId
+            ? { ...state.selectedCandidate, pipelineStage: stageId }
+            : state.selectedCandidate,
+        loading: false,
+      }));
+    } catch (error) {
+      const errorMessage = error instanceof Error ? error.message : "Unknown error";
+      set({ error: errorMessage, loading: false });
+      throw error;
+    }
+  },
+
+  /**
+   * Batch move candidates based on match score criteria
+   */
+  batchMoveCandidates: async (jobId: string, criteria: { minMatchScore?: number; maxMatchScore?: number }, targetStageId: string) => {
+    set({ loading: true, error: null });
+    try {
+      const result = await api.post<{ count: number }>(`/${jobId}/cd/batch-move`, {
+        criteria,
+        targetStageId,
+      });
+      // Refresh candidates to get updated stages
+      await get().fetchCandidates(jobId);
+      set({ loading: false });
+      return result.count;
+    } catch (error) {
+      const errorMessage = error instanceof Error ? error.message : "Unknown error";
+      set({ error: errorMessage, loading: false });
+      throw error;
+    }
   },
 }));
 

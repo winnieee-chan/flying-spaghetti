@@ -9,8 +9,9 @@ import {
   Button,
   ActionIcon,
   Divider,
+  Select,
 } from "@mantine/core";
-import { IconX, IconStar, IconStarFilled } from "@tabler/icons-react";
+import { IconX, IconStar, IconStarFilled, IconPlus } from "@tabler/icons-react";
 import { useParams } from "react-router-dom";
 import useJobStore from "../../stores/jobStore";
 
@@ -22,6 +23,8 @@ const CandidateSidePanel = () => {
     setSidePanelOpen,
     toggleStarCandidate,
     starredCandidates,
+    getPipelineStages,
+    updateCandidateStage,
   } = useJobStore();
 
   if (!jobId) return null;
@@ -38,6 +41,22 @@ const CandidateSidePanel = () => {
   const handleToggleStar = () => {
     if (selectedCandidate) {
       toggleStarCandidate(jobId, selectedCandidate.id);
+    }
+  };
+
+  const handleStageChange = async (stageId: string) => {
+    if (selectedCandidate && jobId) {
+      await updateCandidateStage(jobId, selectedCandidate.id, stageId);
+    }
+  };
+
+  const stages = jobId ? getPipelineStages(jobId) : [];
+  const currentStage = selectedCandidate?.pipelineStage || "new";
+  const isInPipeline = selectedCandidate?.pipelineStage !== undefined && selectedCandidate?.pipelineStage !== null;
+
+  const handleAddToPipeline = async () => {
+    if (selectedCandidate && jobId) {
+      await updateCandidateStage(jobId, selectedCandidate.id, "new");
     }
   };
 
@@ -195,6 +214,33 @@ const CandidateSidePanel = () => {
 
               <Divider />
 
+              {/* Pipeline Stage */}
+              {isInPipeline ? (
+                <Stack gap="xs">
+                  <Text size="sm" fw={500}>
+                    Pipeline Stage
+                  </Text>
+                  <Select
+                    value={currentStage}
+                    onChange={(val) => val && handleStageChange(val)}
+                    data={stages.map((s) => ({ value: s.id, label: s.name }))}
+                    size="sm"
+                  />
+                </Stack>
+              ) : (
+                <Button
+                  fullWidth
+                  variant="light"
+                  color="blue"
+                  leftSection={<IconPlus size={16} />}
+                  onClick={handleAddToPipeline}
+                >
+                  Add to Pipeline
+                </Button>
+              )}
+
+              <Divider />
+
               {/* Actions */}
               <Button
                 fullWidth
@@ -204,7 +250,7 @@ const CandidateSidePanel = () => {
                   console.log("Launch hiring workflow for", selectedCandidate.id);
                 }}
               >
-                Add to Hiring Pipeline
+                View Full Profile
               </Button>
             </Stack>
           </motion.div>

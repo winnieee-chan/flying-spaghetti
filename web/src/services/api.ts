@@ -11,6 +11,13 @@ const simulateLatency = (): Promise<void> => {
   return new Promise((resolve) => setTimeout(resolve, delay));
 };
 
+interface PipelineStage {
+  id: string;
+  name: string;
+  order: number;
+  color?: string;
+}
+
 interface JobDescription {
   id: string;
   title: string;
@@ -23,6 +30,7 @@ interface JobDescription {
     skills?: string[];
   };
   message?: string;
+  pipelineStages?: PipelineStage[];
 }
 
 interface Candidate {
@@ -39,6 +47,7 @@ interface Candidate {
   headline?: string;
   source?: 'seeded' | 'external';
   matchScore?: number;
+  pipelineStage?: string;
 }
 
 interface MockData {
@@ -155,6 +164,7 @@ const generateCandidate = (id: number): Candidate => {
     headline: `${title} at ${company}`,
     source: "seeded",
     matchScore,
+    // No default pipelineStage - candidates must be explicitly added to pipeline
   };
 };
 
@@ -214,7 +224,7 @@ const initializeMockData = (): void => {
 initializeMockData();
 
 interface ParsedEndpoint {
-  type: "allJobs" | "jobDescription" | "candidates" | "candidate" | "starred" | "externalSearch" | "unknown";
+  type: "allJobs" | "jobDescription" | "candidates" | "candidate" | "starred" | "externalSearch" | "batchMove" | "updateStage" | "unknown";
   jdId?: string;
   candidateId?: string;
   path?: string;
@@ -236,6 +246,8 @@ const parseEndpoint = (path: string): ParsedEndpoint => {
   const starredMatch = path.match(/^\/([^/]+)\/starred$/);
   const starredCandidateMatch = path.match(/^\/([^/]+)\/starred\/([^/]+)$/);
   const externalSearchMatch = path.match(/^\/([^/]+)\/cd\/external-search$/);
+  const batchMoveMatch = path.match(/^\/([^/]+)\/cd\/batch-move$/);
+  const updateStageMatch = path.match(/^\/([^/]+)\/cd\/([^/]+)\/stage$/);
 
   if (candidateMatch) {
     return { type: "candidate", jdId: candidateMatch[1], candidateId: candidateMatch[2] };
@@ -251,6 +263,12 @@ const parseEndpoint = (path: string): ParsedEndpoint => {
   }
   if (externalSearchMatch) {
     return { type: "externalSearch", jdId: externalSearchMatch[1] };
+  }
+  if (batchMoveMatch) {
+    return { type: "batchMove", jdId: batchMoveMatch[1] };
+  }
+  if (updateStageMatch) {
+    return { type: "updateStage", jdId: updateStageMatch[1], candidateId: updateStageMatch[2] };
   }
   if (jdIdMatch) {
     return { type: "jobDescription", jdId: jdIdMatch[1] };
@@ -288,6 +306,7 @@ const handleGet = async <T = unknown>(path: string): Promise<T> => {
           candidateCount,
           filters: jd.filters,
           message: jd.message,
+          pipelineStages: jd.pipelineStages,
         });
       }
       return jobs as T;
@@ -308,6 +327,8 @@ const handleGet = async <T = unknown>(path: string): Promise<T> => {
         company: jd.company,
         filters: jd.filters,
         message: jd.message,
+        pipelineStages: jd.pipelineStages,
+        createdAt: jd.createdAt,
       } as T;
     }
 
@@ -331,6 +352,7 @@ const handleGet = async <T = unknown>(path: string): Promise<T> => {
             headline: candidate.headline,
             source: candidate.source,
             matchScore: candidate.matchScore,
+            pipelineStage: candidate.pipelineStage, // Only include if explicitly set
           });
         }
       }
@@ -392,6 +414,7 @@ const handlePost = async <T = unknown>(path: string, body: Record<string, unknow
         skills: [],
       },
       message: (body.message as string) || "",
+      pipelineStages: (body.pipelineStages as PipelineStage[]) || undefined,
       createdAt: new Date().toISOString(),
     };
     mockData.jobDescriptions.set(jdId, newJd);
@@ -422,6 +445,7 @@ const handlePost = async <T = unknown>(path: string, body: Record<string, unknow
         headline: `Senior Engineer at ${companies[index]}`,
         source: "external",
         matchScore: 85 - (index * 5), // Varying match scores
+        // No default pipelineStage - candidates must be explicitly added to pipeline
       };
       externalCandidates.push(candidate);
       mockData.candidates.set(`${parsed.jdId}/${candidateId}`, candidate);
@@ -437,6 +461,36 @@ const handlePost = async <T = unknown>(path: string, body: Record<string, unknow
     }
     
     return externalCandidates as T;
+  }
+
+  // POST /:jdId/cd/batch-move - Batch move candidates based on criteria
+  if (parsed.type === "batchMove" && parsed.jdId) {
+    const criteria = body.criteria as { minMatchScore?: number; maxMatchScore?: number };
+    const targetStageId = body.targetStageId as string;
+    let movedCount = 0;
+
+    for (const [key, candidate] of mockData.candidates.entries()) {
+      if (key.startsWith(`${parsed.jdId}/`)) {
+        const matchScore = candidate.matchScore || 0;
+        let shouldMove = false;
+
+        if (criteria.minMatchScore !== undefined && criteria.maxMatchScore !== undefined) {
+          shouldMove = matchScore >= criteria.minMatchScore && matchScore <= criteria.maxMatchScore;
+        } else if (criteria.minMatchScore !== undefined) {
+          shouldMove = matchScore >= criteria.minMatchScore;
+        } else if (criteria.maxMatchScore !== undefined) {
+          shouldMove = matchScore <= criteria.maxMatchScore;
+        }
+
+        if (shouldMove) {
+          candidate.pipelineStage = targetStageId;
+          mockData.candidates.set(key, candidate);
+          movedCount++;
+        }
+      }
+    }
+
+    return { count: movedCount } as T;
   }
 
   throw new Error(`POST endpoint not found: ${path}`);
@@ -472,9 +526,25 @@ const handlePut = async <T = unknown>(path: string, body: Record<string, unknown
     if (body.message !== undefined) {
       jd.message = body.message as string;
     }
+    if (body.pipelineStages !== undefined) {
+      jd.pipelineStages = body.pipelineStages as PipelineStage[];
+    }
 
     mockData.jobDescriptions.set(parsed.jdId, jd);
     return jd as T;
+  }
+
+  // PUT /:jdId/cd/:candidateId/stage - Update candidate stage
+  if (parsed.type === "updateStage" && parsed.jdId && parsed.candidateId) {
+    const key = `${parsed.jdId}/${parsed.candidateId}`;
+    const candidate = mockData.candidates.get(key);
+    if (!candidate) {
+      throw new Error(`Candidate ${parsed.candidateId} not found for job ${parsed.jdId}`);
+    }
+    const stageId = body.stageId as string;
+    candidate.pipelineStage = stageId;
+    mockData.candidates.set(key, candidate);
+    return { success: true } as T;
   }
 
   // PUT /:jdId/starred/:cdId - Add candidate to star list

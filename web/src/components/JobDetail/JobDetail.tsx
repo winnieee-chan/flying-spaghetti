@@ -10,6 +10,7 @@ import {
   Loader,
   Alert,
   Card,
+  Tabs,
 } from "@mantine/core";
 import { IconAlertCircle, IconArrowLeft } from "@tabler/icons-react";
 import useJobStore from "../../stores/jobStore";
@@ -19,11 +20,13 @@ import CandidatePoolBubble from "./CandidatePoolBubble";
 import CandidateSidePanel from "./CandidateSidePanel";
 import StarredDrawer from "./StarredDrawer";
 import CandidateListView from "./CandidateListView";
+import PipelineView from "./PipelineView";
 
 const JobDetail = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const [listViewOpen, setListViewOpen] = useState(false);
+  const [activeTab, setActiveTab] = useState<string>("pool");
   const {
     currentJob,
     candidates,
@@ -125,23 +128,36 @@ const JobDetail = () => {
         </Group>
       </motion.div>
 
-      {/* Candidate Pool - Search + Visualization in shared container */}
+      {/* Tabs for Pool/Pipeline Views */}
       <motion.div
         initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.2, delay: 0.1 }}
       >
         <Card shadow="sm" padding="xl" radius="md" withBorder>
-          {/* Search Bar */}
-          <CompactFilterBar />
-          
-          {/* Bubble Visualization */}
-          <CandidatePoolBubble 
-            totalCount={candidates.length}
-            filteredCount={displayCount}
-            jobId={id || ""}
-            onBubbleClick={() => setListViewOpen(true)}
-          />
+          <Tabs value={activeTab} onChange={(val) => setActiveTab(val || "pool")}>
+            <Tabs.List mb="md">
+              <Tabs.Tab value="pool">Pool View</Tabs.Tab>
+              <Tabs.Tab value="pipeline">Pipeline View</Tabs.Tab>
+            </Tabs.List>
+
+            <Tabs.Panel value="pool">
+              {/* Search Bar */}
+              <CompactFilterBar />
+              
+              {/* Bubble Visualization */}
+              <CandidatePoolBubble 
+                totalCount={candidates.length}
+                filteredCount={displayCount}
+                jobId={id || ""}
+                onBubbleClick={() => setListViewOpen(true)}
+              />
+            </Tabs.Panel>
+
+            <Tabs.Panel value="pipeline">
+              {id && <PipelineView jobId={id} />}
+            </Tabs.Panel>
+          </Tabs>
         </Card>
       </motion.div>
 
