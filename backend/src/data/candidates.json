@@ -5,6 +5,7 @@
       "full_name": "Alex Chen",
       "headline": "Senior Software Engineer focused on high-performance Python backends.",
       "github_username": "alex-oss-dev",
+      "linkedin_url": "https://www.linkedin.com/in/alexchen/",
       "open_to_work": false,
       "enrichment": {
         "public_repos": 15,
@@ -30,6 +31,7 @@
       "full_name": "Jamie Lee",
       "headline": "Infrastructure Specialist and Docker Enthusiast.",
       "github_username": "jamie-infra",
+      "linkedin_url": "https://www.linkedin.com/in/jamielee/",
       "open_to_work": true,
       "enrichment": {
         "public_repos": 8,
