@@ -46,11 +46,11 @@ router.get('/:candidateId', (req: Request, res: Response) => {
         github_username: candidate.github_username,
         open_to_work: candidate.open_to_work,
         enrichment: candidate.enrichment,
-        scores: candidate.scores.map(score => ({
+        scores: candidate.scores?.map(score => ({
             job_id: score.job_id,
             score: score.score,
             breakdown_json: score.breakdown_json
-        }))
+        })) || []
     });
 });
 

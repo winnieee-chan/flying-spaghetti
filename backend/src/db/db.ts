@@ -84,19 +84,38 @@ const db = {
         const candidates = readCandidatesFile();
         return candidates
             .map(candidate => {
-                const scoreData = candidate.scores.find(s => s.job_id === jobId);
+                const scoreData = candidate.scores?.find((s: any) => s.job_id === jobId);
                 if (!scoreData) return null;
-
-                return {
+                
+                const result: any = {
                     candidateId: candidate._id,
                     full_name: candidate.full_name,
-                    headline: candidate.headline,
+                    headline: candidate.headline || '',
                     github_username: candidate.github_username,
                     open_to_work: candidate.open_to_work,
                     score: scoreData.score,
                     breakdown_json: scoreData.breakdown_json,
                     enrichment: candidate.enrichment
                 };
+
+                // Include new fields if they exist
+                if ((scoreData as any).pipelineStage) {
+                    result.pipelineStage = (scoreData as any).pipelineStage;
+                }
+                if ((scoreData as any).conversationHistory) {
+                    result.conversationHistory = (scoreData as any).conversationHistory;
+                }
+                if ((scoreData as any).aiFitScore !== undefined) {
+                    result.aiFitScore = (scoreData as any).aiFitScore;
+                }
+                if ((scoreData as any).aiSummary) {
+                    result.aiSummary = (scoreData as any).aiSummary;
+                }
+                if ((scoreData as any).aiRecommendation) {
+                    result.aiRecommendation = (scoreData as any).aiRecommendation;
+                }
+
+                return result;
             })
             .filter((c): c is CandidateScore => c !== null);
     },
@@ -107,11 +126,11 @@ const db = {
         const candidate = candidates.find(c => c._id === candidateId);
         if (!candidate) return null;
         
-        const scoreData = candidate.scores?.find(s => s.job_id === jobId);
+        const scoreData = candidate.scores?.find((s: any) => s.job_id === jobId);
         if (!scoreData) return null;
 
         // This structure assumes CandidateScore includes all detailed fields needed for the frontend
-        return {
+        const result: any = {
             candidateId: candidate._id,
             full_name: candidate.full_name,
             headline: candidate.headline || '',
@@ -122,6 +141,25 @@ const db = {
             outreach_messages: scoreData.outreach_messages,
             enrichment: candidate.enrichment
         };
+
+        // Include new fields if they exist
+        if ((scoreData as any).pipelineStage) {
+            result.pipelineStage = (scoreData as any).pipelineStage;
+        }
+        if ((scoreData as any).conversationHistory) {
+            result.conversationHistory = (scoreData as any).conversationHistory;
+        }
+        if ((scoreData as any).aiFitScore !== undefined) {
+            result.aiFitScore = (scoreData as any).aiFitScore;
+        }
+        if ((scoreData as any).aiSummary) {
+            result.aiSummary = (scoreData as any).aiSummary;
+        }
+        if ((scoreData as any).aiRecommendation) {
+            result.aiRecommendation = (scoreData as any).aiRecommendation;
+        }
+
+        return result;
     },
 
     // 6. Read: Get Candidate by ID (without job context)
@@ -130,56 +168,134 @@ const db = {
         return candidates.find(c => c._id === candidateId);
     },
 
-    // 7. Read: Get All Candidates (for searching/filtering)
-    getAllCandidates: (): any[] => {
-        return readCandidatesFile();
-    },
-
-    // 7. Write: Save or Update Candidate Score for a Job
-    /**
-     * Saves or updates the scoring results and details for a specific candidate on a specific job.
-     * @param candidateId The unique ID of the candidate.
-     * @param jobId The job ID the score relates to.
-     * @param score The final calculated score (0-100).
-     * @param scoreDetails Partial CandidateScore object containing breakdown, outreach messages, etc.
-     */
-    saveCandidateScore: (candidateId: string, jobId: string, score: number, scoreDetails: Partial<CandidateScore>): void => {
+    // 7. Update: Update candidate pipeline stage for a job
+    updateCandidatePipelineStage: (candidateId: string, jobId: string, stage: string): boolean => {
         const candidates = readCandidatesFile();
-        let candidate = candidates.find(c => c._id === candidateId);
+        const candidate = candidates.find(c => c._id === candidateId);
+        if (!candidate) return false;
 
-        // 1. Candidate Creation/Lookup
-        if (!candidate) {
-            // If candidate doesn't exist, create a new record
-            candidate = {
-                _id: candidateId,
-                full_name: scoreDetails.full_name || 'N/A',
-                headline: scoreDetails.headline || '',
-                github_username: scoreDetails.github_username || '',
-                open_to_work: scoreDetails.open_to_work || false,
-                enrichment: scoreDetails.enrichment || {
-                    public_repos: 0,
-                    total_stars: 0,
-                    recent_activity_days: 0,
-                    updated_at: new Date().toISOString()
-                },
-                scores: []
-            } as unknown as Candidate;
-            candidates.push(candidate);
+        // Initialize scores array if it doesn't exist
+        if (!candidate.scores) {
+            candidate.scores = [];
         }
 
-        // 2. Score Array Management: Remove old score for this job, if it exists
-        candidate.scores = candidate.scores.filter(s => s.job_id !== jobId);
+        // Find or create score entry for this job
+        let scoreEntry = candidate.scores.find((s: any) => s.job_id === jobId);
+        if (!scoreEntry) {
+            scoreEntry = { job_id: jobId, score: 0, breakdown_json: [] };
+            candidate.scores.push(scoreEntry);
+        }
 
-        // 3. Add the new score and all details
-        candidate.scores.push({
-            job_id: jobId,
-            score: score,
-            breakdown_json: scoreDetails.breakdown_json || [],
-            outreach_messages: scoreDetails.outreach_messages || []
+        // Store pipeline stage in score entry
+        (scoreEntry as any).pipelineStage = stage;
+        writeCandidatesFile(candidates);
+        return true;
+    },
+
+    // 8. Update: Batch update candidate pipeline stages
+    batchUpdateCandidateStages: (jobId: string, candidateIds: string[], stage: string): number => {
+        const candidates = readCandidatesFile();
+        let updated = 0;
+
+        candidates.forEach(candidate => {
+            if (candidateIds.includes(candidate._id)) {
+                // Initialize scores array if it doesn't exist
+                if (!candidate.scores) {
+                    candidate.scores = [];
+                }
+
+                let scoreEntry = candidate.scores.find((s: any) => s.job_id === jobId);
+                if (!scoreEntry) {
+                    scoreEntry = { job_id: jobId, score: 0, breakdown_json: [] };
+                    candidate.scores.push(scoreEntry);
+                }
+
+                (scoreEntry as any).pipelineStage = stage;
+                updated++;
+            }
         });
 
-        // 4. Persistence: Write the updated array back to the file
+        if (updated > 0) {
+            writeCandidatesFile(candidates);
+        }
+        return updated;
+    },
+
+    // 9. Update: Add message to conversation history
+    addMessageToConversation: (candidateId: string, jobId: string, message: {
+        id: string;
+        from: "founder" | "candidate";
+        content: string;
+        timestamp: string;
+        aiDrafted?: boolean;
+    }): boolean => {
+        const candidates = readCandidatesFile();
+        const candidate = candidates.find(c => c._id === candidateId);
+        if (!candidate) return false;
+
+        // Initialize scores array if it doesn't exist
+        if (!candidate.scores) {
+            candidate.scores = [];
+        }
+
+        // Find or create score entry for this job
+        let scoreEntry = candidate.scores.find((s: any) => s.job_id === jobId);
+        if (!scoreEntry) {
+            scoreEntry = { job_id: jobId, score: 0, breakdown_json: [] };
+            candidate.scores.push(scoreEntry);
+        }
+
+        // Initialize conversation history if it doesn't exist
+        if (!(scoreEntry as any).conversationHistory) {
+            (scoreEntry as any).conversationHistory = [];
+        }
+
+        // Add message to conversation history
+        (scoreEntry as any).conversationHistory.push(message);
         writeCandidatesFile(candidates);
+        return true;
+    },
+
+    // 10. Update: Store AI analysis results
+    updateCandidateAIAnalysis: (candidateId: string, jobId: string, analysis: {
+        aiFitScore?: number;
+        aiSummary?: string;
+        aiRecommendation?: string;
+    }): boolean => {
+        const candidates = readCandidatesFile();
+        const candidate = candidates.find(c => c._id === candidateId);
+        if (!candidate) return false;
+
+        // Initialize scores array if it doesn't exist
+        if (!candidate.scores) {
+            candidate.scores = [];
+        }
+
+        // Find or create score entry for this job
+        let scoreEntry = candidate.scores.find((s: any) => s.job_id === jobId);
+        if (!scoreEntry) {
+            scoreEntry = { job_id: jobId, score: 0, breakdown_json: [] };
+            candidate.scores.push(scoreEntry);
+        }
+
+        // Store AI analysis
+        if (analysis.aiFitScore !== undefined) {
+            (scoreEntry as any).aiFitScore = analysis.aiFitScore;
+        }
+        if (analysis.aiSummary !== undefined) {
+            (scoreEntry as any).aiSummary = analysis.aiSummary;
+        }
+        if (analysis.aiRecommendation !== undefined) {
+            (scoreEntry as any).aiRecommendation = analysis.aiRecommendation;
+        }
+
+        writeCandidatesFile(candidates);
+        return true;
+    },
+
+    // 11. Read: Get all jobs
+    getAllJobs: (): Job[] => {
+        return readJobsFile();
     }
 };
 

@@ -21,6 +21,14 @@ export interface Job {
   scoring_ratios: ScoringRatios;
   recruiterId: number;
   createdAt: string;
+  // Frontend-specific fields (optional, stored in job data)
+  pipelineStages?: Array<{
+    id: string;
+    name: string;
+    order: number;
+    color?: string;
+  }>;
+  message?: string;
 }
 
 export interface Candidate {
@@ -36,26 +44,36 @@ export interface Candidate {
     min_experience_years: number,
     location: string
   },
-  notificationSettings: NotificationFilter[]
-
-
-  // headline: string;
-  // enrichment: {
-  //   public_repos: number;
-  //   total_stars: number;
-  //   recent_activity_days: number;
-  //   updated_at: string;
-  // };
-  // scores: Array<{
-  //   job_id: string;
-  //   score: number;
-  //   breakdown_json: Array<{
-  //     signal: string;
-  //     value: number;
-  //     reason: string;
-  //   }>;
-  //   outreach_messages?: string[];
-  // }>;
+  notificationSettings: NotificationFilter[];
+  headline?: string;
+  enrichment?: {
+    public_repos: number;
+    total_stars: number;
+    recent_activity_days: number;
+    updated_at: string;
+  };
+  scores?: Array<{
+    job_id: string;
+    score: number;
+    breakdown_json: Array<{
+      signal: string;
+      value: number;
+      reason: string;
+    }>;
+    outreach_messages?: string[];
+    // Frontend-specific fields
+    pipelineStage?: string;
+    conversationHistory?: Array<{
+      id: string;
+      from: "founder" | "candidate";
+      content: string;
+      timestamp: string;
+      aiDrafted?: boolean;
+    }>;
+    aiFitScore?: number;
+    aiSummary?: string;
+    aiRecommendation?: string;
+  }>;
 }
 
 export interface CandidateScore {
@@ -71,13 +89,36 @@ export interface CandidateScore {
     reason: string;
   }>;
   outreach_messages?: string[];
-  // enrichment: Candidate['enrichment'];
+  enrichment?: Candidate['enrichment'];
+  // Frontend-specific fields
+  pipelineStage?: string;
+  conversationHistory?: Array<{
+    id: string;
+    from: "founder" | "candidate";
+    content: string;
+    timestamp: string;
+    aiDrafted?: boolean;
+  }>;
+  aiFitScore?: number;
+  aiSummary?: string;
+  aiRecommendation?: string;
 }
 
 export interface JobUpdate {
   extracted_keywords?: ExtractedKeywords;
   scoring_ratios?: ScoringRatios;
   status?: Job['status'];
+  // Frontend-specific fields
+  pipelineStages?: Array<{
+    id: string;
+    name: string;
+    order: number;
+    color?: string;
+  }>;
+  message?: string;
+  title?: string;
+  description?: string;
+  company?: string;
 }
 
 export interface JobPost {
