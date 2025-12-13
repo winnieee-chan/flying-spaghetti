@@ -14,10 +14,10 @@ import type { Job as BackendJob } from '../../types/index.js';
 const router = express.Router();
 
 // GET /jd - List all jobs (frontend format)
-router.get('/jd', (req: Request, res: Response) => {
+router.get('/jd', async (req: Request, res: Response) => {
     try {
         const jobs = db.getAllJobs();
-        const frontendJobs = adaptJobsToFrontend(jobs);
+        const frontendJobs = await adaptJobsToFrontend(jobs);
         res.status(200).json(frontendJobs);
     } catch (error: any) {
         console.error('Error fetching jobs:', error);
@@ -65,7 +65,7 @@ router.post('/jd', async (req: Request, res: Response) => {
             return res.status(500).json({ message: 'Failed to retrieve created job' });
         }
 
-        const candidates = db.getCandidatesByJobId(updatedJob.jobId);
+        const candidates = await db.getCandidatesByJobId(updatedJob.jobId);
         const frontendJobResponse = adaptJobToFrontend(updatedJob, candidates.length);
 
         res.status(201).json(frontendJobResponse);
@@ -76,7 +76,7 @@ router.post('/jd', async (req: Request, res: Response) => {
 });
 
 // GET /:jdId - Get job by ID (frontend format)
-router.get('/:jdId', (req: Request, res: Response) => {
+router.get('/:jdId', async (req: Request, res: Response) => {
     try {
         const { jdId } = req.params;
         const job = db.getJobById(jdId);
@@ -85,7 +85,7 @@ router.get('/:jdId', (req: Request, res: Response) => {
             return res.status(404).json({ message: 'Job not found' });
         }
 
-        const candidates = db.getCandidatesByJobId(jdId);
+        const candidates = await db.getCandidatesByJobId(jdId);
         const frontendJob = adaptJobToFrontend(job, candidates.length);
 
         res.status(200).json(frontendJob);
@@ -96,7 +96,7 @@ router.get('/:jdId', (req: Request, res: Response) => {
 });
 
 // PUT /:jdId - Update job (frontend format)
-router.put('/:jdId', (req: Request, res: Response) => {
+router.put('/:jdId', async (req: Request, res: Response) => {
     try {
         const { jdId } = req.params;
         const frontendUpdate = req.body;
@@ -116,7 +116,7 @@ router.put('/:jdId', (req: Request, res: Response) => {
         }
 
         // Transform to frontend format
-        const candidates = db.getCandidatesByJobId(jdId);
+        const candidates = await db.getCandidatesByJobId(jdId);
         const frontendJob = adaptJobToFrontend(updatedJob, candidates.length);
 
         res.status(200).json(frontendJob);

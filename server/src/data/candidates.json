@@ -58,7 +58,7 @@
         "outreach_messages": [
           "Hi Alex, I noticed your experience with Next.js and thought you might be interested in our Senior Backend Engineer role at CoolStartup Co.."
         ],
-        "pipelineStage": "engaged",
+        "pipelineStage": "closing",
         "conversationHistory": [
           {
             "id": "msg-1765630935019-f224dcc8",
@@ -72,6 +72,27 @@
             "from": "founder",
             "content": "Test message from API test script",
             "timestamp": "2025-12-13T13:18:28.812Z",
+            "aiDrafted": false
+          },
+          {
+            "id": "msg-1765660633453-54668df0",
+            "from": "founder",
+            "content": "Thank you for your interest. Would you like to learn more about the role?",
+            "timestamp": "2025-12-13T21:17:13.473Z",
+            "aiDrafted": false
+          },
+          {
+            "id": "msg-1765660638318-a55b319f",
+            "from": "founder",
+            "content": "Hi Alex,\n\nGreat news! I've scheduled our interview for Wednesday, December 17 at 8:17 AM.\n\nLooking forward to speaking with you!\n\nBest regards",
+            "timestamp": "2025-12-13T21:17:18.318Z",
+            "aiDrafted": false
+          },
+          {
+            "id": "msg-1765660651700-960c6d44",
+            "from": "founder",
+            "content": "Dear Alex Chen,\n\nWe are excited to extend an offer for the Senior Backend Engineer position at CoolStartup Co..\n\nSalary: $120,000 - $150,000\nStart Date: TBD\n\nWe look forward to having you on board.\n\nBest regards",
+            "timestamp": "2025-12-13T21:17:31.700Z",
             "aiDrafted": false
           }
         ]
@@ -106,9 +127,23 @@
             "content": "Hi Alex, I noticed your experience with Next.js and thought you might be interested in our Principal Infrastructure Engineer role at InfraGen Ltd..",
             "timestamp": "2025-12-13T20:14:50.618Z",
             "aiDrafted": false
+          },
+          {
+            "id": "msg-1765659974204-0b343dbd",
+            "from": "founder",
+            "content": "Great! Let's schedule a time to chat. Are you available this week?",
+            "timestamp": "2025-12-13T21:06:14.204Z",
+            "aiDrafted": false
+          },
+          {
+            "id": "msg-1765659980119-f1b45091",
+            "from": "founder",
+            "content": "Hi Alex,\n\nGreat news! I've scheduled our interview for Wednesday, December 17 at 8:06 AM.\n\nLooking forward to speaking with you!\n\nBest regards",
+            "timestamp": "2025-12-13T21:06:20.123Z",
+            "aiDrafted": false
           }
         ],
-        "pipelineStage": "engaged"
+        "pipelineStage": "closing"
       },
       {
         "job_id": "550e8400-e29b-41d4-a716-446655440012",
@@ -493,7 +528,31 @@
         ],
         "outreach_messages": [
           "Hi Sarah, I noticed your experience with mongodb and thought you might be interested in our Principal Infrastructure Engineer role at InfraGen Ltd.."
-        ]
+        ],
+        "conversationHistory": [
+          {
+            "id": "msg-1765659909051-62cc6cfb",
+            "from": "founder",
+            "content": "Hi Sarah,\n\nI noticed your background and thought you might be interested in our Principal Infrastructure Engineer role at InfraGen Ltd..\n\nWould you be open to a brief conversation?\n\nBest regards",
+            "timestamp": "2025-12-13T21:05:09.099Z",
+            "aiDrafted": false
+          },
+          {
+            "id": "msg-1765660337653-8eeb5aa2",
+            "from": "founder",
+            "content": "Great! Let's schedule a time to chat. Are you available this week?",
+            "timestamp": "2025-12-13T21:12:17.653Z",
+            "aiDrafted": false
+          },
+          {
+            "id": "msg-1765660342417-c956efc5",
+            "from": "founder",
+            "content": "Hi Sarah,\n\nGreat news! I've scheduled our interview for Wednesday, December 17 at 8:12 AM.\n\nLooking forward to speaking with you!\n\nBest regards",
+            "timestamp": "2025-12-13T21:12:22.417Z",
+            "aiDrafted": false
+          }
+        ],
+        "pipelineStage": "closing"
       },
       {
         "job_id": "550e8400-e29b-41d4-a716-446655440012",
@@ -878,7 +937,17 @@
         ],
         "outreach_messages": [
           "Hi David, I noticed your experience with django and thought you might be interested in our Principal Infrastructure Engineer role at InfraGen Ltd.."
-        ]
+        ],
+        "conversationHistory": [
+          {
+            "id": "msg-1765659921163-0b776477",
+            "from": "founder",
+            "content": "Hi David,\n\nI noticed your background and thought you might be interested in our Principal Infrastructure Engineer role at InfraGen Ltd..\n\nWould you be open to a brief conversation?\n\nBest regards",
+            "timestamp": "2025-12-13T21:05:21.163Z",
+            "aiDrafted": false
+          }
+        ],
+        "pipelineStage": "engaged"
       },
       {
         "job_id": "550e8400-e29b-41d4-a716-446655440012",
@@ -6851,7 +6920,17 @@
             "reason": "Location: Sydney vs Remote"
           }
         ],
-        "outreach_messages": []
+        "outreach_messages": [],
+        "conversationHistory": [
+          {
+            "id": "msg-1765660329181-dd240ad9",
+            "from": "founder",
+            "content": "Hi Parker,\n\nI noticed your background and thought you might be interested in our Principal Infrastructure Engineer role at InfraGen Ltd..\n\nWould you be open to a brief conversation?\n\nBest regards",
+            "timestamp": "2025-12-13T21:12:09.182Z",
+            "aiDrafted": false
+          }
+        ],
+        "pipelineStage": "engaged"
       },
       {
         "job_id": "550e8400-e29b-41d4-a716-446655440012",

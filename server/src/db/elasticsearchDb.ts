@@ -33,14 +33,12 @@ export const elasticsearchDb = {
         
         const response = await client.search({
             index: getIndex(),
-            body: {
-                query: {
-                    nested: {
-                        path: 'scores',
-                        query: {
-                            term: {
-                                'scores.job_id': jobId,
-                            },
+            query: {
+                nested: {
+                    path: 'scores',
+                    query: {
+                        term: {
+                            'scores.job_id': jobId,
                         },
                     },
                 },
@@ -55,7 +53,7 @@ export const elasticsearchDb = {
             if (!scoreData) return null;
 
             const result: any = {
-                candidateId: candidate._id,
+                candidateId: hit._id || candidate._id,
                 full_name: candidate.full_name,
                 headline: candidate.headline || '',
                 github_username: candidate.github_username,
@@ -439,9 +437,7 @@ export const elasticsearchDb = {
 
         const searchQuery: any = {
             index: getIndex(),
-            body: {
-                query: mustQueries.length > 0 ? { bool: { must: mustQueries } } : { match_all: {} },
-            },
+            query: mustQueries.length > 0 ? { bool: { must: mustQueries } } : { match_all: {} },
             size: 1000,
         };
 
