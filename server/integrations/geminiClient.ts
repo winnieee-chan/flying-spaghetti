@@ -9,10 +9,11 @@ const ai = new GoogleGenAI({
 
 const model = process.env.GEMINI_MODEL || "gemini-2.5-flash";
 
-export async function generateInterviewQuestions(prompt) {
+export async function generateInterviewQuestions(prompt: string): Promise<string> {
   const res = await ai.models.generateContent({
     model,
     contents: prompt,
   });
   return res.text;
 }
+
