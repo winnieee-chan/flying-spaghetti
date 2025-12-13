@@ -13,8 +13,9 @@ import {
   Avatar,
   Grid,
   ActionIcon,
+  Button,
 } from "@mantine/core";
-import { IconSearch, IconStar, IconStarFilled, IconMapPin, IconBriefcase } from "@tabler/icons-react";
+import { IconSearch, IconStar, IconStarFilled, IconMapPin, IconBriefcase, IconPlus } from "@tabler/icons-react";
 import useJobStore, { type Candidate } from "../../stores/jobStore";
 import {
   searchCandidates,
@@ -36,7 +37,8 @@ const CandidateListView = ({ opened, onClose, jobId }: CandidateListViewProps) =
     activeFilters,
     selectCandidate, 
     toggleStarCandidate, 
-    starredCandidates 
+    starredCandidates,
+    updateCandidateStage,
   } = useJobStore();
   
   const [searchQuery, setSearchQuery] = useState("");
@@ -70,6 +72,16 @@ const CandidateListView = ({ opened, onClose, jobId }: CandidateListViewProps) =
     selectCandidate(candidate);
   };
 
+  const handleAddToPipeline = async (e: React.MouseEvent, candidate: Candidate) => {
+    e.stopPropagation();
+    // Add to "new" stage (first stage)
+    await updateCandidateStage(jobId, candidate.id, "new");
+  };
+
+  const isInPipeline = (candidate: Candidate) => {
+    return candidate.pipelineStage !== undefined && candidate.pipelineStage !== null;
+  };
+
   return (
     <Modal
       opened={opened}
@@ -91,57 +103,51 @@ const CandidateListView = ({ opened, onClose, jobId }: CandidateListViewProps) =
       <Stack gap={0}>
         {/* Summary Stats Section */}
         <Card p="lg" radius={0} style={{ borderBottom: "1px solid var(--mantine-color-gray-2)" }}>
-          <Grid>
+          <Group gap="lg" align="flex-start" wrap="nowrap">
             {/* Top Matches */}
-            <Grid.Col span={{ base: 12, md: 4 }}>
-              <Stack gap="xs">
-                <Text size="xs" fw={600} c="dimmed" tt="uppercase">Top Matches</Text>
-                <Stack gap={4}>
-                  {topMatches.map((candidate, i) => (
-                    <Group key={candidate.id} gap="xs" wrap="nowrap">
-                      <Text size="xs" c="dimmed" w={16}>{i + 1}.</Text>
-                      <Text size="sm" lineClamp={1} style={{ flex: 1 }}>{candidate.name}</Text>
-                      <Badge size="xs" color="green" variant="light">
-                        {candidate.matchScore}%
-                      </Badge>
-                    </Group>
-                  ))}
-                </Stack>
+            <Stack gap="xs" style={{ flex: 1, minWidth: 0 }}>
+              <Text size="xs" fw={600} c="dimmed" tt="uppercase">Top Matches</Text>
+              <Stack gap={4}>
+                {topMatches.map((candidate, i) => (
+                  <Group key={candidate.id} gap="xs" wrap="nowrap">
+                    <Text size="xs" c="dimmed" w={16}>{i + 1}.</Text>
+                    <Text size="sm" lineClamp={1} style={{ flex: 1 }}>{candidate.name}</Text>
+                    <Badge size="xs" color="green" variant="light">
+                      {candidate.matchScore}%
+                    </Badge>
+                  </Group>
+                ))}
               </Stack>
-            </Grid.Col>
+            </Stack>
             
             {/* Primary Locations */}
-            <Grid.Col span={{ base: 12, md: 4 }}>
-              <Stack gap="xs">
-                <Text size="xs" fw={600} c="dimmed" tt="uppercase">Primary Locations</Text>
-                <Stack gap={4}>
-                  {locationStats.map((stat) => (
-                    <Group key={stat.label} gap="xs" wrap="nowrap">
-                      <IconMapPin size={12} style={{ color: "var(--mantine-color-dimmed)" }} />
-                      <Text size="sm" style={{ flex: 1 }}>{stat.label}</Text>
-                      <Text size="xs" c="dimmed">{stat.count}</Text>
-                    </Group>
-                  ))}
-                </Stack>
+            <Stack gap="xs" style={{ flex: 1, minWidth: 0 }}>
+              <Text size="xs" fw={600} c="dimmed" tt="uppercase">Primary Locations</Text>
+              <Stack gap={4}>
+                {locationStats.map((stat) => (
+                  <Group key={stat.label} gap="xs" wrap="nowrap">
+                    <IconMapPin size={12} style={{ color: "var(--mantine-color-dimmed)" }} />
+                    <Text size="sm" style={{ flex: 1 }}>{stat.label}</Text>
+                    <Text size="xs" c="dimmed">{stat.count}</Text>
+                  </Group>
+                ))}
               </Stack>
-            </Grid.Col>
+            </Stack>
             
             {/* Experience Breakdown */}
-            <Grid.Col span={{ base: 12, md: 4 }}>
-              <Stack gap="xs">
-                <Text size="xs" fw={600} c="dimmed" tt="uppercase">Experience Levels</Text>
-                <Stack gap={4}>
-                  {experienceStats.map((stat) => (
-                    <Group key={stat.label} gap="xs" wrap="nowrap">
-                      <IconBriefcase size={12} style={{ color: "var(--mantine-color-dimmed)" }} />
-                      <Text size="sm" style={{ flex: 1 }}>{stat.label}</Text>
-                      <Text size="xs" c="dimmed">{stat.count}</Text>
-                    </Group>
-                  ))}
-                </Stack>
+            <Stack gap="xs" style={{ flex: 1, minWidth: 0 }}>
+              <Text size="xs" fw={600} c="dimmed" tt="uppercase">Experience Levels</Text>
+              <Stack gap={4}>
+                {experienceStats.map((stat) => (
+                  <Group key={stat.label} gap="xs" wrap="nowrap">
+                    <IconBriefcase size={12} style={{ color: "var(--mantine-color-dimmed)" }} />
+                    <Text size="sm" style={{ flex: 1 }}>{stat.label}</Text>
+                    <Text size="xs" c="dimmed">{stat.count}</Text>
+                  </Group>
+                ))}
               </Stack>
-            </Grid.Col>
-          </Grid>
+            </Stack>
+          </Group>
           
           {/* Top Skills */}
           <Stack gap="xs" mt="md">
@@ -234,6 +240,22 @@ const CandidateListView = ({ opened, onClose, jobId }: CandidateListViewProps) =
                               </Badge>
                             )}
                           </Group>
+                          {!isInPipeline(candidate) && (
+                            <Button
+                              size="xs"
+                              variant="light"
+                              color="blue"
+                              leftSection={<IconPlus size={14} />}
+                              onClick={(e) => handleAddToPipeline(e, candidate)}
+                            >
+                              Add to Pipeline
+                            </Button>
+                          )}
+                          {isInPipeline(candidate) && (
+                            <Badge size="sm" variant="light" color="green">
+                              In Pipeline
+                            </Badge>
+                          )}
                           <ActionIcon
                             variant="subtle"
                             color={isStarred ? "yellow" : "gray"}

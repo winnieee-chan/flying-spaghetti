@@ -16,6 +16,13 @@ interface JobFilters {
   skills?: string[];
 }
 
+export interface PipelineStage {
+  id: string;
+  name: string;
+  order: number;
+  color?: string;
+}
+
 interface Job {
   id: string;
   title: string;
@@ -25,6 +32,15 @@ interface Job {
   candidateCount?: number;
   filters?: JobFilters;
   message?: string;
+  pipelineStages?: PipelineStage[];
+}
+
+export interface Message {
+  id: string;
+  from: "founder" | "candidate";
+  content: string;
+  timestamp: string;
+  aiDrafted?: boolean; // If message was AI-generated
 }
 
 export interface Candidate {
@@ -41,6 +57,12 @@ export interface Candidate {
   headline?: string;         // e.g. "Senior Engineer at Google"
   source?: 'seeded' | 'external';  // Where candidate came from
   matchScore?: number;       // 0-100 relevance score
+  pipelineStage?: "new" | "engaged" | "closing";    // stage id
+  // AI fields
+  aiFitScore?: number;       // 0-100 AI-calculated fit score
+  aiSummary?: string;         // AI-generated fit summary
+  aiRecommendation?: "reach_out" | "wait" | "archive" | "advance" | "offer" | "reject";
+  conversationHistory?: Message[]; // For engaged stage
 }
 
 // CandidateFilters is imported from candidateUtils
@@ -78,6 +100,12 @@ interface JobStore {
   searchExternalCandidates: (jobId: string, query: string) => Promise<Candidate[]>;
   getStarredCandidates: (jobId: string) => Candidate[];
   setSearchQuery: (query: string) => void;
+  
+  // Pipeline actions
+  getPipelineStages: (jobId: string) => PipelineStage[];
+  updatePipelineStages: (jobId: string, stages: PipelineStage[]) => Promise<void>;
+  updateCandidateStage: (jobId: string, candidateId: string, stageId: string) => Promise<void>;
+  batchMoveCandidates: (jobId: string, criteria: { minMatchScore?: number; maxMatchScore?: number }, targetStageId: string) => Promise<number>;
 }
 
 const useJobStore = create<JobStore>((set, get) => ({
@@ -331,6 +359,248 @@ const useJobStore = create<JobStore>((set, get) => ({
    */
   setSearchQuery: (query: string) => {
     set({ searchQuery: query });
+  },
+
+  /**
+   * Get pipeline stages for a job (with defaults)
+   */
+  getPipelineStages: (jobId: string) => {
+    const { currentJob } = get();
+    if (currentJob?.id === jobId && currentJob.pipelineStages) {
+      return currentJob.pipelineStages.sort((a, b) => a.order - b.order);
+    }
+    // Default stages - 3-stage pipeline for startups
+    return [
+      { id: "new", name: "New", order: 0 },
+      { id: "engaged", name: "Engaged", order: 1 },
+      { id: "closing", name: "Closing", order: 2 },
+    ];
+  },
+
+  /**
+   * Update pipeline stages for a job
+   */
+  updatePipelineStages: async (jobId: string, stages: PipelineStage[]) => {
+    set({ loading: true, error: null });
+    try {
+      const updatedJob = await api.put<Job>(`/${jobId}`, { pipelineStages: stages });
+      set((state) => {
+        const updatedJobs = state.jobs.map((job) =>
+          job.id === jobId ? updatedJob : job
+        );
+        return {
+          jobs: updatedJobs,
+          currentJob: state.currentJob?.id === jobId ? updatedJob : state.currentJob,
+          loading: false,
+        };
+      });
+    } catch (error) {
+      const errorMessage = error instanceof Error ? error.message : "Unknown error";
+      set({ error: errorMessage, loading: false });
+      throw error;
+    }
+  },
+
+  /**
+   * Update a candidate's pipeline stage
+   */
+  updateCandidateStage: async (jobId: string, candidateId: string, stageId: string) => {
+    set({ loading: true, error: null });
+    try {
+      await api.put(`/${jobId}/cd/${candidateId}/stage`, { stageId });
+      // Update local state
+      const updatedStage = stageId as "new" | "engaged" | "closing";
+      set((state) => {
+        const updatedCandidates = state.candidates.map((c) =>
+          c.id === candidateId ? { ...c, pipelineStage: updatedStage } : c
+        );
+        const updatedFiltered = state.filteredCandidates.map((c) =>
+          c.id === candidateId ? { ...c, pipelineStage: updatedStage } : c
+        );
+        const updatedSelected = state.selectedCandidate?.id === candidateId
+          ? { ...state.selectedCandidate, pipelineStage: updatedStage }
+          : state.selectedCandidate;
+
+        // Auto-analyze when candidate enters "new" stage
+        if (updatedStage === "new") {
+          // Trigger analysis in background (don't await to keep UI responsive)
+          get().analyzeCandidate(jobId, candidateId).catch(console.error);
+        }
+
+        return {
+          candidates: updatedCandidates,
+          filteredCandidates: updatedFiltered,
+          selectedCandidate: updatedSelected,
+          loading: false,
+        };
+      });
+    } catch (error) {
+      const errorMessage = error instanceof Error ? error.message : "Unknown error";
+      set({ error: errorMessage, loading: false });
+      throw error;
+    }
+  },
+
+  /**
+   * Batch move candidates based on match score criteria
+   */
+  batchMoveCandidates: async (jobId: string, criteria: { minMatchScore?: number; maxMatchScore?: number }, targetStageId: string) => {
+    set({ loading: true, error: null });
+    try {
+      const result = await api.post<{ count: number }>(`/${jobId}/cd/batch-move`, {
+        criteria,
+        targetStageId,
+      });
+      // Refresh candidates to get updated stages
+      await get().fetchCandidates(jobId);
+      set({ loading: false });
+      return result.count;
+    } catch (error) {
+      const errorMessage = error instanceof Error ? error.message : "Unknown error";
+      set({ error: errorMessage, loading: false });
+      throw error;
+    }
+  },
+
+  /**
+   * Analyze candidate with AI (Stage 1: New)
+   */
+  analyzeCandidate: async (jobId: string, candidateId: string) => {
+    set({ loading: true, error: null });
+    try {
+      const result = await api.post<{ fitScore: number; summary: string; recommendation: string; suggestedMessage?: string; confidence: number }>(
+        `/${jobId}/cd/${candidateId}/ai/analyze`,
+        {}
+      );
+      
+      // Update candidate with AI insights
+      set((state) => ({
+        candidates: state.candidates.map((c) =>
+          c.id === candidateId
+            ? { ...c, aiFitScore: result.fitScore, aiSummary: result.summary, aiRecommendation: result.recommendation as any }
+            : c
+        ),
+        loading: false,
+      }));
+      
+      return result;
+    } catch (error) {
+      const errorMessage = error instanceof Error ? error.message : "Unknown error";
+      set({ error: errorMessage, loading: false });
+      throw error;
+    }
+  },
+
+  /**
+   * Draft first message with AI (Stage 1: New)
+   */
+  draftFirstMessage: async (jobId: string, candidateId: string) => {
+    set({ loading: true, error: null });
+    try {
+      const message = await api.post<string>(`/${jobId}/cd/${candidateId}/ai/draft-message`, {});
+      set({ loading: false });
+      return message;
+    } catch (error) {
+      const errorMessage = error instanceof Error ? error.message : "Unknown error";
+      set({ error: errorMessage, loading: false });
+      throw error;
+    }
+  },
+
+  /**
+   * Summarize conversation with AI (Stage 2: Engaged)
+   */
+  summarizeConversation: async (jobId: string, candidateId: string) => {
+    set({ loading: true, error: null });
+    try {
+      const summary = await api.post<string>(`/${jobId}/cd/${candidateId}/ai/summarize-conversation`, {});
+      set({ loading: false });
+      return summary;
+    } catch (error) {
+      const errorMessage = error instanceof Error ? error.message : "Unknown error";
+      set({ error: errorMessage, loading: false });
+      throw error;
+    }
+  },
+
+  /**
+   * Suggest next message with AI (Stage 2: Engaged)
+   */
+  suggestNextMessage: async (jobId: string, candidateId: string, lastMessage: string) => {
+    set({ loading: true, error: null });
+    try {
+      const message = await api.post<string>(`/${jobId}/cd/${candidateId}/ai/suggest-message`, { lastMessage });
+      set({ loading: false });
+      return message;
+    } catch (error) {
+      const errorMessage = error instanceof Error ? error.message : "Unknown error";
+      set({ error: errorMessage, loading: false });
+      throw error;
+    }
+  },
+
+  /**
+   * Suggest interview times (Stage 2: Engaged)
+   */
+  suggestInterviewTimes: async (jobId: string, candidateId: string) => {
+    set({ loading: true, error: null });
+    try {
+      const times = await api.post<Date[]>(`/${jobId}/cd/${candidateId}/ai/suggest-times`, {});
+      set({ loading: false });
+      return times;
+    } catch (error) {
+      const errorMessage = error instanceof Error ? error.message : "Unknown error";
+      set({ error: errorMessage, loading: false });
+      throw error;
+    }
+  },
+
+  /**
+   * Draft offer with AI (Stage 3: Closing)
+   */
+  draftOffer: async (jobId: string, candidateId: string, terms?: Record<string, unknown>) => {
+    set({ loading: true, error: null });
+    try {
+      const offer = await api.post<string>(`/${jobId}/cd/${candidateId}/ai/draft-offer`, { terms });
+      set({ loading: false });
+      return offer;
+    } catch (error) {
+      const errorMessage = error instanceof Error ? error.message : "Unknown error";
+      set({ error: errorMessage, loading: false });
+      throw error;
+    }
+  },
+
+  /**
+   * Help with negotiation (Stage 3: Closing)
+   */
+  helpNegotiate: async (jobId: string, candidateId: string, request: string) => {
+    set({ loading: true, error: null });
+    try {
+      const response = await api.post<string>(`/${jobId}/cd/${candidateId}/ai/negotiate`, { request });
+      set({ loading: false });
+      return response;
+    } catch (error) {
+      const errorMessage = error instanceof Error ? error.message : "Unknown error";
+      set({ error: errorMessage, loading: false });
+      throw error;
+    }
+  },
+
+  /**
+   * Generate decision summary (Stage 3: Closing)
+   */
+  generateDecisionSummary: async (jobId: string, candidateId: string, decision: "hire" | "reject") => {
+    set({ loading: true, error: null });
+    try {
+      const summary = await api.post<string>(`/${jobId}/cd/${candidateId}/ai/decision-summary`, { decision });
+      set({ loading: false });
+      return summary;
+    } catch (error) {
+      const errorMessage = error instanceof Error ? error.message : "Unknown error";
+      set({ error: errorMessage, loading: false });
+      throw error;
+    }
   },
 }));
 

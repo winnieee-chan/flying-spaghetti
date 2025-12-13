@@ -337,5 +337,31 @@
     },
     "recruiterId": 1,
     "createdAt": "2025-12-13T05:04:05.652Z"
+  },
+  {
+    "jobId": "5b4f8d8d-aa78-4e87-a489-77eb7dee2f43",
+    "jd_text": "We are seeking a Senior Backend Engineer (5+ years exp) to join our small team in Sydney. Must have deep expertise in Python, FastAPI, and Postgres. Bonus: Docker/Kubernetes.",
+    "job_title": "Senior Backend Engineer",
+    "company_name": "CoolStartup Co.",
+    "status": "PROCESSED_KEYWORDS",
+    "extracted_keywords": {
+      "role": "Senior Backend Engineer",
+      "skills": [
+        "Python",
+        "FastAPI",
+        "Postgres",
+        "Docker",
+        "Kubernetes"
+      ],
+      "min_experience_years": 5,
+      "location": "Sydney"
+    },
+    "scoring_ratios": {
+      "startup_exp_weight": 0.3,
+      "oss_activity_weight": 0.5,
+      "tech_match_weight": 0.2
+    },
+    "recruiterId": 1,
+    "createdAt": "2025-12-13T07:05:17.743Z"
   }
 ]

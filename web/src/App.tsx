@@ -4,13 +4,15 @@ import ViewNotification from './components/ViewNotification';
 import GetNotification from './components/GetNotification';
 import Dashboard from './components/Dashboard';
 import JobDetail from './components/JobDetail/JobDetail';
+import LandingPage from './pages/LandingPage';
 
 function App() {
 
   return (
     <Router>
       <Routes>
-        <Route path="/" element={<Dashboard />} />
+        <Route path="/" element={<LandingPage />} />
+        <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/jobs/:id" element={<JobDetail />} />
         <Route path="/noti/set" element={<SetupNotification />} />
         <Route path="/noti/view" element={<ViewNotification />} />

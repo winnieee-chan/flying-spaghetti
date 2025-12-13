@@ -24,7 +24,7 @@ app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 app.get('/', (req, res) => res.send('🚀 StartupSignal API is operational. Visit /api-docs for documentation.'));
 
 app.use('/api/v1/jobs', jobRoutes);
-app.use('/api/v1/candidates', candidateRoutes);
+app.use('/api/candidates', candidateRoutes);
 
 app.listen(PORT, () => {
     console.log(`✅ API Server running on http://localhost:${PORT}`);
