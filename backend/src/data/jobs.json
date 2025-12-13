@@ -21,7 +21,24 @@
       "tech_match_weight": 0.2
     },
     "recruiterId": 1,
-    "createdAt": "2025-12-10T10:00:00.000Z"
+    "createdAt": "2025-12-10T10:00:00.000Z",
+    "pipelineStages": [
+      {
+        "id": "new",
+        "name": "New",
+        "order": 0
+      },
+      {
+        "id": "engaged",
+        "name": "Engaged",
+        "order": 1
+      },
+      {
+        "id": "closing",
+        "name": "Closing",
+        "order": 2
+      }
+    ]
   },
   {
     "jobId": "550e8400-e29b-41d4-a716-446655440011",
@@ -45,7 +62,24 @@
       "tech_match_weight": 0.1
     },
     "recruiterId": 1,
-    "createdAt": "2025-12-11T12:30:00.000Z"
+    "createdAt": "2025-12-11T12:30:00.000Z",
+    "pipelineStages": [
+      {
+        "id": "new",
+        "name": "New",
+        "order": 0
+      },
+      {
+        "id": "engaged",
+        "name": "Engaged",
+        "order": 1
+      },
+      {
+        "id": "closing",
+        "name": "Closing",
+        "order": 2
+      }
+    ]
   },
   {
     "jobId": "550e8400-e29b-41d4-a716-446655440012",
@@ -69,7 +103,24 @@
       "tech_match_weight": 0.2
     },
     "recruiterId": 1,
-    "createdAt": "2025-12-13T04:42:31.504Z"
+    "createdAt": "2025-12-13T04:42:31.504Z",
+    "pipelineStages": [
+      {
+        "id": "new",
+        "name": "New",
+        "order": 0
+      },
+      {
+        "id": "engaged",
+        "name": "Engaged",
+        "order": 1
+      },
+      {
+        "id": "closing",
+        "name": "Closing",
+        "order": 2
+      }
+    ]
   },
   {
     "jobId": "550e8400-e29b-41d4-a716-446655440013",
@@ -93,7 +144,24 @@
       "tech_match_weight": 0.2
     },
     "recruiterId": 1,
-    "createdAt": "2025-12-13T04:43:35.893Z"
+    "createdAt": "2025-12-13T04:43:35.893Z",
+    "pipelineStages": [
+      {
+        "id": "new",
+        "name": "New",
+        "order": 0
+      },
+      {
+        "id": "engaged",
+        "name": "Engaged",
+        "order": 1
+      },
+      {
+        "id": "closing",
+        "name": "Closing",
+        "order": 2
+      }
+    ]
   },
   {
     "jobId": "48be8042-2dcb-46a1-a267-2d633fc8a5b9",
@@ -117,7 +185,24 @@
       "tech_match_weight": 0.2
     },
     "recruiterId": 1,
-    "createdAt": "2025-12-13T04:48:17.333Z"
+    "createdAt": "2025-12-13T04:48:17.333Z",
+    "pipelineStages": [
+      {
+        "id": "new",
+        "name": "New",
+        "order": 0
+      },
+      {
+        "id": "engaged",
+        "name": "Engaged",
+        "order": 1
+      },
+      {
+        "id": "closing",
+        "name": "Closing",
+        "order": 2
+      }
+    ]
   },
   {
     "jobId": "f9a7186c-07e9-4e64-8e33-8e26c29c51a6",
@@ -141,7 +226,24 @@
       "tech_match_weight": 0.2
     },
     "recruiterId": 1,
-    "createdAt": "2025-12-13T04:53:07.469Z"
+    "createdAt": "2025-12-13T04:53:07.469Z",
+    "pipelineStages": [
+      {
+        "id": "new",
+        "name": "New",
+        "order": 0
+      },
+      {
+        "id": "engaged",
+        "name": "Engaged",
+        "order": 1
+      },
+      {
+        "id": "closing",
+        "name": "Closing",
+        "order": 2
+      }
+    ]
   },
   {
     "jobId": "bdee904e-a560-445b-b098-030eac613817",
@@ -165,7 +267,24 @@
       "tech_match_weight": 0.2
     },
     "recruiterId": 1,
-    "createdAt": "2025-12-13T04:53:09.395Z"
+    "createdAt": "2025-12-13T04:53:09.395Z",
+    "pipelineStages": [
+      {
+        "id": "new",
+        "name": "New",
+        "order": 0
+      },
+      {
+        "id": "engaged",
+        "name": "Engaged",
+        "order": 1
+      },
+      {
+        "id": "closing",
+        "name": "Closing",
+        "order": 2
+      }
+    ]
   },
   {
     "jobId": "d35c8b92-737f-40d6-913e-f68cf6fd3863",
@@ -189,7 +308,24 @@
       "tech_match_weight": 0.2
     },
     "recruiterId": 1,
-    "createdAt": "2025-12-13T04:56:28.612Z"
+    "createdAt": "2025-12-13T04:56:28.612Z",
+    "pipelineStages": [
+      {
+        "id": "new",
+        "name": "New",
+        "order": 0
+      },
+      {
+        "id": "engaged",
+        "name": "Engaged",
+        "order": 1
+      },
+      {
+        "id": "closing",
+        "name": "Closing",
+        "order": 2
+      }
+    ]
   },
   {
     "jobId": "2e95cd29-7674-490b-8bf9-3d6620f53515",
@@ -213,7 +349,24 @@
       "tech_match_weight": 0.2
     },
     "recruiterId": 1,
-    "createdAt": "2025-12-13T04:56:32.318Z"
+    "createdAt": "2025-12-13T04:56:32.318Z",
+    "pipelineStages": [
+      {
+        "id": "new",
+        "name": "New",
+        "order": 0
+      },
+      {
+        "id": "engaged",
+        "name": "Engaged",
+        "order": 1
+      },
+      {
+        "id": "closing",
+        "name": "Closing",
+        "order": 2
+      }
+    ]
   },
   {
     "jobId": "0a085b12-e3ba-45c6-8985-45a44cfdd43f",
@@ -237,7 +390,24 @@
       "tech_match_weight": 0.2
     },
     "recruiterId": 1,
-    "createdAt": "2025-12-13T05:00:10.981Z"
+    "createdAt": "2025-12-13T05:00:10.981Z",
+    "pipelineStages": [
+      {
+        "id": "new",
+        "name": "New",
+        "order": 0
+      },
+      {
+        "id": "engaged",
+        "name": "Engaged",
+        "order": 1
+      },
+      {
+        "id": "closing",
+        "name": "Closing",
+        "order": 2
+      }
+    ]
   },
   {
     "jobId": "aa082a0c-b8ed-4c8b-a294-f3687f468f1f",
@@ -261,7 +431,24 @@
       "tech_match_weight": 0.2
     },
     "recruiterId": 1,
-    "createdAt": "2025-12-13T05:00:14.930Z"
+    "createdAt": "2025-12-13T05:00:14.930Z",
+    "pipelineStages": [
+      {
+        "id": "new",
+        "name": "New",
+        "order": 0
+      },
+      {
+        "id": "engaged",
+        "name": "Engaged",
+        "order": 1
+      },
+      {
+        "id": "closing",
+        "name": "Closing",
+        "order": 2
+      }
+    ]
   },
   {
     "jobId": "c2f1daac-e95b-4cf6-b5d2-f8877d01cc25",
@@ -285,7 +472,24 @@
       "tech_match_weight": 0.2
     },
     "recruiterId": 1,
-    "createdAt": "2025-12-13T05:00:43.198Z"
+    "createdAt": "2025-12-13T05:00:43.198Z",
+    "pipelineStages": [
+      {
+        "id": "new",
+        "name": "New",
+        "order": 0
+      },
+      {
+        "id": "engaged",
+        "name": "Engaged",
+        "order": 1
+      },
+      {
+        "id": "closing",
+        "name": "Closing",
+        "order": 2
+      }
+    ]
   },
   {
     "jobId": "61ddf084-ba49-434e-8a42-a85e8e00c65c",
@@ -311,7 +515,24 @@
       "tech_match_weight": 0.2
     },
     "recruiterId": 1,
-    "createdAt": "2025-12-13T05:02:32.580Z"
+    "createdAt": "2025-12-13T05:02:32.580Z",
+    "pipelineStages": [
+      {
+        "id": "new",
+        "name": "New",
+        "order": 0
+      },
+      {
+        "id": "engaged",
+        "name": "Engaged",
+        "order": 1
+      },
+      {
+        "id": "closing",
+        "name": "Closing",
+        "order": 2
+      }
+    ]
   },
   {
     "jobId": "0806be6e-0ae9-41ed-a6b2-b9bfece62d23",
@@ -336,7 +557,24 @@
       "tech_match_weight": 0.2
     },
     "recruiterId": 1,
-    "createdAt": "2025-12-13T05:04:05.652Z"
+    "createdAt": "2025-12-13T05:04:05.652Z",
+    "pipelineStages": [
+      {
+        "id": "new",
+        "name": "New",
+        "order": 0
+      },
+      {
+        "id": "engaged",
+        "name": "Engaged",
+        "order": 1
+      },
+      {
+        "id": "closing",
+        "name": "Closing",
+        "order": 2
+      }
+    ]
   },
   {
     "jobId": "5b4f8d8d-aa78-4e87-a489-77eb7dee2f43",
@@ -362,6 +600,23 @@
       "tech_match_weight": 0.2
     },
     "recruiterId": 1,
-    "createdAt": "2025-12-13T07:05:17.743Z"
+    "createdAt": "2025-12-13T07:05:17.743Z",
+    "pipelineStages": [
+      {
+        "id": "new",
+        "name": "New",
+        "order": 0
+      },
+      {
+        "id": "engaged",
+        "name": "Engaged",
+        "order": 1
+      },
+      {
+        "id": "closing",
+        "name": "Closing",
+        "order": 2
+      }
+    ]
   }
 ]
