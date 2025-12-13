@@ -15,6 +15,8 @@ const SetupNotification = () => {
 
     const handleSubmit = (event) => {
         event.preventDefault();
+        // Wrap all three keys together as an object with id
+        // so that can view them later in view noti page
         // Wire this up to your API call when ready
         console.log({
             companies: companies.split(",").map((c) => c.trim()).filter(Boolean),
