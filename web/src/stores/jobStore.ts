@@ -44,7 +44,6 @@ export interface Candidate {
 }
 
 // CandidateFilters is imported from candidateUtils
-
 interface JobStore {
   // State
   jobs: Job[];
