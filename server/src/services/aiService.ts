@@ -8,6 +8,7 @@
 import { GoogleGenerativeAI } from '@google/generative-ai';
 import db from '../db/db.js';
 import type { Job, CandidateScore } from '../types/index.js';
+import { searchCandidatesViaMCP, getCandidatesForJobViaMCP } from './mcpClient.js';
 
 const apiKey = process.env.GEMINI_API_KEY;
 const modelName = process.env.GEMINI_MODEL || 'gemini-2.0-flash-exp';
@@ -38,6 +39,27 @@ export const analyzeCandidate = async (
             const genAI = new GoogleGenerativeAI(apiKey);
             const model = genAI.getGenerativeModel({ model: modelName });
 
+            // Optionally get talent pool context via MCP (if enabled)
+            let talentPoolContext = '';
+            if (process.env.USE_MCP_CONTEXT === 'true') {
+                try {
+                    const similarCandidates = await searchCandidatesViaMCP(
+                        candidate.keywords.skills.slice(0, 2).join(' '),
+                        {
+                            skills: candidate.keywords.skills.slice(0, 3),
+                            minExperience: candidate.keywords.years_of_experience - 2,
+                        }
+                    );
+                    
+                    if (similarCandidates.count > 0 && similarCandidates.count <= 5) {
+                        talentPoolContext = `\n\nTALENT POOL CONTEXT:\nFound ${similarCandidates.count} similar candidates in the talent pool with matching skills. This helps validate the candidate's profile against the market.`;
+                    }
+                } catch (error) {
+                    // MCP context is optional, continue without it
+                    console.log('[AI] MCP context unavailable, continuing without it');
+                }
+            }
+
             const prompt = `Analyze this candidate's fit for the job and return ONLY a valid JSON object:
 
 {
@@ -55,7 +77,7 @@ Experience Required: ${job.extracted_keywords.min_experience_years} years
 Candidate: ${candidateScore.full_name}
 Headline: ${candidateScore.headline}
 Skills Match Score: ${candidateScore.score}
-Breakdown: ${JSON.stringify(candidateScore.breakdown_json?.slice(0, 5) || [])}
+Breakdown: ${JSON.stringify(candidateScore.breakdown_json?.slice(0, 5) || [])}${talentPoolContext}
 
 Return only the JSON object, nothing else.`;
 
@@ -131,6 +153,21 @@ export const draftFirstMessage = async (jobId: string, candidateId: string): Pro
             // Get required skills
             const requiredSkills = job.extracted_keywords?.skills?.join(', ') || 'Not specified';
 
+            // Optionally get talent pool context for better personalization (if enabled)
+            let marketContext = '';
+            if (process.env.USE_MCP_CONTEXT === 'true') {
+                try {
+                    const jobCandidates = await getCandidatesForJobViaMCP(jobId, 60);
+                    if (jobCandidates.count > 0) {
+                        const avgScore = jobCandidates.candidates.reduce((sum, c) => sum + c.score, 0) / jobCandidates.count;
+                        marketContext = `\n\nMARKET CONTEXT:\nThis role has ${jobCandidates.count} qualified candidates (avg score: ${Math.round(avgScore)}). The candidate's score of ${candidateScore.score} is ${candidateScore.score >= avgScore ? 'above' : 'below'} average, making them ${candidateScore.score >= avgScore ? 'a strong' : 'a competitive'} candidate.`;
+                    }
+                } catch (error) {
+                    // MCP context is optional
+                    console.log('[AI] MCP market context unavailable');
+                }
+            }
+
             // Build the enhanced prompt
             const prompt = `Draft a first outreach message to a candidate. Use startup energy - be enthusiastic, authentic, and engaging. Avoid corporate jargon.
 
@@ -158,7 +195,7 @@ Match Score: ${candidateScore.score}/100
 ${candidateScore.aiSummary ? `AI Fit Summary: ${candidateScore.aiSummary}` : ''}
 
 WHY THEY'RE A GOOD FIT:
-${topReasons}
+${topReasons}${marketContext}
 
 Return only the message text, no greeting/signature needed.`;
 
