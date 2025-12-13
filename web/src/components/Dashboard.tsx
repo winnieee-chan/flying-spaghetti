@@ -15,7 +15,22 @@ import {
   Badge,
 } from "@mantine/core";
 import { IconAlertCircle, IconPlus, IconCalendar, IconUsers } from "@tabler/icons-react";
-import useJobStore from "../stores/jobStore.js";
+import useJobStore from "../stores/jobStore";
+
+interface Job {
+  id: string;
+  title: string;
+  description?: string;
+  company: string;
+  createdAt: string;
+  candidateCount?: number;
+  filters?: {
+    experience?: string[];
+    location?: string[];
+    skills?: string[];
+  };
+  message?: string;
+}
 
 const Dashboard = () => {
   const navigate = useNavigate();
@@ -25,7 +40,7 @@ const Dashboard = () => {
     fetchJobs();
   }, [fetchJobs]);
 
-  const formatDate = (dateString) => {
+  const formatDate = (dateString: string): string => {
     const date = new Date(dateString);
     return date.toLocaleDateString("en-US", {
       year: "numeric",
@@ -100,7 +115,7 @@ const Dashboard = () => {
       ) : (
         /* Job Cards Grid */
         <Grid>
-          {jobs.map((job, index) => (
+          {jobs.map((job: Job, index: number) => (
             <Grid.Col key={job.id} span={{ base: 12, sm: 6, lg: 4 }}>
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
@@ -140,7 +155,7 @@ const Dashboard = () => {
                       </Text>
                     )}
 
-                    {job.candidateCount > 0 && (
+                    {job.candidateCount && job.candidateCount > 0 && (
                       <Badge color="blue" variant="light">
                         {job.candidateCount} candidate{job.candidateCount !== 1 ? "s" : ""}
                       </Badge>

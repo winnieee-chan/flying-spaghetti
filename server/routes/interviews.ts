@@ -1,4 +1,4 @@
-import express from "express";
+import express, { type Request, type Response, type NextFunction } from "express";
 import { createInterviewAndQuestions } from "../services/interviewService.js";
 
 const router = express.Router();
@@ -35,7 +35,7 @@ const router = express.Router();
  *             schema:
  *               $ref: '#/components/schemas/Error'
  */
-router.post("/interviews", async (req, res, next) => {
+router.post("/interviews", async (req: Request, res: Response, next: NextFunction) => {
   try {
     const result = await createInterviewAndQuestions(req.body);
     res.status(201).json(result);
@@ -71,7 +71,7 @@ router.post("/interviews", async (req, res, next) => {
  *             schema:
  *               $ref: '#/components/schemas/Error'
  */
-router.get("/interviews/:token", async (req, res) => {
+router.get("/interviews/:token", async (req: Request, res: Response) => {
   res.json({ token: req.params.token, questions: [] }); // TODO:
 });
 
@@ -113,8 +113,9 @@ router.get("/interviews/:token", async (req, res) => {
  *             schema:
  *               $ref: '#/components/schemas/Error'
  */
-router.post("/interviews/:token/submit", async (req, res) => {
+router.post("/interviews/:token/submit", async (req: Request, res: Response) => {
   res.status(200).json({ ok: true }); //: TODO:
 });
 
 export default router;
+

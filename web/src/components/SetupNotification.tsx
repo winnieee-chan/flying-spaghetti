@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, FormEvent, ChangeEvent } from "react";
 import {
     Box,
     Button,
@@ -9,11 +9,11 @@ import {
 } from "@mui/material";
 
 const SetupNotification = () => {
-    const [companies, setCompanies] = useState("");
-    const [roles, setRoles] = useState("");
-    const [keywords, setKeywords] = useState("");
+    const [companies, setCompanies] = useState<string>("");
+    const [roles, setRoles] = useState<string>("");
+    const [keywords, setKeywords] = useState<string>("");
 
-    const handleSubmit = (event) => {
+    const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
         event.preventDefault();
         // Wrap all three keys together as an object with id
         // so that can view them later in view noti page
@@ -40,21 +40,21 @@ const SetupNotification = () => {
                         label="Company names"
                         placeholder="Acme Corp, Globex, Initech"
                         value={companies}
-                        onChange={(e) => setCompanies(e.target.value)}
+                        onChange={(e: ChangeEvent<HTMLInputElement>) => setCompanies(e.target.value)}
                         fullWidth
                     />
                     <TextField
                         label="Job roles"
                         placeholder="Frontend Engineer, Product Manager"
                         value={roles}
-                        onChange={(e) => setRoles(e.target.value)}
+                        onChange={(e: ChangeEvent<HTMLInputElement>) => setRoles(e.target.value)}
                         fullWidth
                     />
                     <TextField
                         label="Keywords"
                         placeholder="TypeScript, React, Node.js"
                         value={keywords}
-                        onChange={(e) => setKeywords(e.target.value)}
+                        onChange={(e: ChangeEvent<HTMLInputElement>) => setKeywords(e.target.value)}
                         fullWidth
                     />
                     <Box display="flex" justifyContent="flex-end">
@@ -69,3 +69,4 @@ const SetupNotification = () => {
 };
 
 export default SetupNotification;
+

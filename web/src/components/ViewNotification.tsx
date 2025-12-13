@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useMemo, useState, ChangeEvent } from "react";
 import {
     Box,
     Button,
@@ -14,8 +14,15 @@ import {
     Typography,
 } from "@mui/material";
 
+interface Notification {
+    id: number;
+    companies: string[];
+    roles: string[];
+    keywords: string[];
+}
+
 const ViewNotification = () => {
-    const [notifications, setNotifications] = useState([
+    const [notifications, setNotifications] = useState<Notification[]>([
         {
             id: 1,
             companies: ["Acme Corp", "Globex"],
@@ -29,7 +36,7 @@ const ViewNotification = () => {
             keywords: ["PostgreSQL", "API", "Performance"],
         },
     ]);
-    const [editingId, setEditingId] = useState(null);
+    const [editingId, setEditingId] = useState<number | null>(null);
     const [formValues, setFormValues] = useState({
         companies: "",
         roles: "",
@@ -41,7 +48,7 @@ const ViewNotification = () => {
         [editingId, notifications]
     );
 
-    const openEdit = (notification) => {
+    const openEdit = (notification: Notification) => {
         setEditingId(notification.id);
         setFormValues({
             companies: notification.companies.join(", "),
@@ -55,7 +62,7 @@ const ViewNotification = () => {
         setFormValues({ companies: "", roles: "", keywords: "" });
     };
 
-    const handleDelete = (id) => {
+    const handleDelete = (id: number) => {
         setNotifications((prev) => prev.filter((n) => n.id !== id));
     };
 
@@ -202,7 +209,7 @@ const ViewNotification = () => {
                         <TextField
                             label="Companies"
                             value={formValues.companies}
-                            onChange={(e) =>
+                            onChange={(e: ChangeEvent<HTMLInputElement>) =>
                                 setFormValues((prev) => ({ ...prev, companies: e.target.value }))
                             }
                             placeholder="Acme Corp, Globex"
@@ -211,7 +218,7 @@ const ViewNotification = () => {
                         <TextField
                             label="Roles"
                             value={formValues.roles}
-                            onChange={(e) =>
+                            onChange={(e: ChangeEvent<HTMLInputElement>) =>
                                 setFormValues((prev) => ({ ...prev, roles: e.target.value }))
                             }
                             placeholder="Frontend Engineer, Product Manager"
@@ -220,7 +227,7 @@ const ViewNotification = () => {
                         <TextField
                             label="Keywords"
                             value={formValues.keywords}
-                            onChange={(e) =>
+                            onChange={(e: ChangeEvent<HTMLInputElement>) =>
                                 setFormValues((prev) => ({ ...prev, keywords: e.target.value }))
                             }
                             placeholder="React, Node.js, API"
@@ -240,3 +247,4 @@ const ViewNotification = () => {
 };
 
 export default ViewNotification;
+

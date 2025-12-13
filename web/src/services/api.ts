@@ -6,13 +6,45 @@
  */
 
 // Simulate network latency (in milliseconds)
-const simulateLatency = () => {
+const simulateLatency = (): Promise<void> => {
   const delay = Math.random() * 300 + 100; // 100-400ms
   return new Promise((resolve) => setTimeout(resolve, delay));
 };
 
+interface JobDescription {
+  id: string;
+  title: string;
+  description?: string;
+  company: string;
+  createdAt: string;
+  filters?: {
+    experience?: string[];
+    location?: string[];
+    skills?: string[];
+  };
+  message?: string;
+}
+
+interface Candidate {
+  id: string;
+  name: string;
+  email: string;
+  experience: string;
+  location: string;
+  skills: string[];
+  resume?: string;
+  status: string;
+}
+
+interface MockData {
+  jobDescriptions: Map<string, JobDescription>;
+  candidates: Map<string, Candidate>;
+  nextJdId: number;
+  nextCandidateId: number;
+}
+
 // Mock data store
-const mockData = {
+const mockData: MockData = {
   jobDescriptions: new Map(),
   candidates: new Map(),
   nextJdId: 1,
@@ -20,7 +52,7 @@ const mockData = {
 };
 
 // Initialize with some sample data
-const initializeMockData = () => {
+const initializeMockData = (): void => {
   const jdId1 = "jd-1";
   const jdId2 = "jd-2";
   
@@ -57,7 +89,7 @@ const initializeMockData = () => {
   });
 
   // Sample candidates for jd-1
-  const candidate1 = {
+  const candidate1: Candidate = {
     id: "cd-1",
     name: "John Doe",
     email: "john.doe@example.com",
@@ -68,7 +100,7 @@ const initializeMockData = () => {
     status: "pending",
   };
 
-  const candidate2 = {
+  const candidate2: Candidate = {
     id: "cd-2",
     name: "Jane Smith",
     email: "jane.smith@example.com",
@@ -83,7 +115,7 @@ const initializeMockData = () => {
   mockData.candidates.set(`${jdId1}/cd-2`, candidate2);
 
   // Sample candidates for jd-2
-  const candidate3 = {
+  const candidate3: Candidate = {
     id: "cd-3",
     name: "Bob Johnson",
     email: "bob.johnson@example.com",
@@ -100,10 +132,17 @@ const initializeMockData = () => {
 // Initialize mock data on module load
 initializeMockData();
 
+interface ParsedEndpoint {
+  type: "allJobs" | "jobDescription" | "candidates" | "candidate" | "unknown";
+  jdId?: string;
+  candidateId?: string;
+  path?: string;
+}
+
 /**
  * Parse REST-style endpoint and extract parameters
  */
-const parseEndpoint = (path) => {
+const parseEndpoint = (path: string): ParsedEndpoint => {
   // Pattern: /jd (all jobs) or /jd-id or /jd-id/cd or /jd-id/cd-id
   if (path === "/jd") {
     return { type: "allJobs" };
@@ -128,7 +167,7 @@ const parseEndpoint = (path) => {
 /**
  * GET request handler
  */
-const handleGet = async (path) => {
+const handleGet = async <T = unknown>(path: string): Promise<T> => {
   await simulateLatency();
 
   const parsed = parseEndpoint(path);
@@ -157,10 +196,13 @@ const handleGet = async (path) => {
           message: jd.message,
         });
       }
-      return jobs;
+      return jobs as T;
     }
 
     case "jobDescription": {
+      if (!parsed.jdId) {
+        throw new Error("Job ID is required");
+      }
       const jd = mockData.jobDescriptions.get(parsed.jdId);
       if (!jd) {
         throw new Error(`Job description ${parsed.jdId} not found`);
@@ -172,10 +214,13 @@ const handleGet = async (path) => {
         company: jd.company,
         filters: jd.filters,
         message: jd.message,
-      };
+      } as T;
     }
 
     case "candidates": {
+      if (!parsed.jdId) {
+        throw new Error("Job ID is required");
+      }
       const candidates = [];
       for (const [key, candidate] of mockData.candidates.entries()) {
         if (key.startsWith(`${parsed.jdId}/`)) {
@@ -190,16 +235,19 @@ const handleGet = async (path) => {
           });
         }
       }
-      return candidates;
+      return candidates as T;
     }
 
     case "candidate": {
+      if (!parsed.jdId || !parsed.candidateId) {
+        throw new Error("Job ID and Candidate ID are required");
+      }
       const key = `${parsed.jdId}/${parsed.candidateId}`;
       const candidate = mockData.candidates.get(key);
       if (!candidate) {
         throw new Error(`Candidate ${parsed.candidateId} not found for job ${parsed.jdId}`);
       }
-      return candidate;
+      return candidate as T;
     }
 
     default:
@@ -210,26 +258,27 @@ const handleGet = async (path) => {
 /**
  * POST request handler
  */
-const handlePost = async (path, body) => {
+const handlePost = async <T = unknown>(path: string, body: Record<string, unknown>): Promise<T> => {
   await simulateLatency();
 
   // POST /jd - Create job description
   if (path === "/jd" || path.match(/^\/jd$/)) {
     const jdId = `jd-${mockData.nextJdId++}`;
-    const newJd = {
+    const newJd: JobDescription = {
       id: jdId,
-      title: body.title || "Untitled Job",
-      description: body.description || "",
-      company: body.company || "",
-      filters: body.filters || {
+      title: (body.title as string) || "Untitled Job",
+      description: (body.description as string) || "",
+      company: (body.company as string) || "",
+      filters: (body.filters as JobDescription["filters"]) || {
         experience: [],
         location: [],
         skills: [],
       },
-      message: body.message || "",
+      message: (body.message as string) || "",
+      createdAt: new Date().toISOString(),
     };
     mockData.jobDescriptions.set(jdId, newJd);
-    return { id: jdId, ...newJd };
+    return newJd as T;
   }
 
   throw new Error(`POST endpoint not found: ${path}`);
@@ -238,12 +287,12 @@ const handlePost = async (path, body) => {
 /**
  * PUT request handler
  */
-const handlePut = async (path, body) => {
+const handlePut = async <T = unknown>(path: string, body: Record<string, unknown>): Promise<T> => {
   await simulateLatency();
 
   const parsed = parseEndpoint(path);
 
-  if (parsed.type === "jobDescription") {
+  if (parsed.type === "jobDescription" && parsed.jdId) {
     const jd = mockData.jobDescriptions.get(parsed.jdId);
     if (!jd) {
       throw new Error(`Job description ${parsed.jdId} not found`);
@@ -251,23 +300,23 @@ const handlePut = async (path, body) => {
 
     // Update filters or other fields
     if (body.filters !== undefined) {
-      jd.filters = body.filters;
+      jd.filters = body.filters as JobDescription["filters"];
     }
     if (body.title !== undefined) {
-      jd.title = body.title;
+      jd.title = body.title as string;
     }
     if (body.description !== undefined) {
-      jd.description = body.description;
+      jd.description = body.description as string;
     }
     if (body.company !== undefined) {
-      jd.company = body.company;
+      jd.company = body.company as string;
     }
     if (body.message !== undefined) {
-      jd.message = body.message;
+      jd.message = body.message as string;
     }
 
     mockData.jobDescriptions.set(parsed.jdId, jd);
-    return jd;
+    return jd as T;
   }
 
   throw new Error(`PUT endpoint not found: ${path}`);
@@ -279,42 +328,45 @@ const handlePut = async (path, body) => {
 export const api = {
   /**
    * GET request
-   * @param {string} path - REST endpoint path (e.g., "/jd-1", "/jd-1/cd", "/jd-1/cd/cd-1")
-   * @returns {Promise<any>} Response data
+   * @param path - REST endpoint path (e.g., "/jd-1", "/jd-1/cd", "/jd-1/cd/cd-1")
+   * @returns Response data
    */
-  async get(path) {
+  async get<T = unknown>(path: string): Promise<T> {
     try {
-      return await handleGet(path);
+      return await handleGet<T>(path);
     } catch (error) {
-      throw new Error(`API GET ${path}: ${error.message}`);
+      const errorMessage = error instanceof Error ? error.message : "Unknown error";
+      throw new Error(`API GET ${path}: ${errorMessage}`);
     }
   },
 
   /**
    * POST request
-   * @param {string} path - REST endpoint path (e.g., "/jd")
-   * @param {object} body - Request body
-   * @returns {Promise<any>} Response data
+   * @param path - REST endpoint path (e.g., "/jd")
+   * @param body - Request body
+   * @returns Response data
    */
-  async post(path, body = {}) {
+  async post<T = unknown>(path: string, body: Record<string, unknown> = {}): Promise<T> {
     try {
-      return await handlePost(path, body);
+      return await handlePost<T>(path, body);
     } catch (error) {
-      throw new Error(`API POST ${path}: ${error.message}`);
+      const errorMessage = error instanceof Error ? error.message : "Unknown error";
+      throw new Error(`API POST ${path}: ${errorMessage}`);
     }
   },
 
   /**
    * PUT request
-   * @param {string} path - REST endpoint path (e.g., "/jd-1")
-   * @param {object} body - Request body
-   * @returns {Promise<any>} Response data
+   * @param path - REST endpoint path (e.g., "/jd-1")
+   * @param body - Request body
+   * @returns Response data
    */
-  async put(path, body = {}) {
+  async put<T = unknown>(path: string, body: Record<string, unknown> = {}): Promise<T> {
     try {
-      return await handlePut(path, body);
+      return await handlePut<T>(path, body);
     } catch (error) {
-      throw new Error(`API PUT ${path}: ${error.message}`);
+      const errorMessage = error instanceof Error ? error.message : "Unknown error";
+      throw new Error(`API PUT ${path}: ${errorMessage}`);
     }
   },
 };
