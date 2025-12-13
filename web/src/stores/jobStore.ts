@@ -1,11 +1,13 @@
 import { create } from "zustand";
 import { api } from "../services/api.js";
+import { filterCandidates, type CandidateFilters } from "../utils/candidateUtils";
 
 /**
  * Job Store
  * 
  * Manages job-related state and actions.
  * All async operations go through the api abstraction layer.
+ * Filtering logic is delegated to shared candidateUtils.
  */
 
 interface JobFilters {
@@ -41,13 +43,7 @@ export interface Candidate {
   matchScore?: number;       // 0-100 relevance score
 }
 
-interface CandidateFilters {
-  keywords?: string[];
-  skills?: string[];
-  experience?: string[];
-  location?: string[];
-  minMatchScore?: number;
-}
+// CandidateFilters is imported from candidateUtils
 
 interface JobStore {
   // State
@@ -253,67 +249,14 @@ const useJobStore = create<JobStore>((set, get) => ({
 
   /**
    * Set active filters and compute filtered candidates
+   * Filtering logic is delegated to shared candidateUtils
    */
   setActiveFilters: (filters: CandidateFilters) => {
     set({ activeFilters: filters });
     
-    // Compute filtered candidates
+    // Use shared filtering utility
     const { candidates } = get();
-    const filtered = candidates.filter((candidate) => {
-      // Keywords filter
-      if (filters.keywords && filters.keywords.length > 0) {
-        const searchText = filters.keywords.join(' ').toLowerCase();
-        const candidateText = [
-          candidate.name,
-          candidate.email,
-          candidate.headline || '',
-          candidate.resume || '',
-          ...candidate.skills,
-        ].join(' ').toLowerCase();
-        
-        if (!filters.keywords.some(keyword => 
-          candidateText.includes(keyword.toLowerCase())
-        )) {
-          return false;
-        }
-      }
-      
-      // Skills filter
-      if (filters.skills && filters.skills.length > 0) {
-        if (!filters.skills.some(skill => 
-          candidate.skills.some(cSkill => 
-            cSkill.toLowerCase().includes(skill.toLowerCase())
-          )
-        )) {
-          return false;
-        }
-      }
-      
-      // Experience filter
-      if (filters.experience && filters.experience.length > 0) {
-        if (!filters.experience.includes(candidate.experience)) {
-          return false;
-        }
-      }
-      
-      // Location filter
-      if (filters.location && filters.location.length > 0) {
-        if (!filters.location.some(loc => 
-          candidate.location.toLowerCase().includes(loc.toLowerCase())
-        )) {
-          return false;
-        }
-      }
-      
-      // Match score filter
-      if (filters.minMatchScore !== undefined) {
-        if ((candidate.matchScore || 0) < filters.minMatchScore) {
-          return false;
-        }
-      }
-      
-      return true;
-    });
+    const filtered = filterCandidates(candidates, filters);
     
     set({ filteredCandidates: filtered });
   },

@@ -2,6 +2,7 @@ import { useMemo } from "react";
 import { motion } from "framer-motion";
 import { Text, Stack, Group, Badge } from "@mantine/core";
 import useJobStore from "../../stores/jobStore";
+import { getSkillDistribution, getLocationDistribution } from "../../utils/candidateUtils";
 
 interface CandidatePoolBubbleProps {
   totalCount: number;
@@ -34,29 +35,17 @@ const CandidatePoolBubble = ({ totalCount, filteredCount, jobId, onBubbleClick }
   const bubbleColor = `hsl(${hue}, ${saturation}%, ${lightness}%)`;
   const glowColor = `hsla(${hue}, ${saturation}%, ${lightness}%, 0.4)`;
 
-  // Get skill distribution for filtered candidates
-  const skillDistribution = useMemo(() => {
-    const skills: Record<string, number> = {};
-    filteredCandidates.forEach(c => {
-      c.skills.forEach(skill => {
-        skills[skill] = (skills[skill] || 0) + 1;
-      });
-    });
-    return Object.entries(skills)
-      .sort((a, b) => b[1] - a[1])
-      .slice(0, 5);
-  }, [filteredCandidates]);
+  // Get skill distribution using shared utility
+  const skillDistribution = useMemo(
+    () => getSkillDistribution(filteredCandidates, 5),
+    [filteredCandidates]
+  );
 
-  // Get location distribution
-  const locationDistribution = useMemo(() => {
-    const locations: Record<string, number> = {};
-    filteredCandidates.forEach(c => {
-      locations[c.location] = (locations[c.location] || 0) + 1;
-    });
-    return Object.entries(locations)
-      .sort((a, b) => b[1] - a[1])
-      .slice(0, 4);
-  }, [filteredCandidates]);
+  // Get location distribution using shared utility
+  const locationDistribution = useMemo(
+    () => getLocationDistribution(filteredCandidates, 4),
+    [filteredCandidates]
+  );
 
   return (
     <div
@@ -195,14 +184,14 @@ const CandidatePoolBubble = ({ totalCount, filteredCount, jobId, onBubbleClick }
         <Stack gap="xs" align="center">
           <Text size="xs" c="dimmed" fw={500}>TOP SKILLS</Text>
           <Group gap="xs">
-            {skillDistribution.map(([skill, count]) => (
+            {skillDistribution.map((stat) => (
               <Badge 
-                key={skill} 
+                key={stat.label} 
                 variant="light" 
                 color="violet"
                 size="sm"
               >
-                {skill} ({count})
+                {stat.label} ({stat.count})
               </Badge>
             ))}
           </Group>
@@ -212,14 +201,14 @@ const CandidatePoolBubble = ({ totalCount, filteredCount, jobId, onBubbleClick }
         <Stack gap="xs" align="center">
           <Text size="xs" c="dimmed" fw={500}>LOCATIONS</Text>
           <Group gap="xs">
-            {locationDistribution.map(([location, count]) => (
+            {locationDistribution.map((stat) => (
               <Badge 
-                key={location} 
+                key={stat.label} 
                 variant="light" 
                 color="blue"
                 size="sm"
               >
-                {location} ({count})
+                {stat.label} ({stat.count})
               </Badge>
             ))}
           </Group>

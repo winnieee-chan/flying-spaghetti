@@ -12,11 +12,15 @@ import {
   ScrollArea,
   Avatar,
   Grid,
-  Progress,
   ActionIcon,
 } from "@mantine/core";
 import { IconSearch, IconStar, IconStarFilled, IconMapPin, IconBriefcase } from "@tabler/icons-react";
 import useJobStore, { type Candidate } from "../../stores/jobStore";
+import {
+  searchCandidates,
+  sortByMatchScore,
+  getCandidateStats,
+} from "../../utils/candidateUtils";
 
 interface CandidateListViewProps {
   opened: boolean;
@@ -40,59 +44,25 @@ const CandidateListView = ({ opened, onClose, jobId }: CandidateListViewProps) =
   // Use filtered candidates from store
   const displayCandidates = filteredCandidates.length > 0 ? filteredCandidates : candidates;
   
-  // Apply local search on top of store filters
-  const searchedCandidates = useMemo(() => {
-    if (!searchQuery.trim()) return displayCandidates;
-    const query = searchQuery.toLowerCase();
-    return displayCandidates.filter(c => 
-      c.name.toLowerCase().includes(query) ||
-      c.headline?.toLowerCase().includes(query) ||
-      c.skills.some(s => s.toLowerCase().includes(query)) ||
-      c.location.toLowerCase().includes(query)
-    );
-  }, [displayCandidates, searchQuery]);
+  // Apply local search on top of store filters using shared utility
+  const searchedCandidates = useMemo(
+    () => searchCandidates(displayCandidates, searchQuery),
+    [displayCandidates, searchQuery]
+  );
   
-  // Sort by match score
-  const sortedCandidates = useMemo(() => 
-    [...searchedCandidates].sort((a, b) => (b.matchScore || 0) - (a.matchScore || 0)),
+  // Sort by match score using shared utility
+  const sortedCandidates = useMemo(
+    () => sortByMatchScore(searchedCandidates),
     [searchedCandidates]
   );
   
-  // Top 5 matches
-  const topMatches = sortedCandidates.slice(0, 5);
+  // Get all stats at once using shared utility
+  const stats = useMemo(
+    () => getCandidateStats(displayCandidates),
+    [displayCandidates]
+  );
   
-  // Location stats
-  const locationStats = useMemo(() => {
-    const stats: Record<string, number> = {};
-    displayCandidates.forEach(c => {
-      stats[c.location] = (stats[c.location] || 0) + 1;
-    });
-    return Object.entries(stats)
-      .sort((a, b) => b[1] - a[1])
-      .slice(0, 5);
-  }, [displayCandidates]);
-  
-  // Experience stats
-  const experienceStats = useMemo(() => {
-    const stats: Record<string, number> = {};
-    displayCandidates.forEach(c => {
-      stats[c.experience] = (stats[c.experience] || 0) + 1;
-    });
-    return Object.entries(stats).sort((a, b) => b[1] - a[1]);
-  }, [displayCandidates]);
-  
-  // Top skills
-  const topSkills = useMemo(() => {
-    const skills: Record<string, number> = {};
-    displayCandidates.forEach(c => {
-      c.skills.forEach(skill => {
-        skills[skill] = (skills[skill] || 0) + 1;
-      });
-    });
-    return Object.entries(skills)
-      .sort((a, b) => b[1] - a[1])
-      .slice(0, 8);
-  }, [displayCandidates]);
+  const { topMatches, locations: locationStats, experiences: experienceStats, skills: topSkills } = stats;
 
   const handleCandidateClick = (candidate: Candidate) => {
     selectCandidate(candidate);
@@ -143,11 +113,11 @@ const CandidateListView = ({ opened, onClose, jobId }: CandidateListViewProps) =
               <Stack gap="xs">
                 <Text size="xs" fw={600} c="dimmed" tt="uppercase">Primary Locations</Text>
                 <Stack gap={4}>
-                  {locationStats.map(([location, count]) => (
-                    <Group key={location} gap="xs" wrap="nowrap">
+                  {locationStats.map((stat) => (
+                    <Group key={stat.label} gap="xs" wrap="nowrap">
                       <IconMapPin size={12} style={{ color: "var(--mantine-color-dimmed)" }} />
-                      <Text size="sm" style={{ flex: 1 }}>{location}</Text>
-                      <Text size="xs" c="dimmed">{count}</Text>
+                      <Text size="sm" style={{ flex: 1 }}>{stat.label}</Text>
+                      <Text size="xs" c="dimmed">{stat.count}</Text>
                     </Group>
                   ))}
                 </Stack>
@@ -159,11 +129,11 @@ const CandidateListView = ({ opened, onClose, jobId }: CandidateListViewProps) =
               <Stack gap="xs">
                 <Text size="xs" fw={600} c="dimmed" tt="uppercase">Experience Levels</Text>
                 <Stack gap={4}>
-                  {experienceStats.map(([exp, count]) => (
-                    <Group key={exp} gap="xs" wrap="nowrap">
+                  {experienceStats.map((stat) => (
+                    <Group key={stat.label} gap="xs" wrap="nowrap">
                       <IconBriefcase size={12} style={{ color: "var(--mantine-color-dimmed)" }} />
-                      <Text size="sm" style={{ flex: 1 }}>{exp}</Text>
-                      <Text size="xs" c="dimmed">{count}</Text>
+                      <Text size="sm" style={{ flex: 1 }}>{stat.label}</Text>
+                      <Text size="xs" c="dimmed">{stat.count}</Text>
                     </Group>
                   ))}
                 </Stack>
@@ -175,9 +145,9 @@ const CandidateListView = ({ opened, onClose, jobId }: CandidateListViewProps) =
           <Stack gap="xs" mt="md">
             <Text size="xs" fw={600} c="dimmed" tt="uppercase">Top Skills in Pool</Text>
             <Group gap="xs">
-              {topSkills.map(([skill, count]) => (
-                <Badge key={skill} variant="light" color="violet" size="sm">
-                  {skill} ({count})
+              {topSkills.map((stat) => (
+                <Badge key={stat.label} variant="light" color="violet" size="sm">
+                  {stat.label} ({stat.count})
                 </Badge>
               ))}
             </Group>

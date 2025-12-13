@@ -13,6 +13,7 @@ import {
 } from "@mantine/core";
 import { IconSearch, IconX } from "@tabler/icons-react";
 import useJobStore from "../../stores/jobStore";
+import { getAllUniqueValues } from "../../utils/candidateUtils";
 
 // Filter types and their colors
 const FILTER_TYPES = {
@@ -39,17 +40,9 @@ const CompactFilterBar = () => {
   const [selectedSuggestion, setSelectedSuggestion] = useState(0);
   const inputRef = useRef<HTMLInputElement>(null);
 
-  // Extract unique values from candidates
-  const allSkills = useMemo(() => 
-    Array.from(new Set(candidates.flatMap((c) => c.skills))).sort(),
-    [candidates]
-  );
-  const allExperiences = useMemo(() => 
-    Array.from(new Set(candidates.map((c) => c.experience))).sort(),
-    [candidates]
-  );
-  const allLocations = useMemo(() => 
-    Array.from(new Set(candidates.map((c) => c.location))).sort(),
+  // Extract unique values from candidates using shared utility
+  const { skills: allSkills, experiences: allExperiences, locations: allLocations } = useMemo(
+    () => getAllUniqueValues(candidates),
     [candidates]
   );
 
