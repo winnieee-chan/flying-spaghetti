@@ -1,6 +1,7 @@
 import express, { Request, Response, NextFunction } from 'express';
 import db from '../../db/db.js';
 import { createJob } from '../../services/jobService.js';
+import { sourceCandidatesForJob } from '../../services/sourcingService.js';
 import type { Job } from '../../types/index.js';
 import { RabbitMqService } from '../../services/rabbitMqService.js';
 
@@ -82,7 +83,7 @@ router.put('/:jobId', (req: JobRequest, res: Response) => {
     const updatedJob = db.updateJob(req.jobId, {
         extracted_keywords,
         scoring_ratios,
-        status: 'FILTERS_SAVED' 
+        status: 'FILTERS_SAVED'
     });
 
     if (!updatedJob) {
@@ -102,7 +103,7 @@ router.get('/:jobId/candidates', (req: JobRequest, res: Response) => {
 
     let candidates = db.getCandidatesByJobId(req.jobId);
     const { sort, exclude_open_to_work } = req.query;
-    
+
     if (exclude_open_to_work === 'true') {
         candidates = candidates.filter(c => !c.open_to_work);
     }
@@ -148,7 +149,7 @@ router.post('/:jobId/candidates/sendall', (req: JobRequest, res: Response) => {
     }
 
     const candidates = db.getCandidatesByJobId(req.jobId);
-    
+
     if (candidates.length === 0) {
         return res.status(404).json({ message: "No candidates found for this job." });
     }
@@ -156,7 +157,7 @@ router.post('/:jobId/candidates/sendall', (req: JobRequest, res: Response) => {
     const results = candidates.map(candidate => {
         const candidateDetail = db.getCandidateScoreForJob(candidate.candidateId, req.jobId!);
         const message = candidateDetail?.outreach_messages?.[0] || `Hi ${candidate.full_name}, we'd like to connect...`;
-        
+
         return {
             candidateId: candidate.candidateId,
             full_name: candidate.full_name,
@@ -195,6 +196,33 @@ router.post('/:jobId/candidates/:candidateId/send', (req: JobRequest, res: Respo
         email_sent: true,
         message: message
     });
+});
+
+// POST /jobs/:jobId/source - Source candidates from Apify (LinkedIn + GitHub)
+router.post('/:jobId/source', async (req: JobRequest, res: Response) => {
+    if (!req.job || !req.jobId) {
+        return res.status(404).json({ message: "Job not found." });
+    }
+
+    try {
+        console.log(`[API] Starting candidate sourcing for job: ${req.jobId}`);
+
+        // Call the sourcing service
+        const profiles = await sourceCandidatesForJob(req.job);
+
+        res.status(200).json({
+            jobId: req.jobId,
+            message: `Successfully found ${profiles.length} LinkedIn profiles.`,
+            profilesFound: profiles.length,
+            profiles: profiles // Return all the raw LinkedIn data
+        });
+    } catch (error) {
+        console.error('[API] Error sourcing candidates:', error);
+        res.status(500).json({
+            message: "Error sourcing candidates.",
+            error: error instanceof Error ? error.message : 'Unknown error'
+        });
+    }
 });
 
 export default router;

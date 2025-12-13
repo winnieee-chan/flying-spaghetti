@@ -193,6 +193,88 @@ paths:
                     type: string
                     example: "Filters and scoring ratios successfully updated and saved for sourcing."
 
+  /jobs/{jobId}/source:
+    post:
+      tags:
+        - Candidate Sourcing
+      summary: Source Candidates from LinkedIn and GitHub via Keywords
+      description: |
+        Triggers candidate sourcing using Apify's LinkedIn search API. Searches LinkedIn using job keywords (role, skills, location), 
+        enriches profiles with GitHub data, scores candidates based on job requirements, and stores results.
+        
+        **No LinkedIn profile URLs or cookies required** - uses keyword-based search.
+        
+        **Requirements:** `APIFY_TOKEN` must be set in environment variables.
+      operationId: sourceCandidates
+      parameters:
+        - name: jobId
+          in: path
+          required: true
+          description: Job identifier (UUID v4)
+          schema:
+            type: string
+            format: uuid
+          example: "550e8400-e29b-41d4-a716-446655440000"
+      responses:
+        '200':
+          description: Candidates sourced successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  jobId:
+                    type: string
+                    format: uuid
+                    example: "550e8400-e29b-41d4-a716-446655440000"
+                  message:
+                    type: string
+                    example: "Successfully sourced 15 candidates."
+                  candidatesFound:
+                    type: number
+                    example: 15
+                  topCandidates:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        candidateId:
+                          type: string
+                          format: uuid
+                          example: "550e8400-e29b-41d4-a716-446655440001"
+                        full_name:
+                          type: string
+                          example: "Alex Chen"
+                        headline:
+                          type: string
+                          example: "Senior Software Engineer"
+                        score:
+                          type: number
+                          example: 85
+        '404':
+          description: Job not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Job not found."
+        '500':
+          description: Error during sourcing process
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Error sourcing candidates."
+                  error:
+                    type: string
+                    example: "Apify API timeout"
+
   /jobs/{jobId}/candidates:
     get:
       tags:

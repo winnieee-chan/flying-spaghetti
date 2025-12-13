@@ -5,7 +5,7 @@ import type { ExtractedKeywords } from '../types/index.js';
 // Regex-based fallback extraction
 const extractWithRegex = (jd_text: string, job_title: string): ExtractedKeywords => {
     const text = (jd_text + ' ' + job_title).toLowerCase();
-    
+
     const skillPatterns = {
         languages: ['python', 'javascript', 'typescript', 'java', 'c\\+\\+', 'c#', 'go', 'rust', 'ruby', 'php', 'swift', 'kotlin', 'scala'],
         frameworks: ['react', 'angular', 'vue', 'next\\.?js', 'node\\.?js', 'django', 'flask', 'fastapi', 'spring', 'express', 'laravel', 'rails'],
@@ -14,7 +14,7 @@ const extractWithRegex = (jd_text: string, job_title: string): ExtractedKeywords
         devops: ['docker', 'kubernetes', 'k8s', 'jenkins', 'gitlab', 'github actions', 'terraform', 'ansible'],
         other: ['git', 'graphql', 'rest api', 'microservices', 'agile', 'scrum', 'ci/cd', 'tdd', 'machine learning', 'ml', 'ai']
     };
-    
+
     const foundSkills: string[] = [];
     Object.values(skillPatterns).flat().forEach(pattern => {
         const regex = new RegExp(`\\b${pattern}\\b`, 'i');
@@ -23,16 +23,16 @@ const extractWithRegex = (jd_text: string, job_title: string): ExtractedKeywords
             foundSkills.push(skill.charAt(0).toUpperCase() + skill.slice(1));
         }
     });
-    
+
     const skills = foundSkills.length > 0 ? [...new Set(foundSkills)].slice(0, 8) : ['General Programming'];
-    
+
     const expPatterns = [
         /(\d+)\s*\+?\s*years?\s+(?:of\s+)?experience/i,
         /minimum\s+(\d+)\s*years?/i,
         /(\d+)\s*-\s*\d+\s*years?/i,
         /at least\s+(\d+)\s*years?/i
     ];
-    
+
     let min_experience_years = 3;
     for (const pattern of expPatterns) {
         const match = text.match(pattern);
@@ -41,17 +41,17 @@ const extractWithRegex = (jd_text: string, job_title: string): ExtractedKeywords
             break;
         }
     }
-    
+
     const locationPatterns = [
         /location[:\s]+([a-z\s]+?)(?:\.|,|$)/i,
         /based in ([a-z\s]+?)(?:\.|,|$)/i,
         /\b(remote|hybrid|onsite|on-site)\b/i
     ];
-    
-    const cityList = ['remote', 'hybrid', 'sydney', 'melbourne', 'brisbane', 'perth', 'adelaide', 
-                     'san francisco', 'new york', 'london', 'berlin', 'singapore', 'bangalore', 
-                     'toronto', 'austin', 'seattle', 'boston', 'amsterdam', 'dublin', 'paris'];
-    
+
+    const cityList = ['remote', 'hybrid', 'sydney', 'melbourne', 'brisbane', 'perth', 'adelaide',
+        'san francisco', 'new york', 'london', 'berlin', 'singapore', 'bangalore',
+        'toronto', 'austin', 'seattle', 'boston', 'amsterdam', 'dublin', 'paris'];
+
     let location = 'Remote';
     for (const pattern of locationPatterns) {
         const match = text.match(pattern);
@@ -60,14 +60,14 @@ const extractWithRegex = (jd_text: string, job_title: string): ExtractedKeywords
             break;
         }
     }
-    
+
     if (location === 'Remote') {
         const foundCity = cityList.find(city => text.includes(city));
         if (foundCity) {
             location = foundCity.split(' ').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ');
         }
     }
-    
+
     return {
         role: job_title || "Software Engineer",
         skills,
@@ -80,7 +80,7 @@ const extractWithRegex = (jd_text: string, job_title: string): ExtractedKeywords
 const extractWithOpenAI = async (jd_text: string, job_title: string): Promise<ExtractedKeywords> => {
     const apiKey = process.env.OPENAI_API_KEY;
     if (!apiKey) throw new Error('OpenAI API key not available');
-    
+
     const response = await fetch('https://api.openai.com/v1/chat/completions', {
         method: 'POST',
         headers: {
@@ -96,12 +96,12 @@ const extractWithOpenAI = async (jd_text: string, job_title: string): Promise<Ex
             temperature: 0.3
         })
     });
-    
-    const data = await response.json();
+
+    const data = await response.json() as any;
     const content = data.choices[0].message.content.trim();
     const jsonMatch = content.match(/\{[\s\S]*\}/);
     const extracted = JSON.parse(jsonMatch ? jsonMatch[0] : content);
-    
+
     return {
         role: extracted.role || job_title,
         skills: Array.isArray(extracted.skills) ? extracted.skills : [],
@@ -115,14 +115,16 @@ const extractWithOpenAI = async (jd_text: string, job_title: string): Promise<Ex
  * Falls back to OpenAI if available, then regex extraction.
  */
 export const runSynchronousLLM = async (jd_text: string, job_title: string): Promise<ExtractedKeywords> => {
+
     const apiKey = process.env.GEMINI_API_KEY;
     const modelName = process.env.GEMINI_MODEL || 'gemini-2.0-flash-exp';
-    
+
     // Try Gemini first
     if (apiKey) {
+
         try {
             console.log(`[LLM] Calling Google Gemini API (${modelName}) for: ${job_title}...`);
-            
+
             const genAI = new GoogleGenerativeAI(apiKey);
             const model = genAI.getGenerativeModel({ model: modelName });
 
@@ -143,6 +145,7 @@ Return only the JSON object, nothing else.`;
 
             const result = await model.generateContent(prompt);
             const response = await result.response;
+            console.log(response)
             const text = response.text().trim();
 
             let jsonText = text;
@@ -163,16 +166,6 @@ Return only the JSON object, nothing else.`;
 
         } catch (error: any) {
             console.error('[LLM] Gemini API failed:', error.message);
-        }
-    }
-
-    // Try OpenAI fallback
-    if (process.env.OPENAI_API_KEY) {
-        try {
-            console.log('[LLM] Trying OpenAI fallback...');
-            return await extractWithOpenAI(jd_text, job_title);
-        } catch (error: any) {
-            console.warn('[LLM] OpenAI fallback failed:', error.message);
         }
     }
 

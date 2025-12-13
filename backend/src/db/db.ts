@@ -86,7 +86,7 @@ const db = {
             .map(candidate => {
                 const scoreData = candidate.scores.find(s => s.job_id === jobId);
                 if (!scoreData) return null;
-                
+
                 return {
                     candidateId: candidate._id,
                     full_name: candidate.full_name,
@@ -109,7 +109,7 @@ const db = {
         
         const scoreData = candidate.scores?.find(s => s.job_id === jobId);
         if (!scoreData) return null;
-        
+
         // This structure assumes CandidateScore includes all detailed fields needed for the frontend
         return {
             candidateId: candidate._id,
@@ -128,6 +128,58 @@ const db = {
     getCandidateById: (candidateId: string): Candidate | undefined => {
         const candidates = readCandidatesFile();
         return candidates.find(c => c._id === candidateId);
+    },
+
+    // 7. Read: Get All Candidates (for searching/filtering)
+    getAllCandidates: (): any[] => {
+        return readCandidatesFile();
+    },
+
+    // 7. Write: Save or Update Candidate Score for a Job
+    /**
+     * Saves or updates the scoring results and details for a specific candidate on a specific job.
+     * @param candidateId The unique ID of the candidate.
+     * @param jobId The job ID the score relates to.
+     * @param score The final calculated score (0-100).
+     * @param scoreDetails Partial CandidateScore object containing breakdown, outreach messages, etc.
+     */
+    saveCandidateScore: (candidateId: string, jobId: string, score: number, scoreDetails: Partial<CandidateScore>): void => {
+        const candidates = readCandidatesFile();
+        let candidate = candidates.find(c => c._id === candidateId);
+
+        // 1. Candidate Creation/Lookup
+        if (!candidate) {
+            // If candidate doesn't exist, create a new record
+            candidate = {
+                _id: candidateId,
+                full_name: scoreDetails.full_name || 'N/A',
+                headline: scoreDetails.headline || '',
+                github_username: scoreDetails.github_username || '',
+                open_to_work: scoreDetails.open_to_work || false,
+                enrichment: scoreDetails.enrichment || {
+                    public_repos: 0,
+                    total_stars: 0,
+                    recent_activity_days: 0,
+                    updated_at: new Date().toISOString()
+                },
+                scores: []
+            } as unknown as Candidate;
+            candidates.push(candidate);
+        }
+
+        // 2. Score Array Management: Remove old score for this job, if it exists
+        candidate.scores = candidate.scores.filter(s => s.job_id !== jobId);
+
+        // 3. Add the new score and all details
+        candidate.scores.push({
+            job_id: jobId,
+            score: score,
+            breakdown_json: scoreDetails.breakdown_json || [],
+            outreach_messages: scoreDetails.outreach_messages || []
+        });
+
+        // 4. Persistence: Write the updated array back to the file
+        writeCandidatesFile(candidates);
     }
 };
 
