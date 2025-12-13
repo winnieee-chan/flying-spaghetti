@@ -66,6 +66,18 @@ export interface Candidate {
 }
 
 // CandidateFilters is imported from candidateUtils
+
+export interface CandidateWorkflowState {
+  candidateId: string;
+  stage: "new" | "engaged" | "closing";
+  currentStep: number;
+  completedSteps: number[];
+  draftMessage?: string;
+  scheduledInterview?: string; // ISO date
+  decision?: "hire" | "reject" | null;
+  notes: string;
+}
+
 interface JobStore {
   // State
   jobs: Job[];
@@ -82,6 +94,7 @@ interface JobStore {
   selectedCandidate: Candidate | null;
   sidePanelOpen: boolean;
   searchQuery: string; // Search input value
+  workflowStates: Map<string, CandidateWorkflowState>; // candidateId -> workflow state
 
   // Actions
   fetchJobs: () => Promise<void>;
@@ -106,6 +119,22 @@ interface JobStore {
   updatePipelineStages: (jobId: string, stages: PipelineStage[]) => Promise<void>;
   updateCandidateStage: (jobId: string, candidateId: string, stageId: string) => Promise<void>;
   batchMoveCandidates: (jobId: string, criteria: { minMatchScore?: number; maxMatchScore?: number }, targetStageId: string) => Promise<number>;
+  
+  // Workflow state actions
+  getWorkflowState: (candidateId: string) => CandidateWorkflowState | undefined;
+  updateWorkflowStep: (candidateId: string, step: number, completed: boolean) => void;
+  saveDraftMessage: (candidateId: string, message: string) => void;
+  sendMessage: (jobId: string, candidateId: string, message: string) => Promise<void>;
+  
+  // AI actions (already exist, adding types for completeness)
+  analyzeCandidate: (jobId: string, candidateId: string) => Promise<{ fitScore: number; summary: string; recommendation: string }>;
+  draftFirstMessage: (jobId: string, candidateId: string) => Promise<string>;
+  summarizeConversation: (jobId: string, candidateId: string) => Promise<string>;
+  suggestNextMessage: (jobId: string, candidateId: string, lastMessage: string) => Promise<string>;
+  suggestInterviewTimes: (jobId: string, candidateId: string) => Promise<Date[]>;
+  draftOffer: (jobId: string, candidateId: string, terms?: Record<string, unknown>) => Promise<string>;
+  helpNegotiate: (jobId: string, candidateId: string, request: string) => Promise<string>;
+  generateDecisionSummary: (jobId: string, candidateId: string, decision: "hire" | "reject") => Promise<string>;
 }
 
 const useJobStore = create<JobStore>((set, get) => ({
@@ -124,6 +153,7 @@ const useJobStore = create<JobStore>((set, get) => ({
   selectedCandidate: null,
   sidePanelOpen: false,
   searchQuery: "",
+  workflowStates: new Map(),
 
   // Actions
 
@@ -463,6 +493,119 @@ const useJobStore = create<JobStore>((set, get) => ({
   },
 
   /**
+   * Get workflow state for a candidate
+   */
+  getWorkflowState: (candidateId: string) => {
+    const { workflowStates } = get();
+    return workflowStates.get(candidateId);
+  },
+
+  /**
+   * Update workflow step completion for a candidate
+   */
+  updateWorkflowStep: (candidateId: string, step: number, completed: boolean) => {
+    set((state) => {
+      const newMap = new Map(state.workflowStates);
+      const existing = newMap.get(candidateId) || {
+        candidateId,
+        stage: "new" as const,
+        currentStep: 0,
+        completedSteps: [],
+        notes: "",
+      };
+      
+      let completedSteps = [...existing.completedSteps];
+      if (completed && !completedSteps.includes(step)) {
+        completedSteps.push(step);
+      } else if (!completed) {
+        completedSteps = completedSteps.filter((s) => s !== step);
+      }
+      
+      newMap.set(candidateId, {
+        ...existing,
+        currentStep: step,
+        completedSteps,
+      });
+      
+      return { workflowStates: newMap };
+    });
+  },
+
+  /**
+   * Save draft message for a candidate
+   */
+  saveDraftMessage: (candidateId: string, message: string) => {
+    set((state) => {
+      const newMap = new Map(state.workflowStates);
+      const existing = newMap.get(candidateId) || {
+        candidateId,
+        stage: "new" as const,
+        currentStep: 0,
+        completedSteps: [],
+        notes: "",
+      };
+      
+      newMap.set(candidateId, {
+        ...existing,
+        draftMessage: message,
+      });
+      
+      return { workflowStates: newMap };
+    });
+  },
+
+  /**
+   * Send a message to a candidate and add to conversation history
+   */
+  sendMessage: async (jobId: string, candidateId: string, message: string) => {
+    set({ loading: true, error: null });
+    try {
+      await api.post(`/${jobId}/cd/${candidateId}/messages`, { content: message });
+      
+      // Add message to local conversation history
+      set((state) => {
+        const newMessage: Message = {
+          id: `msg-${Date.now()}`,
+          from: "founder",
+          content: message,
+          timestamp: new Date().toISOString(),
+          aiDrafted: true,
+        };
+        
+        const updatedCandidates = state.candidates.map((c) => {
+          if (c.id === candidateId) {
+            return {
+              ...c,
+              conversationHistory: [...(c.conversationHistory || []), newMessage],
+            };
+          }
+          return c;
+        });
+        
+        // Clear draft message
+        const newWorkflowStates = new Map(state.workflowStates);
+        const existing = newWorkflowStates.get(candidateId);
+        if (existing) {
+          newWorkflowStates.set(candidateId, {
+            ...existing,
+            draftMessage: undefined,
+          });
+        }
+        
+        return {
+          candidates: updatedCandidates,
+          workflowStates: newWorkflowStates,
+          loading: false,
+        };
+      });
+    } catch (error) {
+      const errorMessage = error instanceof Error ? error.message : "Unknown error";
+      set({ error: errorMessage, loading: false });
+      throw error;
+    }
+  },
+
+  /**
    * Analyze candidate with AI (Stage 1: New)
    */
   analyzeCandidate: async (jobId: string, candidateId: string) => {
@@ -477,7 +620,12 @@ const useJobStore = create<JobStore>((set, get) => ({
       set((state) => ({
         candidates: state.candidates.map((c) =>
           c.id === candidateId
-            ? { ...c, aiFitScore: result.fitScore, aiSummary: result.summary, aiRecommendation: result.recommendation as any }
+            ? { 
+                ...c, 
+                aiFitScore: result.fitScore, 
+                aiSummary: result.summary, 
+                aiRecommendation: result.recommendation as Candidate["aiRecommendation"]
+              }
             : c
         ),
         loading: false,

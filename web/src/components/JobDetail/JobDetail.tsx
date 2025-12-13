@@ -12,7 +12,7 @@ import {
   Card,
   Tabs,
 } from "@mantine/core";
-import { IconAlertCircle, IconArrowLeft } from "@tabler/icons-react";
+import { IconAlertCircle, IconArrowLeft, IconUsers, IconWand } from "@tabler/icons-react";
 import useJobStore from "../../stores/jobStore";
 import { hasActiveFilters } from "../../utils/candidateUtils";
 import CompactFilterBar from "./CompactFilterBar";
@@ -20,7 +20,7 @@ import CandidatePoolBubble from "./CandidatePoolBubble";
 import CandidateSidePanel from "./CandidateSidePanel";
 import StarredDrawer from "./StarredDrawer";
 import CandidateListView from "./CandidateListView";
-import PipelineView from "./Pipeline/PipelineView";
+import HiringWorkflow from "./Hiring/HiringWorkflow";
 
 const JobDetail = () => {
   const { id } = useParams<{ id: string }>();
@@ -134,11 +134,15 @@ const JobDetail = () => {
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.2, delay: 0.1 }}
       >
-        <Card shadow="sm" padding="xl" radius="md" withBorder>
+        <Card shadow="sm" padding={activeTab === "hiring" ? "md" : "xl"} radius="md" withBorder>
           <Tabs value={activeTab} onChange={(val) => setActiveTab(val || "pool")}>
             <Tabs.List mb="md">
-              <Tabs.Tab value="pool">Pool View</Tabs.Tab>
-              <Tabs.Tab value="pipeline">Pipeline View</Tabs.Tab>
+              <Tabs.Tab value="pool" leftSection={<IconUsers size={14} />}>
+                Pool
+              </Tabs.Tab>
+              <Tabs.Tab value="hiring" leftSection={<IconWand size={14} />}>
+                Hiring Workflow
+              </Tabs.Tab>
             </Tabs.List>
 
             <Tabs.Panel value="pool">
@@ -154,8 +158,13 @@ const JobDetail = () => {
               />
             </Tabs.Panel>
 
-            <Tabs.Panel value="pipeline">
-              {id && <PipelineView jobId={id} />}
+            <Tabs.Panel value="hiring">
+              {id && (
+                <HiringWorkflow 
+                  jobId={id} 
+                  onNavigateToPool={() => setActiveTab("pool")}
+                />
+              )}
             </Tabs.Panel>
           </Tabs>
         </Card>

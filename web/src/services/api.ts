@@ -33,6 +33,14 @@ interface JobDescription {
   pipelineStages?: PipelineStage[];
 }
 
+interface Message {
+  id: string;
+  from: "founder" | "candidate";
+  content: string;
+  timestamp: string;
+  aiDrafted?: boolean;
+}
+
 interface Candidate {
   id: string;
   name: string;
@@ -48,6 +56,11 @@ interface Candidate {
   source?: 'seeded' | 'external';
   matchScore?: number;
   pipelineStage?: string;
+  // AI and conversation fields
+  aiFitScore?: number;
+  aiSummary?: string;
+  aiRecommendation?: string;
+  conversationHistory?: Message[];
 }
 
 interface MockData {
@@ -224,7 +237,7 @@ const initializeMockData = (): void => {
 initializeMockData();
 
 interface ParsedEndpoint {
-  type: "allJobs" | "jobDescription" | "candidates" | "candidate" | "starred" | "externalSearch" | "batchMove" | "updateStage" | "aiAnalyze" | "aiDraftMessage" | "aiSummarize" | "aiSuggestMessage" | "aiSuggestTimes" | "aiDraftOffer" | "aiNegotiate" | "aiDecisionSummary" | "unknown";
+  type: "allJobs" | "jobDescription" | "candidates" | "candidate" | "starred" | "externalSearch" | "batchMove" | "updateStage" | "sendMessage" | "aiAnalyze" | "aiDraftMessage" | "aiSummarize" | "aiSuggestMessage" | "aiSuggestTimes" | "aiDraftOffer" | "aiNegotiate" | "aiDecisionSummary" | "unknown";
   jdId?: string;
   candidateId?: string;
   path?: string;
@@ -249,6 +262,7 @@ const parseEndpoint = (path: string): ParsedEndpoint => {
   const externalSearchMatch = path.match(/^\/([^/]+)\/cd\/external-search$/);
   const batchMoveMatch = path.match(/^\/([^/]+)\/cd\/batch-move$/);
   const updateStageMatch = path.match(/^\/([^/]+)\/cd\/([^/]+)\/stage$/);
+  const sendMessageMatch = path.match(/^\/([^/]+)\/cd\/([^/]+)\/messages$/);
   const aiAnalyzeMatch = path.match(/^\/([^/]+)\/cd\/([^/]+)\/ai\/analyze$/);
   const aiDraftMessageMatch = path.match(/^\/([^/]+)\/cd\/([^/]+)\/ai\/draft-message$/);
   const aiSummarizeMatch = path.match(/^\/([^/]+)\/cd\/([^/]+)\/ai\/summarize-conversation$/);
@@ -258,6 +272,9 @@ const parseEndpoint = (path: string): ParsedEndpoint => {
   const aiNegotiateMatch = path.match(/^\/([^/]+)\/cd\/([^/]+)\/ai\/negotiate$/);
   const aiDecisionSummaryMatch = path.match(/^\/([^/]+)\/cd\/([^/]+)\/ai\/decision-summary$/);
 
+  if (sendMessageMatch) {
+    return { type: "sendMessage", jdId: sendMessageMatch[1], candidateId: sendMessageMatch[2] };
+  }
   if (aiAnalyzeMatch) {
     return { type: "aiAnalyze", jdId: aiAnalyzeMatch[1], candidateId: aiAnalyzeMatch[2] };
   }
@@ -385,7 +402,11 @@ const handleGet = async <T = unknown>(path: string): Promise<T> => {
             headline: candidate.headline,
             source: candidate.source,
             matchScore: candidate.matchScore,
-            pipelineStage: candidate.pipelineStage, // Only include if explicitly set
+            pipelineStage: candidate.pipelineStage,
+            aiFitScore: candidate.aiFitScore,
+            aiSummary: candidate.aiSummary,
+            aiRecommendation: candidate.aiRecommendation,
+            conversationHistory: candidate.conversationHistory,
           });
         }
       }
@@ -539,7 +560,6 @@ const handlePost = async <T = unknown>(path: string, body: Record<string, unknow
     // Mock AI analysis
     const matchScore = candidate.matchScore || 70;
     const fitScore = Math.min(100, matchScore + Math.floor(Math.random() * 10) - 5);
-    const recommendations = ["reach_out", "wait", "archive"] as const;
     const recommendation = fitScore >= 80 ? "reach_out" : fitScore >= 60 ? "wait" : "archive";
     const confidence = Math.min(100, fitScore + 10);
 
@@ -549,6 +569,12 @@ const handlePost = async <T = unknown>(path: string, body: Record<string, unknow
     const suggestedMessage = fitScore >= 80 
       ? `Hi ${candidate.name.split(" ")[0]},\n\nI came across your profile and was impressed by your experience with ${strengths}. We're looking for someone with your background to join our team at ${job.company}.\n\nWould you be open to a quick conversation?\n\nBest,\n[Your Name]`
       : undefined;
+
+    // Save AI results to candidate
+    candidate.aiFitScore = fitScore;
+    candidate.aiSummary = summary;
+    candidate.aiRecommendation = recommendation;
+    mockData.candidates.set(key, candidate);
 
     return {
       fitScore,
@@ -645,6 +671,52 @@ const handlePost = async <T = unknown>(path: string, body: Record<string, unknow
     } else {
       return `Decision: REJECT\n\nWhile ${candidate.name} has relevant experience, there were concerns about fit for the role. The candidate's background in ${candidate.skills.slice(0, 2).join(" and ")} was noted, but may not align perfectly with our current needs.` as T;
     }
+  }
+
+  // POST /:jdId/cd/:candidateId/messages - Send a message to candidate
+  if (parsed.type === "sendMessage" && parsed.jdId && parsed.candidateId) {
+    const key = `${parsed.jdId}/${parsed.candidateId}`;
+    const candidate = mockData.candidates.get(key);
+    
+    if (!candidate) {
+      throw new Error("Candidate not found");
+    }
+
+    const content = (body.content as string) || "";
+    const newMessage = {
+      id: `msg-${Date.now()}`,
+      from: "founder" as const,
+      content,
+      timestamp: new Date().toISOString(),
+      aiDrafted: true,
+    };
+
+    // Add to candidate's conversation history
+    if (!candidate.conversationHistory) {
+      candidate.conversationHistory = [];
+    }
+    candidate.conversationHistory.push(newMessage);
+    mockData.candidates.set(key, candidate);
+
+    // Simulate a candidate reply after a delay (for demo purposes)
+    setTimeout(() => {
+      const replies = [
+        "Thank you for reaching out! I'm very interested in learning more about this opportunity.",
+        "Thanks for the message! I'd love to discuss this further. When would be a good time to chat?",
+        "I appreciate you contacting me. The role sounds exciting. Could you share more details?",
+        "Great to hear from you! I'm currently exploring new opportunities and this sounds promising.",
+      ];
+      const candidateReply = {
+        id: `msg-${Date.now() + 1}`,
+        from: "candidate" as const,
+        content: replies[Math.floor(Math.random() * replies.length)],
+        timestamp: new Date().toISOString(),
+      };
+      candidate.conversationHistory?.push(candidateReply);
+      mockData.candidates.set(key, candidate);
+    }, 2000);
+
+    return { success: true, messageId: newMessage.id } as T;
   }
 
   throw new Error(`POST endpoint not found: ${path}`);
