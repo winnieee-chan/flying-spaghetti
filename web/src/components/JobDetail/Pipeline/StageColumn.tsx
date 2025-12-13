@@ -179,21 +179,57 @@ const StageColumn = ({
                       <Text size="xs" fw={500} truncate>
                         {candidate.name}
                       </Text>
-                      {candidate.matchScore !== undefined && (
-                        <Badge
-                          size="xs"
-                          color={
-                            candidate.matchScore >= 80
-                              ? "green"
-                              : candidate.matchScore >= 60
-                              ? "yellow"
-                              : "gray"
-                          }
-                          variant="light"
-                        >
-                          {candidate.matchScore}%
-                        </Badge>
-                      )}
+                      <Group gap={4} mt={2}>
+                        {candidate.aiFitScore !== undefined ? (
+                          <Badge
+                            size="xs"
+                            color={
+                              candidate.aiFitScore >= 80
+                                ? "green"
+                                : candidate.aiFitScore >= 60
+                                ? "yellow"
+                                : "gray"
+                            }
+                            variant="light"
+                          >
+                            AI: {candidate.aiFitScore}%
+                          </Badge>
+                        ) : candidate.matchScore !== undefined ? (
+                          <Badge
+                            size="xs"
+                            color={
+                              candidate.matchScore >= 80
+                                ? "green"
+                                : candidate.matchScore >= 60
+                                ? "yellow"
+                                : "gray"
+                            }
+                            variant="light"
+                          >
+                            {candidate.matchScore}%
+                          </Badge>
+                        ) : null}
+                        {candidate.aiRecommendation && (
+                          <Badge
+                            size="xs"
+                            color={
+                              candidate.aiRecommendation === "reach_out" || candidate.aiRecommendation === "advance" || candidate.aiRecommendation === "offer"
+                                ? "green"
+                                : candidate.aiRecommendation === "wait"
+                                ? "yellow"
+                                : "red"
+                            }
+                            variant="dot"
+                          >
+                            {candidate.aiRecommendation === "reach_out" ? "Reach Out" :
+                             candidate.aiRecommendation === "wait" ? "Wait" :
+                             candidate.aiRecommendation === "archive" ? "Archive" :
+                             candidate.aiRecommendation === "advance" ? "Advance" :
+                             candidate.aiRecommendation === "offer" ? "Offer" :
+                             "Reject"}
+                          </Badge>
+                        )}
+                      </Group>
                     </div>
                   </Group>
                 </Card>

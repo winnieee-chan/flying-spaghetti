@@ -1,0 +1,72 @@
+/* Editorial Landing Page Styles */
+
+:root {
+  --landing-bg: #0f0f0f;
+  --landing-text-primary: #f5f5f0;
+  --landing-text-secondary: #a1a1aa;
+  --landing-accent-violet: linear-gradient(135deg, #7c3aed 0%, #4f46e5 50%, #6366f1 100%);
+  --landing-accent-gold: #d4af37;
+  --landing-noise: url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.03'/%3E%3C/svg%3E");
+}
+
+.landing-page {
+  background: var(--landing-bg);
+  background-image: var(--landing-noise);
+  color: var(--landing-text-primary);
+  overflow-x: hidden;
+}
+
+.landing-headline {
+  font-family: 'Playfair Display', serif;
+  font-weight: 900;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+}
+
+.landing-body {
+  font-family: 'Satoshi', sans-serif;
+  font-weight: 400;
+  line-height: 1.6;
+  color: var(--landing-text-secondary);
+}
+
+.landing-section {
+  min-height: 100vh;
+  position: relative;
+  padding: 0;
+}
+
+/* Smooth scroll behavior */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Hide scrollbar but keep functionality */
+.landing-page::-webkit-scrollbar {
+  width: 8px;
+}
+
+.landing-page::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.landing-page::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 4px;
+}
+
+.landing-page::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+/* Responsive Features Grid */
+@media (max-width: 768px) {
+  .features-grid {
+    grid-template-columns: 1fr !important;
+  }
+  
+  .feature-card {
+    grid-column: span 12 !important;
+  }
+}
+

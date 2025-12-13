@@ -14,6 +14,7 @@ import {
 import { IconX, IconStar, IconStarFilled, IconPlus } from "@tabler/icons-react";
 import { useParams } from "react-router-dom";
 import useJobStore from "../../stores/jobStore";
+import AIInsightsPanel from "./Pipeline/AIInsightsPanel";
 
 const CandidateSidePanel = () => {
   const { id: jobId } = useParams<{ id: string }>();
@@ -213,6 +214,14 @@ const CandidateSidePanel = () => {
               )}
 
               <Divider />
+
+              {/* AI Insights - Only show if in pipeline */}
+              {isInPipeline && selectedCandidate && (
+                <>
+                  <AIInsightsPanel candidate={selectedCandidate} jobId={jobId} />
+                  <Divider />
+                </>
+              )}
 
               {/* Pipeline Stage */}
               {isInPipeline ? (

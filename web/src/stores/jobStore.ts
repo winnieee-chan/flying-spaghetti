@@ -410,19 +410,31 @@ const useJobStore = create<JobStore>((set, get) => ({
     try {
       await api.put(`/${jobId}/cd/${candidateId}/stage`, { stageId });
       // Update local state
-      set((state) => ({
-        candidates: state.candidates.map((c) =>
-          c.id === candidateId ? { ...c, pipelineStage: stageId } : c
-        ),
-        filteredCandidates: state.filteredCandidates.map((c) =>
-          c.id === candidateId ? { ...c, pipelineStage: stageId } : c
-        ),
-        selectedCandidate:
-          state.selectedCandidate?.id === candidateId
-            ? { ...state.selectedCandidate, pipelineStage: stageId }
-            : state.selectedCandidate,
-        loading: false,
-      }));
+      const updatedStage = stageId as "new" | "engaged" | "closing";
+      set((state) => {
+        const updatedCandidates = state.candidates.map((c) =>
+          c.id === candidateId ? { ...c, pipelineStage: updatedStage } : c
+        );
+        const updatedFiltered = state.filteredCandidates.map((c) =>
+          c.id === candidateId ? { ...c, pipelineStage: updatedStage } : c
+        );
+        const updatedSelected = state.selectedCandidate?.id === candidateId
+          ? { ...state.selectedCandidate, pipelineStage: updatedStage }
+          : state.selectedCandidate;
+
+        // Auto-analyze when candidate enters "new" stage
+        if (updatedStage === "new") {
+          // Trigger analysis in background (don't await to keep UI responsive)
+          get().analyzeCandidate(jobId, candidateId).catch(console.error);
+        }
+
+        return {
+          candidates: updatedCandidates,
+          filteredCandidates: updatedFiltered,
+          selectedCandidate: updatedSelected,
+          loading: false,
+        };
+      });
     } catch (error) {
       const errorMessage = error instanceof Error ? error.message : "Unknown error";
       set({ error: errorMessage, loading: false });
