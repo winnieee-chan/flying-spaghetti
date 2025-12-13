@@ -67,4 +67,14 @@ export default {
     }): Promise<boolean> => {
         return await db.updateCandidateAIAnalysis(candidateId, jobId, analysis);
     },
+
+    // Search candidates
+    searchCandidates: async (query: string, filters?: {
+        skills?: string[];
+        location?: string;
+        minExperience?: number;
+        openToWork?: boolean;
+    }): Promise<Candidate[]> => {
+        return await db.searchCandidates(query, filters);
+    },
 };

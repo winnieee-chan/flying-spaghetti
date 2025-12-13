@@ -32,6 +32,7 @@ const asyncJsonDb = {
     batchUpdateCandidateStages: makeAsync(jsonDb.batchUpdateCandidateStages),
     addMessageToConversation: makeAsync(jsonDb.addMessageToConversation),
     updateCandidateAIAnalysis: makeAsync(jsonDb.updateCandidateAIAnalysis),
+    searchCandidates: makeAsync(jsonDb.searchCandidates),
 };
 
 export const getDb = () => {

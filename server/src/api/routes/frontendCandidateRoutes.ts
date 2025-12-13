@@ -7,9 +7,39 @@
 import express, { Request, Response } from 'express';
 import db from '../../db/db.js';
 import { adaptCandidatesToFrontend, adaptCandidateToFrontend } from '../../utils/frontendAdapter.js';
+import { getTalentPoolAnalytics, getJobAnalytics } from '../../services/analyticsService.js';
 import { randomUUID } from 'crypto';
 
 const router = express.Router();
+
+// GET /candidates/analytics - Get analytics for entire talent pool (must be before /:jobId routes)
+router.get('/candidates/analytics', async (req: Request, res: Response) => {
+    try {
+        const analytics = await getTalentPoolAnalytics();
+        res.status(200).json(analytics);
+    } catch (error: any) {
+        console.error('Error getting talent pool analytics:', error);
+        res.status(500).json({ message: 'Internal server error' });
+    }
+});
+
+// GET /:jobId/cd/analytics - Get analytics for a job (must be before /:jdId/cd route)
+router.get('/:jobId/cd/analytics', async (req: Request, res: Response) => {
+    try {
+        const { jobId } = req.params;
+        console.log(`[Analytics] Getting analytics for job: ${jobId}`);
+        const analytics = await getJobAnalytics(jobId);
+        console.log(`[Analytics] Success: ${analytics.totalCandidates} candidates`);
+        res.status(200).json(analytics);
+    } catch (error: any) {
+        console.error('Error getting job analytics:', error);
+        console.error('Stack:', error.stack);
+        res.status(500).json({ 
+            message: 'Internal server error',
+            error: process.env.NODE_ENV === 'development' ? error.message : undefined
+        });
+    }
+});
 
 // GET /:jdId/cd - Get candidates for a job (frontend format)
 router.get('/:jdId/cd', async (req: Request, res: Response) => {
@@ -139,6 +169,77 @@ router.post('/:jobId/cd/batch-move', async (req: Request, res: Response) => {
         res.status(200).json({ count });
     } catch (error: any) {
         console.error('Error batch moving candidates:', error);
+        res.status(500).json({ message: 'Internal server error' });
+    }
+});
+
+// POST /:jobId/cd/search - Search candidates for a job
+router.post('/:jobId/cd/search', async (req: Request, res: Response) => {
+    try {
+        const { jobId } = req.params;
+        const { query, skills, location, minExperience, openToWork } = req.body;
+
+        // Search all candidates
+        const allCandidates = await db.searchCandidates(query || '', {
+            skills: Array.isArray(skills) ? skills : undefined,
+            location: typeof location === 'string' ? location : undefined,
+            minExperience: typeof minExperience === 'number' ? minExperience : undefined,
+            openToWork: typeof openToWork === 'boolean' ? openToWork : undefined,
+        });
+
+        // Filter to only candidates that have scores for this job
+        const candidateScores = await db.getCandidatesByJobId(jobId);
+        const jobCandidateIds = new Set(candidateScores.map(cs => cs.candidateId));
+
+        const jobCandidates = allCandidates
+            .filter(c => jobCandidateIds.has(c._id))
+            .map(candidate => {
+                const scoreData = candidateScores.find(cs => cs.candidateId === candidate._id);
+                if (!scoreData) return null;
+
+                return adaptCandidateToFrontend(scoreData, candidate);
+            })
+            .filter((c): c is NonNullable<typeof c> => c !== null);
+
+        res.status(200).json(jobCandidates);
+    } catch (error: any) {
+        console.error('Error searching candidates:', error);
+        res.status(500).json({ message: 'Internal server error' });
+    }
+});
+
+// POST /candidates/search - Search all candidates in talent pool
+router.post('/candidates/search', async (req: Request, res: Response) => {
+    try {
+        const { query, skills, location, minExperience, openToWork } = req.body;
+
+        const candidates = await db.searchCandidates(query || '', {
+            skills: Array.isArray(skills) ? skills : undefined,
+            location: typeof location === 'string' ? location : undefined,
+            minExperience: typeof minExperience === 'number' ? minExperience : undefined,
+            openToWork: typeof openToWork === 'boolean' ? openToWork : undefined,
+        });
+
+        // Transform to frontend format (without job-specific scores)
+        const frontendCandidates = candidates.map(candidate => ({
+            id: candidate._id,
+            name: candidate.full_name,
+            email: candidate.email,
+            experience: `${candidate.keywords.years_of_experience} years`,
+            location: candidate.keywords.location,
+            skills: candidate.keywords.skills,
+            headline: candidate.headline || `${candidate.keywords.role}`,
+            status: 'active',
+            source: 'seeded' as const,
+            openToWork: candidate.open_to_work,
+        }));
+
+        res.status(200).json({
+            count: frontendCandidates.length,
+            candidates: frontendCandidates,
+        });
+    } catch (error: any) {
+        console.error('Error searching candidates:', error);
         res.status(500).json({ message: 'Internal server error' });
     }
 });

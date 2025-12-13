@@ -11,6 +11,8 @@
     "type-check": "tsc --noEmit",
     "migrate": "tsx src/utils/migrateMockData.ts",
     "migrate:elasticsearch": "tsx src/utils/migrateToElasticsearch.ts",
+    "test:elasticsearch": "tsx src/utils/testElasticsearch.ts",
+    "test:mcp": "tsx src/utils/testMcpServer.ts",
     "mcp:server": "tsx src/mcp/server.ts"
   },
   "keywords": [

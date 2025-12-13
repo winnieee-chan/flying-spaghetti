@@ -284,5 +284,63 @@ export const jsonDb = {
     // 11. Read: Get all jobs
     getAllJobs: (): Job[] => {
         return readJobsFile();
-    }
+    },
+
+    // 12. Search: Search candidates (client-side search for JSON fallback)
+    searchCandidates: (query: string, filters?: {
+        skills?: string[];
+        location?: string;
+        minExperience?: number;
+        openToWork?: boolean;
+    }): Candidate[] => {
+        const candidates = readCandidatesFile();
+        let results = candidates;
+
+        // Apply filters
+        if (filters) {
+            if (filters.skills && filters.skills.length > 0) {
+                results = results.filter(c => 
+                    filters.skills!.some(skill => 
+                        c.keywords.skills.some(cSkill => 
+                            cSkill.toLowerCase().includes(skill.toLowerCase())
+                        )
+                    )
+                );
+            }
+
+            if (filters.location) {
+                results = results.filter(c => 
+                    c.keywords.location.toLowerCase() === filters.location!.toLowerCase()
+                );
+            }
+
+            if (filters.minExperience !== undefined) {
+                results = results.filter(c => 
+                    c.keywords.years_of_experience >= filters.minExperience!
+                );
+            }
+
+            if (filters.openToWork !== undefined) {
+                results = results.filter(c => c.open_to_work === filters.openToWork);
+            }
+        }
+
+        // Apply text search
+        if (query) {
+            const lowerQuery = query.toLowerCase();
+            results = results.filter(c => {
+                const searchableText = [
+                    c.full_name,
+                    c.bio,
+                    c.headline || '',
+                    c.github_username,
+                    ...c.keywords.skills,
+                    c.keywords.location,
+                ].join(' ').toLowerCase();
+                return searchableText.includes(lowerQuery);
+            });
+        }
+
+        return results;
+    },
 };
