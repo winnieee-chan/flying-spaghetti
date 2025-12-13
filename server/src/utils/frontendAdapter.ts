@@ -171,12 +171,15 @@ export const adaptCandidateToFrontend = (
 /**
  * Convert array of backend jobs to frontend format
  */
-export const adaptJobsToFrontend = (backendJobs: BackendJob[]): FrontendJob[] => {
-  return backendJobs.map(job => {
-    // Count candidates for this job
-    const candidates = db.getCandidatesByJobId(job.jobId);
-    return adaptJobToFrontend(job, candidates.length);
-  });
+export const adaptJobsToFrontend = async (backendJobs: BackendJob[]): Promise<FrontendJob[]> => {
+  const jobsWithCounts = await Promise.all(
+    backendJobs.map(async (job) => {
+      // Count candidates for this job
+      const candidates = await db.getCandidatesByJobId(job.jobId);
+      return adaptJobToFrontend(job, candidates.length);
+    })
+  );
+  return jobsWithCounts;
 };
 
 /**
