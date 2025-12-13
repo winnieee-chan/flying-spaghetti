@@ -23,6 +23,16 @@ interface CandidateStore extends AsyncState {
 
   // Actions
   fetchCandidates: (jdId: string) => Promise<Candidate[]>;
+  searchCandidates: (
+    jobId: string,
+    query: string,
+    filters?: {
+      skills?: string[];
+      location?: string;
+      minExperience?: number;
+      openToWork?: boolean;
+    }
+  ) => Promise<Candidate[]>;
   setActiveFilters: (filters: CandidateFilters) => void;
   toggleStarCandidate: (jobId: string, candidateId: string) => void;
   getStarredCandidates: (jobId: string) => Candidate[];
@@ -85,6 +95,32 @@ const useCandidateStore = create<CandidateStore>((set, get) => ({
       }
 
       return candidates;
+    });
+  },
+
+  searchCandidates: async (
+    jobId: string,
+    query: string,
+    filters?: {
+      skills?: string[];
+      location?: string;
+      minExperience?: number;
+      openToWork?: boolean;
+    }
+  ) => {
+    return asyncAction(set, async () => {
+      const searchResults = await api.post<Candidate[]>(
+        `/${jobId}/cd/search`,
+        {
+          query,
+          ...filters,
+        }
+      );
+
+      // Update filtered candidates with search results
+      set({ filteredCandidates: searchResults });
+
+      return searchResults;
     });
   },
 

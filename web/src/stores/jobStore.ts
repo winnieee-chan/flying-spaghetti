@@ -216,6 +216,7 @@ const useJobStore = () => {
     toggleStarCandidate: candidateStore.toggleStarCandidate,
     getStarredCandidates: candidateStore.getStarredCandidates,
     searchExternalCandidates: candidateStore.searchExternalCandidates,
+    searchCandidates: candidateStore.searchCandidates,
     updateCandidateStage: candidateStore.updateCandidateStage,
     batchMoveCandidates: candidateStore.batchMoveCandidates,
 
