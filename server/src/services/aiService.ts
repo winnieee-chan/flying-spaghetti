@@ -109,22 +109,56 @@ export const draftFirstMessage = async (jobId: string, candidateId: string): Pro
         throw new Error('Job or candidate not found');
     }
 
-    // Use existing outreach message if available
-    if (candidateScore.outreach_messages && candidateScore.outreach_messages.length > 0) {
-        return candidateScore.outreach_messages[0];
-    }
-
-    // Use LLM to draft
+    // Always use LLM to draft with the enhanced prompt
+    // (Previously cached messages are bypassed to use the improved prompt)
     if (apiKey) {
         try {
             const genAI = new GoogleGenerativeAI(apiKey);
             const model = genAI.getGenerativeModel({ model: modelName });
 
-            const prompt = `Draft a brief, professional first outreach message to a candidate. Keep it under 150 words.
+            // Extract top match reasons from breakdown_json
+            const topReasons = candidateScore.breakdown_json
+                ?.sort((a, b) => (b.value || 0) - (a.value || 0))
+                .slice(0, 5)
+                .map(item => `- ${item.signal}: ${item.reason}`)
+                .join('\n') || 'No specific breakdown available';
 
-Job: ${job.job_title} at ${job.company_name || 'Company'}
-Candidate: ${candidateScore.full_name}
-Headline: ${candidateScore.headline}
+            // Get job description summary (first 400 chars)
+            const jobDescriptionSummary = job.jd_text
+                ? job.jd_text.substring(0, 400) + (job.jd_text.length > 400 ? '...' : '')
+                : 'No job description available';
+
+            // Get required skills
+            const requiredSkills = job.extracted_keywords?.skills?.join(', ') || 'Not specified';
+
+            // Build the enhanced prompt
+            const prompt = `Draft a first outreach message to a candidate. Use startup energy - be enthusiastic, authentic, and engaging. Avoid corporate jargon.
+
+TONE: Startup energy - enthusiastic, authentic, and engaging. Not formal or corporate.
+LENGTH: Keep it brief (100-150 words) - quick and scannable.
+EMPHASIS: Highlight growth and learning opportunities in the role.
+PERSONALIZATION: Mention key skills and fit reasons (moderate level of detail).
+
+STRUCTURE:
+1. Opening hook - enthusiastic, personalized based on their background
+2. Value proposition - explain why they're a good fit and emphasize growth opportunities
+3. Clear, low-pressure call-to-action
+
+JOB DETAILS:
+Title: ${job.job_title}
+Company: ${job.company_name || 'Company'}
+Description: ${jobDescriptionSummary}
+Required Skills: ${requiredSkills}
+Experience Required: ${job.extracted_keywords?.min_experience_years || 'Not specified'} years
+
+CANDIDATE DETAILS:
+Name: ${candidateScore.full_name}
+Headline: ${candidateScore.headline || 'Not available'}
+Match Score: ${candidateScore.score}/100
+${candidateScore.aiSummary ? `AI Fit Summary: ${candidateScore.aiSummary}` : ''}
+
+WHY THEY'RE A GOOD FIT:
+${topReasons}
 
 Return only the message text, no greeting/signature needed.`;
 
