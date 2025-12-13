@@ -1,0 +1,36 @@
+{
+  "name": "startup-signal-backend",
+  "version": "1.0.0",
+  "description": "Backend for JD-Driven Candidate Sourcing and Scoring.",
+  "main": "dist/api/server.js",
+  "type": "module",
+  "scripts": {
+    "build": "tsc",
+    "start": "node dist/api/server.js",
+    "dev": "tsx watch src/api/server.ts",
+    "type-check": "tsc --noEmit"
+  },
+  "keywords": [
+    "express",
+    "node",
+    "hackathon"
+  ],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@google/generative-ai": "^0.21.0",
+    "body-parser": "^1.20.2",
+    "dotenv": "^16.3.1",
+    "express": "^4.18.2",
+    "swagger-ui-express": "^5.0.1",
+    "yamljs": "^0.3.0"
+  },
+  "devDependencies": {
+    "@types/express": "^4.17.21",
+    "@types/node": "^20.10.0",
+    "@types/swagger-ui-express": "^4.1.6",
+    "@types/yamljs": "^0.2.34",
+    "tsx": "^4.7.0",
+    "typescript": "^5.3.3"
+  }
+}
