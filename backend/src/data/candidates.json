@@ -1,0 +1,53 @@
+[
+    {
+      "_id": "550e8400-e29b-41d4-a716-446655440001",
+      "full_name": "Alex Chen",
+      "headline": "Senior Software Engineer focused on high-performance Python backends.",
+      "github_username": "alex-oss-dev",
+      "open_to_work": false,
+      "enrichment": {
+        "public_repos": 15,
+        "total_stars": 350,
+        "recent_activity_days": 14,
+        "updated_at": "2025-12-13T10:00:00.000Z"
+      },
+      "scores": [
+        {
+          "job_id": "550e8400-e29b-41d4-a716-446655440010",
+          "score": 92,
+          "breakdown_json": [
+            {"signal": "Tech Match", "value": 38, "reason": "Perfect match on Python and FastAPI."},
+            {"signal": "OSS Activity", "value": 30, "reason": "350 total stars, highly active."},
+            {"signal": "Startup Exp", "value": 24, "reason": "Worked at 3 small companies."}
+          ],
+          "outreach_messages": ["Hi Alex, your work on the Python logging library...", "..."]
+        }
+      ]
+    },
+    {
+      "_id": "550e8400-e29b-41d4-a716-446655440002",
+      "full_name": "Jamie Lee",
+      "headline": "Infrastructure Specialist and Docker Enthusiast.",
+      "github_username": "jamie-infra",
+      "open_to_work": true,
+      "enrichment": {
+        "public_repos": 8,
+        "total_stars": 45,
+        "recent_activity_days": 90,
+        "updated_at": "2025-12-13T10:00:00.000Z"
+      },
+      "scores": [
+        {
+          "job_id": "550e8400-e29b-41d4-a716-446655440010",
+          "score": 45,
+          "breakdown_json": [
+            {"signal": "Tech Match", "value": 10, "reason": "Only matched on Docker/Kubernetes (Bonus Skill)."},
+            {"signal": "OSS Activity", "value": 15, "reason": "Low activity."},
+            {"signal": "Startup Exp", "value": 20, "reason": "Good history."},
+            {"signal": "Penalty", "value": -2, "reason": "Marked Open to Work."}
+          ],
+          "outreach_messages": ["Hello Jamie, your infrastructure background is interesting...", "..."]
+        }
+      ]
+    }
+  ]

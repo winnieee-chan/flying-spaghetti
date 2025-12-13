@@ -1,0 +1,555 @@
+openapi: 3.0.0
+info:
+  title: StartupSignal Recruiter API
+  version: 1.0.0
+  description: API for JD Ingestion, Candidate Sourcing, and Scoring.
+
+servers:
+  - url: http://localhost:3000/api/v1
+    description: Local Development Server
+
+paths:
+  /jobs:
+    post:
+      tags:
+        - Job Ingestion
+      summary: Upload Job Description text, create job record, and trigger synchronous LLM keyword extraction.
+      description: Processes the job description synchronously and returns extracted keywords immediately. The client waits for LLM processing to complete (typically 5-10 seconds).
+      operationId: uploadJob
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - jd_text
+                - job_title
+              properties:
+                jd_text:
+                  type: string
+                  example: "We are seeking a Senior Backend Engineer (5+ years exp) to join our small team in Sydney. Must have deep expertise in Python, FastAPI, and Postgres. Bonus: Docker/Kubernetes."
+                job_title:
+                  type: string
+                  example: "Senior Backend Engineer"
+                company_name:
+                  type: string
+                  example: "CoolStartup Co."
+      responses:
+        '201':
+          description: Created - Job created and LLM processing completed synchronously. Extracted keywords are returned immediately.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  jobId:
+                    type: string
+                    format: uuid
+                    example: "550e8400-e29b-41d4-a716-446655440000"
+                  status:
+                    type: string
+                    example: "PROCESSED_KEYWORDS"
+                  extracted_keywords:
+                    type: object
+                    properties:
+                      role:
+                        type: string
+                        example: "Senior Backend Engineer"
+                      skills:
+                        type: array
+                        items:
+                          type: string
+                        example: ["Python", "FastAPI", "Postgres"]
+                      min_experience_years:
+                        type: number
+                        example: 5
+                      location:
+                        type: string
+                        example: "Sydney"
+
+  /jobs/{jobId}:
+    get:
+      tags:
+        - Job Ingestion
+      summary: Retrieve the current state of extracted keywords and scoring weights for the job.
+      operationId: getJobFilters
+      parameters:
+        - name: jobId
+          in: path
+          required: true
+          description: Job identifier (UUID v4)
+          schema:
+            type: string
+            format: uuid
+          example: "550e8400-e29b-41d4-a716-446655440000"
+      responses:
+        '200':
+          description: Returns filters. If status is PROCESSING, returns minimal data.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  jobId:
+                    type: string
+                    format: uuid
+                    example: "550e8400-e29b-41d4-a716-446655440000"
+                  status:
+                    type: string
+                    example: "PROCESSED_KEYWORDS"
+                  extracted_keywords:
+                    type: object
+                    properties:
+                      role:
+                        type: string
+                        example: "Senior Backend Engineer"
+                      skills:
+                        type: array
+                        items:
+                          type: string
+                        example: ["Python", "FastAPI", "Postgres"]
+                      min_experience_years:
+                        type: number
+                        example: 5
+                      location:
+                        type: string
+                        example: "Sydney"
+                  scoring_ratios:
+                    type: object
+                    properties:
+                      startup_exp_weight:
+                        type: number
+                        example: 0.3
+                      oss_activity_weight:
+                        type: number
+                        example: 0.5
+                      tech_match_weight:
+                        type: number
+                        example: 0.2
+
+    put:
+      tags:
+        - Job Ingestion
+      summary: Update and save the final, user-validated keywords and scoring ratios before sourcing.
+      operationId: saveJobFilters
+      parameters:
+        - name: jobId
+          in: path
+          required: true
+          description: Job identifier (UUID v4)
+          schema:
+            type: string
+            format: uuid
+          example: "550e8400-e29b-41d4-a716-446655440000"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - extracted_keywords
+                - scoring_ratios
+              properties:
+                extracted_keywords:
+                  type: object
+                  properties:
+                    role:
+                      type: string
+                      example: "Principal Engineer"
+                    skills:
+                      type: array
+                      items:
+                        type: string
+                      example: ["Go", "Kubernetes", "Redis"]
+                    min_experience_years:
+                      type: number
+                      example: 8
+                    location:
+                      type: string
+                      example: "Remote"
+                scoring_ratios:
+                  type: object
+                  properties:
+                    startup_exp_weight:
+                      type: number
+                      example: 0.3
+                    oss_activity_weight:
+                      type: number
+                      example: 0.5
+                    tech_match_weight:
+                      type: number
+                      example: 0.2
+      responses:
+        '200':
+          description: Filters updated and ready for sourcing.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Filters and scoring ratios successfully updated and saved for sourcing."
+
+  /jobs/{jobId}/candidates:
+    get:
+      tags:
+        - Talent Radar
+      summary: Get Ranked Candidate List
+      description: Retrieves a ranked list of candidates for a job. Supports filtering and sorting options.
+      operationId: getRankedCandidates
+      parameters:
+        - name: jobId
+          in: path
+          required: true
+          description: Job identifier (UUID v4)
+          schema:
+            type: string
+            format: uuid
+          example: "550e8400-e29b-41d4-a716-446655440000"
+        - name: sort
+          in: query
+          required: false
+          description: Sort order (default: score)
+          schema:
+            type: string
+            enum: [score]
+          example: "score"
+        - name: exclude_open_to_work
+          in: query
+          required: false
+          description: Exclude candidates marked as open to work
+          schema:
+            type: string
+            enum: ["true", "false"]
+          example: "true"
+      responses:
+        '200':
+          description: Ranked candidate list retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  jobId:
+                    type: string
+                    format: uuid
+                    example: "550e8400-e29b-41d4-a716-446655440000"
+                  candidates:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        candidateId:
+                          type: string
+                          format: uuid
+                          example: "550e8400-e29b-41d4-a716-446655440001"
+                        full_name:
+                          type: string
+                          example: "Alex Chen"
+                        headline:
+                          type: string
+                          example: "Senior Software Engineer focused on high-performance Python backends."
+                        github_username:
+                          type: string
+                          example: "alex-oss-dev"
+                        score:
+                          type: number
+                          example: 92
+                        open_to_work:
+                          type: boolean
+                          example: false
+
+  /jobs/{jobId}/candidates/{candidateId}:
+    get:
+      tags:
+        - Talent Radar
+      summary: Get Candidate Detail
+      description: Retrieves full candidate profile, score breakdown, and enrichment data for a specific job.
+      operationId: getCandidateDetail
+      parameters:
+        - name: jobId
+          in: path
+          required: true
+          description: Job identifier (UUID v4)
+          schema:
+            type: string
+            format: uuid
+          example: "550e8400-e29b-41d4-a716-446655440000"
+        - name: candidateId
+          in: path
+          required: true
+          description: Candidate identifier (UUID v4)
+          schema:
+            type: string
+            format: uuid
+          example: "550e8400-e29b-41d4-a716-446655440001"
+      responses:
+        '200':
+          description: Candidate detail retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  candidateId:
+                    type: string
+                    format: uuid
+                    example: "550e8400-e29b-41d4-a716-446655440001"
+                  full_name:
+                    type: string
+                    example: "Alex Chen"
+                  headline:
+                    type: string
+                    example: "Senior Software Engineer focused on high-performance Python backends."
+                  github_username:
+                    type: string
+                    example: "alex-oss-dev"
+                  open_to_work:
+                    type: boolean
+                    example: false
+                  score:
+                    type: number
+                    example: 92
+                  breakdown_json:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        signal:
+                          type: string
+                          example: "Tech Match"
+                        value:
+                          type: number
+                          example: 38
+                        reason:
+                          type: string
+                          example: "Perfect match on Python and FastAPI."
+                  outreach_messages:
+                    type: array
+                    items:
+                      type: string
+                    example: ["Hi Alex, your work on the Python logging library...", "..."]
+                  enrichment:
+                    type: object
+                    properties:
+                      public_repos:
+                        type: number
+                        example: 15
+                      total_stars:
+                        type: number
+                        example: 350
+                      recent_activity_days:
+                        type: number
+                        example: 14
+                      updated_at:
+                        type: string
+                        format: date-time
+                        example: "2025-12-13T10:00:00.000Z"
+        '404':
+          description: Candidate not found for this job
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Candidate not found for this job."
+
+  /jobs/{jobId}/candidates/sendall:
+    post:
+      tags:
+        - Talent Radar
+      summary: Generate Personalized Messages and Send to All Candidates
+      description: Generates and sends personalized outreach messages to all candidates for a job.
+      operationId: sendMessagesToAll
+      parameters:
+        - name: jobId
+          in: path
+          required: true
+          description: Job identifier (UUID v4)
+          schema:
+            type: string
+            format: uuid
+          example: "550e8400-e29b-41d4-a716-446655440000"
+      responses:
+        '200':
+          description: Messages generated and sent successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  jobId:
+                    type: string
+                    format: uuid
+                    example: "550e8400-e29b-41d4-a716-446655440000"
+                  message:
+                    type: string
+                    example: "Personalized messages generated and sent to 2 candidates."
+                  results:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        candidateId:
+                          type: string
+                          format: uuid
+                          example: "550e8400-e29b-41d4-a716-446655440001"
+                        full_name:
+                          type: string
+                          example: "Alex Chen"
+                        email_sent:
+                          type: boolean
+                          example: true
+                        message:
+                          type: string
+                          example: "Hi Alex, your work on the Python logging library..."
+        '404':
+          description: No candidates found for this job
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "No candidates found for this job."
+
+  /jobs/{jobId}/candidates/{candidateId}/send:
+    post:
+      tags:
+        - Talent Radar
+      summary: Send Email to a Specific Candidate
+      description: Sends a personalized outreach message to a specific candidate for a job.
+      operationId: sendMessageToCandidate
+      parameters:
+        - name: jobId
+          in: path
+          required: true
+          description: Job identifier (UUID v4)
+          schema:
+            type: string
+            format: uuid
+          example: "550e8400-e29b-41d4-a716-446655440000"
+        - name: candidateId
+          in: path
+          required: true
+          description: Candidate identifier (UUID v4)
+          schema:
+            type: string
+            format: uuid
+          example: "550e8400-e29b-41d4-a716-446655440001"
+      responses:
+        '200':
+          description: Message sent successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  candidateId:
+                    type: string
+                    format: uuid
+                    example: "550e8400-e29b-41d4-a716-446655440001"
+                  jobId:
+                    type: string
+                    format: uuid
+                    example: "550e8400-e29b-41d4-a716-446655440000"
+                  full_name:
+                    type: string
+                    example: "Alex Chen"
+                  email_sent:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+                    example: "Hi Alex, your work on the Python logging library..."
+        '404':
+          description: Candidate not found for this job
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Candidate not found for this job."
+
+  /candidates/{candidateId}/send:
+    post:
+      tags:
+        - Talent Radar
+      summary: Send Email to a Specific Candidate (Standalone)
+      description: Sends a personalized outreach message to a specific candidate. Requires jobId in request body.
+      operationId: sendMessageToCandidateStandalone
+      parameters:
+        - name: candidateId
+          in: path
+          required: true
+          description: Candidate identifier (UUID v4)
+          schema:
+            type: string
+            format: uuid
+          example: "550e8400-e29b-41d4-a716-446655440001"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - jobId
+              properties:
+                jobId:
+                  type: string
+                  format: uuid
+                  example: "550e8400-e29b-41d4-a716-446655440000"
+      responses:
+        '200':
+          description: Message sent successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  candidateId:
+                    type: string
+                    format: uuid
+                    example: "550e8400-e29b-41d4-a716-446655440001"
+                  jobId:
+                    type: string
+                    format: uuid
+                    example: "550e8400-e29b-41d4-a716-446655440000"
+                  full_name:
+                    type: string
+                    example: "Alex Chen"
+                  email_sent:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+                    example: "Hi Alex, your work on the Python logging library..."
+        '400':
+          description: Missing required field
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Missing required field: jobId."
+        '404':
+          description: Candidate not found for this job
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Candidate not found for this job."
