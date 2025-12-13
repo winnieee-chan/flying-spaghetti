@@ -95,7 +95,7 @@ export class RabbitMqService {
     private static checkUserMatch(candidate: Candidate, job: JobPost): boolean {
         // 1. If no settings, match everything
         if (!candidate.notificationSettings || candidate.notificationSettings.length === 0) {
-          return true;
+          return false;
         }
     
         // 2. Check if ANY setting configuration matches
