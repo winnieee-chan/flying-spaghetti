@@ -9,4 +9,5 @@ export { default as AIMessageEditor } from "./AIMessageEditor";
 export { default as ConversationThread } from "./ConversationThread";
 export { default as CalendlyEmbed } from "./CalendlyEmbed";
 export { default as CandidateComparison } from "./CandidateComparison";
+export { default as HiringOutcomes } from "./HiringOutcomes";
 

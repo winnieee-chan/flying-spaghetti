@@ -15,12 +15,14 @@ import {
   IconChecklist,
   IconArrowLeft,
   IconPlus,
+  IconTrophy,
 } from "@tabler/icons-react";
 import useJobStore, { Candidate } from "../../../stores/jobStore";
 import CandidateListSidebar from "./CandidateListSidebar";
 import NewStageWorkflow from "./NewStageWorkflow";
 import EngagedStageWorkflow from "./EngagedStageWorkflow";
 import ClosingStageWorkflow from "./ClosingStageWorkflow";
+import HiringOutcomes from "./HiringOutcomes";
 
 interface HiringWorkflowProps {
   jobId: string;
@@ -31,33 +33,41 @@ const STAGES = [
   { id: "new", label: "New", icon: IconUserSearch, description: "Evaluate & Reach Out" },
   { id: "engaged", label: "Engaged", icon: IconMessageCircle, description: "Converse & Schedule" },
   { id: "closing", label: "Closing", icon: IconChecklist, description: "Decide & Offer" },
+  { id: "outcomes", label: "Outcomes", icon: IconTrophy, description: "Hired & Rejected" },
 ] as const;
 
 type StageId = typeof STAGES[number]["id"];
+type PipelineStageId = "new" | "engaged" | "closing";
 
 const HiringWorkflow = ({ jobId, onNavigateToPool }: HiringWorkflowProps) => {
-  const { candidates, getWorkflowState } = useJobStore();
+  const { candidates, getWorkflowState, getHiredCandidates, getRejectedCandidates } = useJobStore();
   const [activeStage, setActiveStage] = useState<StageId>("new");
   const [selectedCandidate, setSelectedCandidate] = useState<Candidate | null>(null);
 
-  // Filter candidates by stage
+  // Filter candidates by pipeline stage
   const candidatesByStage = useMemo(() => {
-    const result: Record<StageId, Candidate[]> = {
+    const result: Record<PipelineStageId, Candidate[]> = {
       new: [],
       engaged: [],
       closing: [],
     };
 
     candidates.forEach((c) => {
-      if (c.pipelineStage && result[c.pipelineStage as StageId]) {
-        result[c.pipelineStage as StageId].push(c);
+      if (c.pipelineStage && result[c.pipelineStage as PipelineStageId]) {
+        result[c.pipelineStage as PipelineStageId].push(c);
       }
     });
 
     return result;
   }, [candidates]);
 
-  const currentStageCandidates = candidatesByStage[activeStage];
+  // Get hiring outcomes
+  const hiredCandidates = getHiredCandidates(jobId);
+  const rejectedCandidates = getRejectedCandidates(jobId);
+
+  const currentStageCandidates = useMemo(() => {
+    return activeStage === "outcomes" ? [] : candidatesByStage[activeStage as PipelineStageId];
+  }, [activeStage, candidatesByStage]);
 
   // Derive effective selected candidate - if current selection is invalid, use first candidate
   const effectiveSelectedCandidate = useMemo(() => {
@@ -100,6 +110,16 @@ const HiringWorkflow = ({ jobId, onNavigateToPool }: HiringWorkflowProps) => {
   const activeStageIndex = STAGES.findIndex((s) => s.id === activeStage);
 
   const renderStageWorkflow = () => {
+    // Outcomes stage - show hired/rejected candidates
+    if (activeStage === "outcomes") {
+      return (
+        <HiringOutcomes
+          hiredCandidates={hiredCandidates}
+          rejectedCandidates={rejectedCandidates}
+        />
+      );
+    }
+
     if (!effectiveSelectedCandidate) {
       return (
         <Card shadow="sm" padding="xl" radius="md" withBorder style={{ flex: 1 }}>
@@ -185,7 +205,9 @@ const HiringWorkflow = ({ jobId, onNavigateToPool }: HiringWorkflowProps) => {
           >
             {STAGES.map((stage) => {
               const Icon = stage.icon;
-              const count = candidatesByStage[stage.id].length;
+              const count = stage.id === "outcomes" 
+                ? hiredCandidates.length + rejectedCandidates.length
+                : candidatesByStage[stage.id as PipelineStageId].length;
               return (
                 <Stepper.Step
                   key={stage.id}
@@ -215,21 +237,28 @@ const HiringWorkflow = ({ jobId, onNavigateToPool }: HiringWorkflowProps) => {
         transition={{ duration: 0.2, delay: 0.1 }}
         style={{ flex: 1, display: "flex", minHeight: 0, overflow: "hidden" }}
       >
-        <Group gap="md" align="stretch" wrap="nowrap" style={{ flex: 1, height: "100%", overflow: "hidden" }}>
-          {/* Candidate List Sidebar */}
-          <CandidateListSidebar
-            candidates={currentStageCandidates}
-            selectedCandidateId={effectiveSelectedCandidate?.id || null}
-            onCandidateSelect={handleCandidateSelect}
-            currentStage={activeStage}
-            getStepStatus={getStepStatus}
-          />
-
-          {/* Workflow Area */}
+        {activeStage === "outcomes" ? (
+          // Full width for outcomes view
           <div style={{ flex: 1, display: "flex", flexDirection: "column", minHeight: 0, overflow: "hidden" }}>
             {renderStageWorkflow()}
           </div>
-        </Group>
+        ) : (
+          <Group gap="md" align="stretch" wrap="nowrap" style={{ flex: 1, height: "100%", overflow: "hidden" }}>
+            {/* Candidate List Sidebar */}
+            <CandidateListSidebar
+              candidates={currentStageCandidates}
+              selectedCandidateId={effectiveSelectedCandidate?.id || null}
+              onCandidateSelect={handleCandidateSelect}
+              currentStage={activeStage as PipelineStageId}
+              getStepStatus={getStepStatus}
+            />
+
+            {/* Workflow Area */}
+            <div style={{ flex: 1, display: "flex", flexDirection: "column", minHeight: 0, overflow: "hidden" }}>
+              {renderStageWorkflow()}
+            </div>
+          </Group>
+        )}
       </motion.div>
     </Stack>
   );

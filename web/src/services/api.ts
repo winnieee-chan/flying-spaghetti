@@ -11,6 +11,11 @@ const simulateLatency = (): Promise<void> => {
   return new Promise((resolve) => setTimeout(resolve, delay));
 };
 
+// Generate UUID v4
+const generateUUID = (): string => {
+  return crypto.randomUUID();
+};
+
 interface PipelineStage {
   id: string;
   name: string;
@@ -231,6 +236,7 @@ const initializeMockData = (): void => {
   }
   
   mockData.nextCandidateId = 171;
+  mockData.nextJdId = 3; // Start after jd-1 and jd-2
 };
 
 // Initialize mock data on module load
@@ -456,7 +462,7 @@ const handlePost = async <T = unknown>(path: string, body: Record<string, unknow
 
   // POST /jd - Create job description
   if (path === "/jd" || path.match(/^\/jd$/)) {
-    const jdId = `jd-${mockData.nextJdId++}`;
+    const jdId = generateUUID();
     const newJd: JobDescription = {
       id: jdId,
       title: (body.title as string) || "Untitled Job",

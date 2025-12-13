@@ -132,7 +132,7 @@ const CTASection = () => {
                 padding: "1.125rem 3rem",
                 fontSize: "1.125rem",
               }}
-              onClick={() => navigate("/dashboard")}
+              onClick={() => navigate("/")}
             >
               Start Free Trial
             </Button>
@@ -149,7 +149,7 @@ const CTASection = () => {
                 padding: "1.125rem 3rem",
                 fontSize: "1.125rem",
               }}
-              onClick={() => navigate("/dashboard")}
+              onClick={() => navigate("/")}
             >
               Schedule Demo
             </Button>

@@ -12,8 +12,8 @@ function App() {
   return (
     <Router>
       <Routes>
-        <Route path="/" element={<LandingPage />} />
-        <Route path="/dashboard" element={<Dashboard />} />
+        <Route path="/" element={<Dashboard />} />
+        <Route path="/landing" element={<LandingPage />} />
         <Route path="/jobs/new" element={<CreateJob />} />
         <Route path="/jobs/:id" element={<JobDetail />} />
         <Route path="/noti/set" element={<SetupNotification />} />

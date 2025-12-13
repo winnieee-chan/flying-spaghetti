@@ -78,6 +78,23 @@ export interface CandidateWorkflowState {
   notes: string;
 }
 
+// Separate data structure for final hiring decisions
+export interface HiringDecision {
+  id: string;
+  jobId: string;
+  candidateId: string;
+  candidateName: string;
+  candidateEmail: string;
+  candidateHeadline?: string;
+  decision: "hired" | "rejected";
+  decisionDate: string; // ISO date
+  fitScore?: number;
+  offerMessage?: string;
+  rejectionMessage?: string;
+  feedbackSent: boolean;
+  notes?: string;
+}
+
 interface JobStore {
   // State
   jobs: Job[];
@@ -95,6 +112,7 @@ interface JobStore {
   sidePanelOpen: boolean;
   searchQuery: string; // Search input value
   workflowStates: Map<string, CandidateWorkflowState>; // candidateId -> workflow state
+  hiringDecisions: HiringDecision[]; // Final hiring decisions
 
   // Actions
   fetchJobs: () => Promise<void>;
@@ -135,6 +153,12 @@ interface JobStore {
   draftOffer: (jobId: string, candidateId: string, terms?: Record<string, unknown>) => Promise<string>;
   helpNegotiate: (jobId: string, candidateId: string, request: string) => Promise<string>;
   generateDecisionSummary: (jobId: string, candidateId: string, decision: "hire" | "reject") => Promise<string>;
+  
+  // Hiring decisions actions
+  recordHiringDecision: (jobId: string, candidateId: string, decision: "hired" | "rejected", message?: string) => void;
+  getHiringDecisions: (jobId: string) => HiringDecision[];
+  getHiredCandidates: (jobId: string) => HiringDecision[];
+  getRejectedCandidates: (jobId: string) => HiringDecision[];
 }
 
 const useJobStore = create<JobStore>((set, get) => ({
@@ -154,6 +178,7 @@ const useJobStore = create<JobStore>((set, get) => ({
   sidePanelOpen: false,
   searchQuery: "",
   workflowStates: new Map(),
+  hiringDecisions: [],
 
   // Actions
 
@@ -749,6 +774,63 @@ const useJobStore = create<JobStore>((set, get) => ({
       set({ error: errorMessage, loading: false });
       throw error;
     }
+  },
+
+  /**
+   * Record a final hiring decision (separate from pipeline)
+   */
+  recordHiringDecision: (jobId: string, candidateId: string, decision: "hired" | "rejected", message?: string) => {
+    const { candidates } = get();
+    const candidate = candidates.find((c) => c.id === candidateId);
+    
+    if (!candidate) return;
+
+    const newDecision: HiringDecision = {
+      id: `decision-${Date.now()}`,
+      jobId,
+      candidateId,
+      candidateName: candidate.name,
+      candidateEmail: candidate.email,
+      candidateHeadline: candidate.headline,
+      decision,
+      decisionDate: new Date().toISOString(),
+      fitScore: candidate.aiFitScore || candidate.matchScore,
+      offerMessage: decision === "hired" ? message : undefined,
+      rejectionMessage: decision === "rejected" ? message : undefined,
+      feedbackSent: !!message,
+    };
+
+    // Remove candidate from pipeline
+    set((state) => ({
+      hiringDecisions: [...state.hiringDecisions, newDecision],
+      candidates: state.candidates.map((c) =>
+        c.id === candidateId ? { ...c, pipelineStage: undefined } : c
+      ),
+    }));
+  },
+
+  /**
+   * Get all hiring decisions for a job
+   */
+  getHiringDecisions: (jobId: string) => {
+    const { hiringDecisions } = get();
+    return hiringDecisions.filter((d) => d.jobId === jobId);
+  },
+
+  /**
+   * Get hired candidates for a job
+   */
+  getHiredCandidates: (jobId: string) => {
+    const { hiringDecisions } = get();
+    return hiringDecisions.filter((d) => d.jobId === jobId && d.decision === "hired");
+  },
+
+  /**
+   * Get rejected candidates for a job
+   */
+  getRejectedCandidates: (jobId: string) => {
+    const { hiringDecisions } = get();
+    return hiringDecisions.filter((d) => d.jobId === jobId && d.decision === "rejected");
   },
 }));
 

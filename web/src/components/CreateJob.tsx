@@ -117,7 +117,7 @@ const CreateJob = () => {
             variant="subtle"
             color="gray"
             leftSection={<IconArrowLeft size={16} />}
-            onClick={() => navigate("/dashboard")}
+            onClick={() => navigate("/")}
           >
             Back to Dashboard
           </Button>
@@ -262,7 +262,7 @@ const CreateJob = () => {
                     <Button
                       variant="subtle"
                       color="gray"
-                      onClick={() => navigate("/dashboard")}
+                      onClick={() => navigate("/")}
                       disabled={loading}
                     >
                       Cancel

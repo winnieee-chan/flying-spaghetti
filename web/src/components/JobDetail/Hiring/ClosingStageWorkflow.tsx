@@ -45,10 +45,11 @@ const ClosingStageWorkflow = ({
   const {
     draftOffer,
     generateDecisionSummary,
-    updateCandidateStage,
     getWorkflowState,
     updateWorkflowStep,
     sendMessage,
+    recordHiringDecision,
+    updateCandidateStage,
   } = useJobStore();
 
   const [expandedStep, setExpandedStep] = useState(0);
@@ -109,7 +110,8 @@ const ClosingStageWorkflow = ({
       if (offerMessage) {
         await sendMessage?.(jobId, candidate.id, offerMessage);
       }
-      await updateCandidateStage(jobId, candidate.id, "hired" as any);
+      // Record the hiring decision (separate from pipeline)
+      recordHiringDecision(jobId, candidate.id, "hired", offerMessage);
       markStepComplete(3);
       onComplete?.();
     } catch (error) {
@@ -125,7 +127,9 @@ const ClosingStageWorkflow = ({
       if (sendFeedback && feedbackMessage) {
         await sendMessage?.(jobId, candidate.id, feedbackMessage);
       }
-      await updateCandidateStage(jobId, candidate.id, "rejected" as any);
+      // Record the rejection decision (separate from pipeline)
+      const message = sendFeedback ? feedbackMessage : undefined;
+      recordHiringDecision(jobId, candidate.id, "rejected", message);
       markStepComplete(3);
       onComplete?.();
     } catch (error) {
