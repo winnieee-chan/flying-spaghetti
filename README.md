@@ -23,7 +23,7 @@ npm -v
 ```
 .
 ├── web/        # Frontend (Vite + React)
-└── server/     # Backend (Express)
+└── backend/     # Backend (Express)
 ```
 
 ## Quick start
