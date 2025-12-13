@@ -40,8 +40,9 @@ npm run dev
 
 ### Run Both
 ```bash
-# From project root
-npm run dev
+# Open two terminal windows:
+# Terminal 1: cd server && npm run dev
+# Terminal 2: cd web && npm run dev
 ```
 
 ### Test API
