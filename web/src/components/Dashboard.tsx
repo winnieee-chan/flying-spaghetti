@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import {
@@ -13,8 +13,10 @@ import {
   Alert,
   Grid,
   Badge,
+  TextInput,
 } from "@mantine/core";
-import { IconAlertCircle, IconPlus, IconCalendar, IconUsers } from "@tabler/icons-react";
+import { useDebouncedValue } from "@mantine/hooks";
+import { IconAlertCircle, IconPlus, IconCalendar, IconUsers, IconSearch } from "@tabler/icons-react";
 import useJobStore from "../stores/jobStore";
 
 interface Job {
@@ -35,10 +37,43 @@ interface Job {
 const Dashboard = () => {
   const navigate = useNavigate();
   const { jobs, loading, error, fetchJobs } = useJobStore();
+  const [searchQuery, setSearchQuery] = useState("");
+  const [debouncedSearch] = useDebouncedValue(searchQuery, 300);
 
   useEffect(() => {
     fetchJobs();
   }, [fetchJobs]);
+
+  // Filter jobs based on search query
+  const filteredJobs = jobs.filter((job: Job) => {
+    if (!debouncedSearch.trim()) {
+      return true;
+    }
+
+    const searchLower = debouncedSearch.toLowerCase();
+    
+    // Search in title
+    if (job.title.toLowerCase().includes(searchLower)) {
+      return true;
+    }
+    
+    // Search in company
+    if (job.company.toLowerCase().includes(searchLower)) {
+      return true;
+    }
+    
+    // Search in description
+    if (job.description?.toLowerCase().includes(searchLower)) {
+      return true;
+    }
+    
+    // Search in skills
+    if (job.filters?.skills?.some((skill) => skill.toLowerCase().includes(searchLower))) {
+      return true;
+    }
+    
+    return false;
+  });
 
   const formatDate = (dateString: string): string => {
     const date = new Date(dateString);
@@ -77,18 +112,66 @@ const Dashboard = () => {
   return (
     <Container size="xl" py="xl">
       {/* Header */}
-      <Group justify="space-between" mb="xl">
-        <Title order={1}>Jobs Dashboard</Title>
-        <Button
-          leftSection={<IconPlus size={16} />}
-          onClick={() => navigate("/jobs/new")}
-        >
-          Create Job
-        </Button>
-      </Group>
+      <Stack gap="md" mb="xl">
+        <Group justify="space-between">
+          <Title order={1}>Jobs Dashboard</Title>
+          <Button
+            leftSection={<IconPlus size={16} />}
+            onClick={() => navigate("/jobs/new")}
+          >
+            Create Job
+          </Button>
+        </Group>
+        
+        {/* Search Input */}
+        <TextInput
+          placeholder="Search jobs by title, company, description, or skills..."
+          leftSection={<IconSearch size={16} />}
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.currentTarget.value)}
+          size="md"
+        />
+        
+        {/* Results Count */}
+        {jobs.length > 0 && (
+          <Text size="sm" c="dimmed">
+            {debouncedSearch.trim() ? (
+              <>Showing {filteredJobs.length} of {jobs.length} job{jobs.length !== 1 ? "s" : ""}</>
+            ) : (
+              <>Showing {jobs.length} job{jobs.length !== 1 ? "s" : ""}</>
+            )}
+          </Text>
+        )}
+      </Stack>
 
       {/* Empty State */}
-      {jobs.length === 0 ? (
+      {filteredJobs.length === 0 && jobs.length > 0 ? (
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.3 }}
+        >
+          <Card shadow="sm" padding="xl" radius="md" withBorder>
+            <Stack align="center" gap="md">
+              <Text size="lg" c="dimmed">
+                No jobs found
+              </Text>
+              <Text size="sm" c="dimmed" ta="center">
+                No jobs match your search query. Try adjusting your search terms.
+              </Text>
+              {debouncedSearch && (
+                <Button
+                  variant="light"
+                  onClick={() => setSearchQuery("")}
+                  mt="md"
+                >
+                  Clear Search
+                </Button>
+              )}
+            </Stack>
+          </Card>
+        </motion.div>
+      ) : filteredJobs.length === 0 ? (
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -115,7 +198,7 @@ const Dashboard = () => {
       ) : (
         /* Job Cards Grid */
         <Grid>
-          {jobs.map((job: Job, index: number) => (
+          {filteredJobs.map((job: Job, index: number) => (
             <Grid.Col key={job.id} span={{ base: 12, sm: 6, lg: 4 }}>
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
