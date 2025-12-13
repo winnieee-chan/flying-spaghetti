@@ -190,20 +190,29 @@ const db = {
         const candidate = candidates.find(c => c._id === candidateId);
         if (!candidate) return null;
         
-        const scoreData = candidate.scores.find(s => s.job_id === jobId);
+        const scoreData = candidate.scores?.find(s => s.job_id === jobId);
         if (!scoreData) return null;
         
         return {
             candidateId: candidate._id,
             full_name: candidate.full_name,
-            headline: candidate.headline,
+            headline: candidate.headline || '',
             github_username: candidate.github_username,
             open_to_work: candidate.open_to_work,
             score: scoreData.score,
             breakdown_json: scoreData.breakdown_json,
             outreach_messages: scoreData.outreach_messages,
-            enrichment: candidate.enrichment
+            enrichment: candidate.enrichment || {
+                public_repos: 0,
+                total_stars: 0,
+                recent_activity_days: 0,
+                updated_at: new Date().toISOString()
+            }
         };
+    },
+
+    getAllCandidates: (): Candidate[] => {
+        return readCandidatesFile();
     }
 };
 

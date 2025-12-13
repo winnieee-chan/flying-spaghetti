@@ -26,25 +26,36 @@ export interface Job {
 export interface Candidate {
   _id: string;
   full_name: string;
-  headline: string;
+  email: string;
+  bio: string;
   github_username: string;
   open_to_work: boolean;
-  enrichment: {
-    public_repos: number;
-    total_stars: number;
-    recent_activity_days: number;
-    updated_at: string;
-  };
-  scores: Array<{
-    job_id: string;
-    score: number;
-    breakdown_json: Array<{
-      signal: string;
-      value: number;
-      reason: string;
-    }>;
-    outreach_messages?: string[];
-  }>;
+  keywords: {
+    role: string,
+    skills: string[],
+    min_experience_years: number,
+    location: string
+  },
+  notificationSettings: NotificationFilter[]
+
+
+  // headline: string;
+  // enrichment: {
+  //   public_repos: number;
+  //   total_stars: number;
+  //   recent_activity_days: number;
+  //   updated_at: string;
+  // };
+  // scores: Array<{
+  //   job_id: string;
+  //   score: number;
+  //   breakdown_json: Array<{
+  //     signal: string;
+  //     value: number;
+  //     reason: string;
+  //   }>;
+  //   outreach_messages?: string[];
+  // }>;
 }
 
 export interface CandidateScore {
@@ -60,7 +71,7 @@ export interface CandidateScore {
     reason: string;
   }>;
   outreach_messages?: string[];
-  enrichment: Candidate['enrichment'];
+  // enrichment: Candidate['enrichment'];
 }
 
 export interface JobUpdate {
@@ -69,3 +80,22 @@ export interface JobUpdate {
   status?: Job['status'];
 }
 
+export interface JobPost {
+  id: string;
+  companyName: string;
+  role: string;
+  description: string;
+}
+
+
+export interface NotificationFilter {
+  companyNames?: string[];
+  jobRoles?: string[];
+  keywords?: string[];
+}
+
+// export interface User {
+//   id: string;
+//   email: string;
+//   notificationSettings: NotificationFilter[];
+// }

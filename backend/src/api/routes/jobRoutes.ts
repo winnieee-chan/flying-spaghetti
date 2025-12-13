@@ -1,6 +1,7 @@
 import express, { Request, Response } from 'express';
 import db from '../../db/db.js';
 import type { Job } from '../../types/index.js';
+import { RabbitMqService } from '../../services/rabbitMqService.js';
 
 const router = express.Router();
 
@@ -28,6 +29,16 @@ router.post('/', async (req: Request, res: Response) => {
 
     try {
         const newJob = await db.createJob(jd_text, job_title, company_name);
+
+        const newJobPost = {
+            id: Date.now().toString(), // Simple ID gen
+            companyName: 'Google',
+            role: "Software Engineer",
+            description: "This works."
+        }
+
+        await RabbitMqService.publishJob(newJobPost);
+
         res.status(201).json({
             jobId: newJob.jobId,
             status: newJob.status,

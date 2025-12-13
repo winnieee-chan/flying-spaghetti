@@ -1,58 +1,4 @@
 [
-<<<<<<< HEAD
-    {
-      "_id": "550e8400-e29b-41d4-a716-446655440001",
-      "full_name": "Alex Chen",
-      "headline": "Senior Software Engineer focused on high-performance Python backends.",
-      "github_username": "alex-oss-dev",
-      "open_to_work": false,
-      "enrichment": {
-        "public_repos": 15,
-        "total_stars": 350,
-        "recent_activity_days": 14,
-        "updated_at": "2025-12-13T10:00:00.000Z"
-      },
-      "scores": [
-        {
-          "job_id": "550e8400-e29b-41d4-a716-446655440010",
-          "score": 92,
-          "breakdown_json": [
-            {"signal": "Tech Match", "value": 38, "reason": "Perfect match on Python and FastAPI."},
-            {"signal": "OSS Activity", "value": 30, "reason": "350 total stars, highly active."},
-            {"signal": "Startup Exp", "value": 24, "reason": "Worked at 3 small companies."}
-          ],
-          "outreach_messages": ["Hi Alex, your work on the Python logging library...", "..."]
-        }
-      ]
-    },
-    {
-      "_id": "550e8400-e29b-41d4-a716-446655440002",
-      "full_name": "Jamie Lee",
-      "headline": "Infrastructure Specialist and Docker Enthusiast.",
-      "github_username": "jamie-infra",
-      "open_to_work": true,
-      "enrichment": {
-        "public_repos": 8,
-        "total_stars": 45,
-        "recent_activity_days": 90,
-        "updated_at": "2025-12-13T10:00:00.000Z"
-      },
-      "scores": [
-        {
-          "job_id": "550e8400-e29b-41d4-a716-446655440010",
-          "score": 45,
-          "breakdown_json": [
-            {"signal": "Tech Match", "value": 10, "reason": "Only matched on Docker/Kubernetes (Bonus Skill)."},
-            {"signal": "OSS Activity", "value": 15, "reason": "Low activity."},
-            {"signal": "Startup Exp", "value": 20, "reason": "Good history."},
-            {"signal": "Penalty", "value": -2, "reason": "Marked Open to Work."}
-          ],
-          "outreach_messages": ["Hello Jamie, your infrastructure background is interesting...", "..."]
-        }
-      ]
-    }
-  ]
-=======
   {
     "_id": "550e8400-e29b-41d4-a716-446655440001",
     "full_name": "Alex Chen",
@@ -71,9 +17,16 @@
         "Event-driven systems",
         "Stripe"
       ],
-      "min_experience_years": 1,
+      "years_of_experience": 1,
       "location": "Brisbane"
-    }
+    },
+    "notificationSettings": [
+      {
+        "companyNames": ["Google"],
+        "jobRoles": ["Software Engineer"],
+        "keywords": ["Typescript", "RabbitMQ"]
+      }
+    ]
   },
   {
     "_id": "550e8400-e29b-41d4-a716-446655440002",
@@ -93,9 +46,10 @@
         "Redux",
         "CI/CD"
       ],
-      "min_experience_years": 3,
+      "years_of_experience": 3,
       "location": "Brisbane"
-    }
+    },
+    "notificationSettings": []
   },
   {
     "_id": "550e8400-e29b-41d4-a716-446655440003",
@@ -115,9 +69,10 @@
         "Rest APIs",
         "Linux"
       ],
-      "min_experience_years": 4,
+      "years_of_experience": 4,
       "location": "Sydney"
-    }
+    },
+    "notificationSettings": []
   },
   {
     "_id": "550e8400-e29b-41d4-a716-446655440004",
@@ -137,9 +92,10 @@
         "Figma",
         "Google Cloud"
       ],
-      "min_experience_years": 2,
+      "years_of_experience": 2,
       "location": "Melbourne"
-    }
+    },
+    "notificationSettings": []
   },
   {
     "_id": "550e8400-e29b-41d4-a716-446655440005",
@@ -159,9 +115,10 @@
         "OAuth2",
         "Docker"
       ],
-      "min_experience_years": 5,
+      "years_of_experience": 5,
       "location": "Singapore"
-    }
+    },
+    "notificationSettings": []
   },
   {
     "_id": "550e8400-e29b-41d4-a716-446655440006",
@@ -181,9 +138,10 @@
         "Grafana",
         "gRPC"
       ],
-      "min_experience_years": 4,
+      "years_of_experience": 4,
       "location": "Penang"
-    }
+    },
+    "notificationSettings": []
   },
   {
     "_id": "550e8400-e29b-41d4-a716-446655440007",
@@ -203,9 +161,10 @@
         "Maven",
         "Git"
       ],
-      "min_experience_years": 6,
+      "years_of_experience": 6,
       "location": "Osaka"
-    }
+    },
+    "notificationSettings": []
   },
   {
     "_id": "550e8400-e29b-41d4-a716-446655440008",
@@ -225,9 +184,10 @@
         "Android",
         "iOS"
       ],
-      "min_experience_years": 3,
+      "years_of_experience": 3,
       "location": "Tokyo"
-    }
+    },
+    "notificationSettings": []
   },
   {
     "_id": "550e8400-e29b-41d4-a716-446655440009",
@@ -247,9 +207,10 @@
         "Heroku",
         "RSpec"
       ],
-      "min_experience_years": 5,
+      "years_of_experience": 5,
       "location": "Brisbane"
-    }
+    },
+    "notificationSettings": []
   },
   {
     "_id": "550e8400-e29b-41d4-a716-446655440010",
@@ -269,9 +230,9 @@
         "Tailwind CSS",
         "Git"
       ],
-      "min_experience_years": 2,
+      "years_of_experience": 2,
       "location": "Sydney"
-    }
+    },
+    "notificationSettings": []
   }
 ]
->>>>>>> fix/candidate-json
