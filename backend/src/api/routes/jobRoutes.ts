@@ -31,10 +31,7 @@ router.post('/', async (req: Request, res: Response) => {
     }
 
     try {
-<<<<<<< HEAD
         const newJob = await createJob(jd_text, job_title, company_name);
-=======
-        const newJob = await db.createJob(jd_text, job_title, company_name);
 
         const newJobPost = {
             id: Date.now().toString(), // Simple ID gen
@@ -45,7 +42,6 @@ router.post('/', async (req: Request, res: Response) => {
 
         await RabbitMqService.publishJob(newJobPost);
 
->>>>>>> api/create-notification-setting
         res.status(201).json({
             jobId: newJob.jobId,
             status: newJob.status,
