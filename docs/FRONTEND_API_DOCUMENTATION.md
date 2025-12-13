@@ -1,6 +1,6 @@
 # Frontend API Documentation
 
-This document lists all API calls made by the frontend, including their inputs, outputs, and descriptions. This will help match with backend endpoints and migrate mock data.
+This document lists all API calls made by the frontend, including their inputs, outputs, and descriptions. This will help match with server endpoints and migrate mock data.
 
 ## Table of Contents
 
@@ -8,7 +8,7 @@ This document lists all API calls made by the frontend, including their inputs, 
 2. [Candidate APIs](#candidate-apis)
 3. [AI APIs](#ai-apis)
 4. [Workflow APIs](#workflow-apis)
-5. [Backend Comparison](#backend-comparison)
+5. [Backend Comparison](#server-comparison)
 6. [Migration Notes](#migration-notes)
 
 ---
@@ -215,7 +215,7 @@ Candidate[]
 
 **Used in:** `candidateStore.ts` - `searchExternalCandidates()`
 
-**Backend Match:** ❌ No backend endpoint exists
+**Backend Match:** ❌ No server endpoint exists
 
 ---
 
@@ -238,7 +238,7 @@ Candidate[]
 
 **Used in:** `candidateStore.ts` - `updateCandidateStage()`
 
-**Backend Match:** ❌ No backend endpoint exists
+**Backend Match:** ❌ No server endpoint exists
 
 ---
 
@@ -267,7 +267,7 @@ Candidate[]
 
 **Used in:** `candidateStore.ts` - `batchMoveCandidates()`
 
-**Backend Match:** ❌ No backend endpoint exists
+**Backend Match:** ❌ No server endpoint exists
 
 ---
 
@@ -296,7 +296,7 @@ Candidate[]
 
 **Used in:** `aiStore.ts` - `analyzeCandidate()`
 
-**Backend Match:** ❌ No backend endpoint exists
+**Backend Match:** ❌ No server endpoint exists
 
 ---
 
@@ -317,7 +317,7 @@ string // Drafted message text
 
 **Used in:** `aiStore.ts` - `draftFirstMessage()`
 
-**Backend Match:** ❌ No backend endpoint exists (but backend has `outreach_messages` in candidate data)
+**Backend Match:** ❌ No server endpoint exists (but server has `outreach_messages` in candidate data)
 
 ---
 
@@ -338,7 +338,7 @@ string // Conversation summary
 
 **Used in:** `aiStore.ts` - `summarizeConversation()`
 
-**Backend Match:** ❌ No backend endpoint exists
+**Backend Match:** ❌ No server endpoint exists
 
 ---
 
@@ -361,7 +361,7 @@ string // Suggested message text
 
 **Used in:** `aiStore.ts` - `suggestNextMessage()`
 
-**Backend Match:** ❌ No backend endpoint exists
+**Backend Match:** ❌ No server endpoint exists
 
 ---
 
@@ -382,7 +382,7 @@ Date[] // Array of suggested interview times
 
 **Used in:** `aiStore.ts` - `suggestInterviewTimes()`
 
-**Backend Match:** ❌ No backend endpoint exists
+**Backend Match:** ❌ No server endpoint exists
 
 ---
 
@@ -405,7 +405,7 @@ string // Drafted offer letter text
 
 **Used in:** `aiStore.ts` - `draftOffer()`
 
-**Backend Match:** ❌ No backend endpoint exists
+**Backend Match:** ❌ No server endpoint exists
 
 ---
 
@@ -428,7 +428,7 @@ string // AI-generated negotiation response
 
 **Used in:** `aiStore.ts` - `helpNegotiate()`
 
-**Backend Match:** ❌ No backend endpoint exists
+**Backend Match:** ❌ No server endpoint exists
 
 ---
 
@@ -451,7 +451,7 @@ string // Decision summary text
 
 **Used in:** `aiStore.ts` - `generateDecisionSummary()`
 
-**Backend Match:** ❌ No backend endpoint exists
+**Backend Match:** ❌ No server endpoint exists
 
 ---
 
@@ -551,12 +551,12 @@ string // Decision summary text
 
 ### Priority 1: Core Functionality
 1. **Job CRUD Operations**
-   - Map frontend `Job` model to backend `Job` model
+   - Map frontend `Job` model to server `Job` model
    - Create adapter layer to transform data structures
-   - Update URL paths to match backend (`/jd` → `/jobs`)
+   - Update URL paths to match server (`/jd` → `/jobs`)
 
 2. **Candidate Fetching**
-   - Map backend `CandidateScore` to frontend `Candidate`
+   - Map server `CandidateScore` to frontend `Candidate`
    - Handle missing fields (experience, location, skills extraction)
    - Add candidate count to job responses
 
@@ -566,7 +566,7 @@ string // Decision summary text
    - Standardize response format
 
 4. **Pipeline Stages**
-   - Add pipeline stage support to backend
+   - Add pipeline stage support to server
    - Store stage in candidate data
    - Add batch move endpoint
 
@@ -593,7 +593,7 @@ string // Decision summary text
 - In-memory database via `db.ts`
 
 **Migration Strategy:**
-1. Convert frontend mock data generators to backend seed data
-2. Map frontend types to backend types
+1. Convert frontend mock data generators to server seed data
+2. Map frontend types to server types
 3. Create transformation utilities for data conversion
-4. Update backend routes to return frontend-compatible formats
+4. Update server routes to return frontend-compatible formats

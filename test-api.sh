@@ -1,11 +1,11 @@
 #!/bin/bash
 
 # Quick API Test Script
-# Tests the main backend endpoints
+# Tests the main server endpoints
 
 BASE_URL="http://localhost:3000"
 
-echo "🧪 Testing Backend API..."
+echo "🧪 Testing Server API..."
 echo "========================="
 
 # Colors for output
@@ -121,5 +121,5 @@ fi
 echo -e "\n========================="
 echo -e "${GREEN}Tests completed!${NC}"
 echo ""
-echo "Note: Make sure the backend server is running on port 3000"
-echo "      Start it with: cd backend && npm start"
+echo "Note: Make sure the server is running on port 3000"
+echo "      Start it with: cd server && npm run dev"

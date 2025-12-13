@@ -42,7 +42,7 @@
 ### What We Want
 
 **API Service (`src/services/api.js`)**
-- REST-style endpoints matching backend contract:
+- REST-style endpoints matching server contract:
   - `POST /jobs` - Upload JD text, triggers LLM extraction, returns job with extracted filters/ratios
   - `GET /jobs/:jobId` - Get filters/ratios (LLM-extracted or user-refined)
   - `PUT /jobs/:jobId` - Save final filters/ratios (with scoring weights)

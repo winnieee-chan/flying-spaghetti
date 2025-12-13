@@ -5,7 +5,7 @@
 ### Run the Migration Script
 
 ```bash
-cd backend
+cd server
 npm run migrate
 ```
 
@@ -35,10 +35,10 @@ This will:
 After running migration, check:
 ```bash
 # Check jobs have pipelineStages
-cat backend/src/data/jobs.json | grep -A 5 "pipelineStages"
+cat server/src/data/jobs.json | grep -A 5 "pipelineStages"
 
 # Check candidates have scores
-cat backend/src/data/candidates.json | grep -A 3 "scores"
+cat server/src/data/candidates.json | grep -A 3 "scores"
 ```
 
 ## Step 2: Integration Testing
@@ -54,7 +54,7 @@ cat backend/src/data/candidates.json | grep -A 3 "scores"
 
 1. **Start Backend:**
    ```bash
-   cd backend
+   cd server
    npm run dev
    ```
 
@@ -78,7 +78,7 @@ cat backend/src/data/candidates.json | grep -A 3 "scores"
 ## Test Results Checklist
 
 ### ✅ Core Functionality
-- [ ] Dashboard loads jobs from backend
+- [ ] Dashboard loads jobs from server
 - [ ] Job detail page loads candidates
 - [ ] Candidate side panel shows details
 - [ ] Pipeline stages display correctly
@@ -116,18 +116,18 @@ cat backend/src/data/candidates.json | grep -A 3 "scores"
 ### Migration Issues
 
 **Error: "Cannot find module"**
-- Run `npm install` in backend
+- Run `npm install` in server
 - Make sure TypeScript is compiled: `npm run build`
 
 **Error: "File not found"**
-- Verify `backend/src/data/jobs.json` and `candidates.json` exist
+- Verify `server/src/data/jobs.json` and `candidates.json` exist
 - Check file paths in migration script
 
 ### Testing Issues
 
 **No data showing:**
 - Verify migration ran successfully
-- Check backend server is running
+- Check server server is running
 - Verify API_BASE_URL is correct
 - Check browser console for errors
 

@@ -1,10 +1,10 @@
 # Quick Start Guide
 
-## Backend Setup
+## Server Setup
 
 ### Option 1: Development Mode (Recommended)
 ```bash
-cd backend
+cd server
 npm install  # if you haven't already
 npm run dev  # Uses tsx watch - auto-recompiles on changes
 ```
@@ -16,7 +16,7 @@ This will:
 
 ### Option 2: Production Mode
 ```bash
-cd backend
+cd server
 npm install
 npm run build  # Compile TypeScript to JavaScript
 npm start      # Run compiled code
@@ -69,22 +69,22 @@ curl http://localhost:3000/{jobId}/cd
 - Run `npm run build` first, or use `npm run dev` instead
 
 ### "No jobs found"
-- Check `backend/src/data/jobs.json` has data
+- Check `server/src/data/jobs.json` has data
 - Verify the server is running on port 3000
 
 ### CORS errors
-- Add CORS middleware to `backend/src/api/server.ts`:
+- Add CORS middleware to `server/src/api/server.ts`:
   ```typescript
   import cors from 'cors';
   app.use(cors());
   ```
 
 ### Port already in use
-- Change port in `backend/src/api/server.ts` or set `PORT` environment variable
+- Change port in `server/src/api/server.ts` or set `PORT` environment variable
 
 ## Environment Variables
 
-Create `.env` file in `backend/` directory:
+Create `.env` file in `server/` directory:
 ```env
 PORT=3000
 GEMINI_API_KEY=your_key_here  # Optional - for AI features
