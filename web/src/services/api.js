@@ -98,7 +98,11 @@ initializeMockData();
  * Parse REST-style endpoint and extract parameters
  */
 const parseEndpoint = (path) => {
-  // Pattern: /jd-id or /jd-id/cd or /jd-id/cd-id
+  // Pattern: /jd (all jobs) or /jd-id or /jd-id/cd or /jd-id/cd-id
+  if (path === "/jd") {
+    return { type: "allJobs" };
+  }
+  
   const jdIdMatch = path.match(/^\/([^/]+)$/);
   const candidatesMatch = path.match(/^\/([^/]+)\/cd$/);
   const candidateMatch = path.match(/^\/([^/]+)\/cd\/([^/]+)$/);
@@ -124,6 +128,22 @@ const handleGet = async (path) => {
   const parsed = parseEndpoint(path);
 
   switch (parsed.type) {
+    case "allJobs": {
+      // Return all jobs as an array
+      const jobs = [];
+      for (const jd of mockData.jobDescriptions.values()) {
+        jobs.push({
+          id: jd.id,
+          title: jd.title,
+          description: jd.description,
+          company: jd.company,
+          filters: jd.filters,
+          message: jd.message,
+        });
+      }
+      return jobs;
+    }
+
     case "jobDescription": {
       const jd = mockData.jobDescriptions.get(parsed.jdId);
       if (!jd) {
