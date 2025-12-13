@@ -2,7 +2,7 @@ import { useMemo } from "react";
 import { motion } from "framer-motion";
 import { Text, Stack, Group, Badge } from "@mantine/core";
 import useJobStore from "../../stores/jobStore";
-import { getSkillDistribution, getLocationDistribution } from "../../utils/candidateUtils";
+import { getSkillDistribution, getLocationDistribution, hasActiveFilters } from "../../utils/candidateUtils";
 
 interface CandidatePoolBubbleProps {
   totalCount: number;
@@ -12,12 +12,31 @@ interface CandidatePoolBubbleProps {
 }
 
 const CandidatePoolBubble = ({ totalCount, filteredCount, jobId, onBubbleClick }: CandidatePoolBubbleProps) => {
-  const { filteredCandidates, starredCandidates } = useJobStore();
+  const { filteredCandidates, candidates, starredCandidates, activeFilters, setActiveFilters } = useJobStore();
   
   const starredIds = starredCandidates.get(jobId) || new Set<string>();
+  
+  // Use correct candidate list based on whether filters are active
+  const displayCandidates = hasActiveFilters(activeFilters) ? filteredCandidates : candidates;
   const starredCount = Array.from(starredIds).filter(id => 
-    filteredCandidates.some(c => c.id === id)
+    displayCandidates.some(c => c.id === id)
   ).length;
+
+  // Handler to add a skill filter
+  const handleSkillClick = (skill: string) => {
+    const currentSkills = activeFilters.skills || [];
+    if (!currentSkills.includes(skill)) {
+      setActiveFilters({ ...activeFilters, skills: [...currentSkills, skill] });
+    }
+  };
+
+  // Handler to add a location filter
+  const handleLocationClick = (location: string) => {
+    const currentLocations = activeFilters.location || [];
+    if (!currentLocations.includes(location)) {
+      setActiveFilters({ ...activeFilters, location: [...currentLocations, location] });
+    }
+  };
 
   // Calculate bubble size based on filtered percentage
   const percentage = totalCount > 0 ? (filteredCount / totalCount) * 100 : 100;
@@ -37,14 +56,14 @@ const CandidatePoolBubble = ({ totalCount, filteredCount, jobId, onBubbleClick }
 
   // Get skill distribution using shared utility
   const skillDistribution = useMemo(
-    () => getSkillDistribution(filteredCandidates, 5),
-    [filteredCandidates]
+    () => getSkillDistribution(displayCandidates, 5),
+    [displayCandidates]
   );
 
   // Get location distribution using shared utility
   const locationDistribution = useMemo(
-    () => getLocationDistribution(filteredCandidates, 4),
-    [filteredCandidates]
+    () => getLocationDistribution(displayCandidates, 4),
+    [displayCandidates]
   );
 
   return (
@@ -184,16 +203,21 @@ const CandidatePoolBubble = ({ totalCount, filteredCount, jobId, onBubbleClick }
         <Stack gap="xs" align="center">
           <Text size="xs" c="dimmed" fw={500}>TOP SKILLS</Text>
           <Group gap="xs">
-            {skillDistribution.map((stat) => (
-              <Badge 
-                key={stat.label} 
-                variant="light" 
-                color="violet"
-                size="sm"
-              >
-                {stat.label} ({stat.count})
-              </Badge>
-            ))}
+            {skillDistribution.map((stat) => {
+              const isActive = activeFilters.skills?.includes(stat.label);
+              return (
+                <Badge 
+                  key={stat.label} 
+                  variant={isActive ? "filled" : "light"}
+                  color="violet"
+                  size="sm"
+                  style={{ cursor: "pointer" }}
+                  onClick={() => handleSkillClick(stat.label)}
+                >
+                  {stat.label} ({stat.count})
+                </Badge>
+              );
+            })}
           </Group>
         </Stack>
 
@@ -201,23 +225,28 @@ const CandidatePoolBubble = ({ totalCount, filteredCount, jobId, onBubbleClick }
         <Stack gap="xs" align="center">
           <Text size="xs" c="dimmed" fw={500}>LOCATIONS</Text>
           <Group gap="xs">
-            {locationDistribution.map((stat) => (
-              <Badge 
-                key={stat.label} 
-                variant="light" 
-                color="blue"
-                size="sm"
-              >
-                {stat.label} ({stat.count})
-              </Badge>
-            ))}
+            {locationDistribution.map((stat) => {
+              const isActive = activeFilters.location?.includes(stat.label);
+              return (
+                <Badge 
+                  key={stat.label} 
+                  variant={isActive ? "filled" : "light"}
+                  color="blue"
+                  size="sm"
+                  style={{ cursor: "pointer" }}
+                  onClick={() => handleLocationClick(stat.label)}
+                >
+                  {stat.label} ({stat.count})
+                </Badge>
+              );
+            })}
           </Group>
         </Stack>
       </motion.div>
 
       {/* Click hint */}
       <Text size="xs" c="dimmed" style={{ opacity: 0.6 }}>
-        Click bubble to browse candidates
+        Click bubble to browse • Click tags to filter
       </Text>
     </div>
   );

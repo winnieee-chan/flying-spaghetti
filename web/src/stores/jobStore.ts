@@ -60,6 +60,7 @@ interface JobStore {
   filteredCandidates: Candidate[];
   selectedCandidate: Candidate | null;
   sidePanelOpen: boolean;
+  searchQuery: string; // Search input value
 
   // Actions
   fetchJobs: () => Promise<void>;
@@ -77,6 +78,7 @@ interface JobStore {
   setSidePanelOpen: (open: boolean) => void;
   searchExternalCandidates: (jobId: string, query: string) => Promise<Candidate[]>;
   getStarredCandidates: (jobId: string) => Candidate[];
+  setSearchQuery: (query: string) => void;
 }
 
 const useJobStore = create<JobStore>((set, get) => ({
@@ -94,6 +96,7 @@ const useJobStore = create<JobStore>((set, get) => ({
   filteredCandidates: [],
   selectedCandidate: null,
   sidePanelOpen: false,
+  searchQuery: "",
 
   // Actions
 
@@ -224,6 +227,7 @@ const useJobStore = create<JobStore>((set, get) => ({
     sidePanelOpen: false,
     activeFilters: {},
     filteredCandidates: [],
+    searchQuery: "",
   }),
 
   /**
@@ -321,6 +325,13 @@ const useJobStore = create<JobStore>((set, get) => ({
     const { candidates, starredCandidates } = get();
     const starredIds = starredCandidates.get(jobId) || new Set();
     return candidates.filter(c => starredIds.has(c.id));
+  },
+
+  /**
+   * Set search query
+   */
+  setSearchQuery: (query: string) => {
+    set({ searchQuery: query });
   },
 }));
 

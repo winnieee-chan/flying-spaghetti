@@ -32,6 +32,23 @@ export interface CandidateStats {
 }
 
 // ============================================================================
+// Filter Helpers
+// ============================================================================
+
+/**
+ * Check if any filters are currently active
+ */
+export function hasActiveFilters(filters: CandidateFilters): boolean {
+  return (
+    (filters.keywords !== undefined && filters.keywords.length > 0) ||
+    (filters.skills !== undefined && filters.skills.length > 0) ||
+    (filters.experience !== undefined && filters.experience.length > 0) ||
+    (filters.location !== undefined && filters.location.length > 0) ||
+    filters.minMatchScore !== undefined
+  );
+}
+
+// ============================================================================
 // Search & Filter
 // ============================================================================
 

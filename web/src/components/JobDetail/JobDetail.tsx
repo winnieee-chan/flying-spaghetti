@@ -13,6 +13,7 @@ import {
 } from "@mantine/core";
 import { IconAlertCircle, IconArrowLeft } from "@tabler/icons-react";
 import useJobStore from "../../stores/jobStore";
+import { hasActiveFilters } from "../../utils/candidateUtils";
 import CompactFilterBar from "./CompactFilterBar";
 import CandidatePoolBubble from "./CandidatePoolBubble";
 import CandidateSidePanel from "./CandidateSidePanel";
@@ -27,6 +28,7 @@ const JobDetail = () => {
     currentJob,
     candidates,
     filteredCandidates,
+    activeFilters,
     loading,
     error,
     fetchJob,
@@ -91,7 +93,9 @@ const JobDetail = () => {
   }
 
   const starredCount = id ? getStarredCandidates(id).length : 0;
-  const displayCount = filteredCandidates.length > 0 ? filteredCandidates.length : candidates.length;
+  
+  // Show filteredCandidates count if filters are active, otherwise show all
+  const displayCount = hasActiveFilters(activeFilters) ? filteredCandidates.length : candidates.length;
 
   return (
     <Container size="xl" py="xl">
@@ -121,24 +125,17 @@ const JobDetail = () => {
         </Group>
       </motion.div>
 
-      {/* Filter Bar */}
+      {/* Candidate Pool - Search + Visualization in shared container */}
       <motion.div
         initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.2, delay: 0.1 }}
       >
-        <Card shadow="sm" padding="sm" radius="md" withBorder mb="xl">
-          <CompactFilterBar />
-        </Card>
-      </motion.div>
-
-      {/* Main Visualization */}
-      <motion.div
-        initial={{ opacity: 0, scale: 0.95 }}
-        animate={{ opacity: 1, scale: 1 }}
-        transition={{ duration: 0.3, delay: 0.2 }}
-      >
         <Card shadow="sm" padding="xl" radius="md" withBorder>
+          {/* Search Bar */}
+          <CompactFilterBar />
+          
+          {/* Bubble Visualization */}
           <CandidatePoolBubble 
             totalCount={candidates.length}
             filteredCount={displayCount}

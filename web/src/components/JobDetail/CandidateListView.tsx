@@ -20,6 +20,7 @@ import {
   searchCandidates,
   sortByMatchScore,
   getCandidateStats,
+  hasActiveFilters,
 } from "../../utils/candidateUtils";
 
 interface CandidateListViewProps {
@@ -32,6 +33,7 @@ const CandidateListView = ({ opened, onClose, jobId }: CandidateListViewProps) =
   const { 
     filteredCandidates, 
     candidates,
+    activeFilters,
     selectCandidate, 
     toggleStarCandidate, 
     starredCandidates 
@@ -41,8 +43,8 @@ const CandidateListView = ({ opened, onClose, jobId }: CandidateListViewProps) =
   
   const starredIds = starredCandidates.get(jobId) || new Set<string>();
   
-  // Use filtered candidates from store
-  const displayCandidates = filteredCandidates.length > 0 ? filteredCandidates : candidates;
+  // Use filtered candidates from store if filters are active, otherwise all candidates
+  const displayCandidates = hasActiveFilters(activeFilters) ? filteredCandidates : candidates;
   
   // Apply local search on top of store filters using shared utility
   const searchedCandidates = useMemo(

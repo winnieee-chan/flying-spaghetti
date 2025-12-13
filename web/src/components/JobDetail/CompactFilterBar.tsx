@@ -34,8 +34,7 @@ interface ParsedFilter {
 }
 
 const CompactFilterBar = () => {
-  const { activeFilters, setActiveFilters, candidates } = useJobStore();
-  const [searchInput, setSearchInput] = useState("");
+  const { activeFilters, setActiveFilters, candidates, searchQuery, setSearchQuery } = useJobStore();
   const [showSuggestions, setShowSuggestions] = useState(false);
   const [selectedSuggestion, setSelectedSuggestion] = useState(0);
   const inputRef = useRef<HTMLInputElement>(null);
@@ -71,10 +70,10 @@ const CompactFilterBar = () => {
 
   // Generate suggestions based on input
   const suggestions = useMemo(() => {
-    const { type, query } = parseInput(searchInput);
+    const { type, query } = parseInput(searchQuery);
     const queryLower = query.toLowerCase().trim();
     
-    if (!searchInput.trim()) {
+    if (!searchQuery.trim()) {
       // Show prefix hints when empty
       return [
         { type: "hint" as const, value: "skill:", label: "skill:React — Filter by skill" },
@@ -123,10 +122,10 @@ const CompactFilterBar = () => {
     
     return options.slice(0, 8).map(opt => ({
       type,
-      value: `${parseInput(searchInput).prefix}${opt}`,
+      value: `${parseInput(searchQuery).prefix}${opt}`,
       label: opt,
     }));
-  }, [searchInput, allSkills, allLocations, allExperiences]);
+  }, [searchQuery, allSkills, allLocations, allExperiences]);
 
   // Convert active filters to display badges
   const activeFilterBadges = useMemo((): ParsedFilter[] => {
@@ -180,7 +179,7 @@ const CompactFilterBar = () => {
       }
     }
     
-    setSearchInput("");
+    setSearchQuery("");
     setShowSuggestions(false);
     setSelectedSuggestion(0);
   };
@@ -214,12 +213,12 @@ const CompactFilterBar = () => {
       if (suggestions[selectedSuggestion]) {
         const suggestion = suggestions[selectedSuggestion];
         if ('type' in suggestion && suggestion.type === "hint") {
-          setSearchInput(suggestion.value);
+          setSearchQuery(suggestion.value);
         } else {
           applyFilter(suggestion.value);
         }
-      } else if (searchInput.trim()) {
-        applyFilter(searchInput);
+      } else if (searchQuery.trim()) {
+        applyFilter(searchQuery);
       }
     } else if (e.key === "Escape") {
       setShowSuggestions(false);
@@ -234,15 +233,15 @@ const CompactFilterBar = () => {
     <Stack gap="xs">
       <Group gap="sm" wrap="nowrap" style={{ width: "100%" }}>
         {/* Smart Search Input */}
-        <div style={{ position: "relative", flex: 1, maxWidth: 400 }}>
+        <div style={{ position: "relative", flex: 1 }}>
           <TextInput
             ref={inputRef}
-            placeholder="Type skill:React, loc:Sydney, exp:5+ years or any keyword..."
-            leftSection={<IconSearch size={14} />}
-            size="sm"
-            value={searchInput}
+            placeholder="Search: skill:React, loc:Sydney, exp:5+ years..."
+            leftSection={<IconSearch size={16} />}
+            size="lg"
+            value={searchQuery}
             onChange={(e) => {
-              setSearchInput(e.target.value);
+              setSearchQuery(e.target.value);
               setShowSuggestions(true);
               setSelectedSuggestion(0);
             }}
@@ -252,7 +251,8 @@ const CompactFilterBar = () => {
             styles={{
               input: {
                 fontFamily: "monospace",
-                fontSize: "13px",
+                fontSize: "16px",
+                minHeight: "48px",
               },
             }}
           />
@@ -291,7 +291,7 @@ const CompactFilterBar = () => {
                           onMouseEnter={() => setSelectedSuggestion(index)}
                           onClick={() => {
                             if ('type' in suggestion && suggestion.type === "hint") {
-                              setSearchInput(suggestion.value);
+                              setSearchQuery(suggestion.value);
                               inputRef.current?.focus();
                             } else {
                               applyFilter(suggestion.value);
