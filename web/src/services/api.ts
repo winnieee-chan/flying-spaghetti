@@ -34,11 +34,17 @@ interface Candidate {
   skills: string[];
   resume?: string;
   status: string;
+  // New fields
+  avatar?: string;
+  headline?: string;
+  source?: 'seeded' | 'external';
+  matchScore?: number;
 }
 
 interface MockData {
   jobDescriptions: Map<string, JobDescription>;
   candidates: Map<string, Candidate>;
+  starredCandidates: Map<string, Set<string>>; // jobId -> Set<candidateId>
   nextJdId: number;
   nextCandidateId: number;
 }
@@ -47,6 +53,7 @@ interface MockData {
 const mockData: MockData = {
   jobDescriptions: new Map(),
   candidates: new Map(),
+  starredCandidates: new Map(),
   nextJdId: 1,
   nextCandidateId: 1,
 };
@@ -96,8 +103,11 @@ const initializeMockData = (): void => {
     experience: "5+ years",
     location: "San Francisco",
     skills: ["React", "TypeScript", "Node.js", "GraphQL"],
-    resume: "Experienced frontend engineer with 5+ years...",
+    resume: "Experienced frontend engineer with 5+ years of experience building scalable web applications. Specialized in React and TypeScript with a strong background in modern frontend architecture.",
     status: "pending",
+    headline: "Senior Frontend Engineer at Google",
+    source: "seeded",
+    matchScore: 95,
   };
 
   const candidate2: Candidate = {
@@ -107,12 +117,61 @@ const initializeMockData = (): void => {
     experience: "3-5 years",
     location: "Remote",
     skills: ["React", "JavaScript", "CSS"],
-    resume: "Frontend developer specializing in React...",
+    resume: "Frontend developer specializing in React and modern JavaScript. Passionate about creating beautiful user interfaces and improving user experience.",
     status: "pending",
+    headline: "Frontend Developer at StartupCo",
+    source: "seeded",
+    matchScore: 75,
+  };
+  
+  // Add more candidates for better visualization
+  const candidate4: Candidate = {
+    id: "cd-4",
+    name: "Alice Williams",
+    email: "alice.williams@example.com",
+    experience: "3-5 years",
+    location: "Remote",
+    skills: ["React", "TypeScript", "Vue.js", "Testing"],
+    resume: "Full-stack developer with focus on frontend. Experience with React, TypeScript, and Vue.js. Strong testing background.",
+    status: "pending",
+    headline: "Full-Stack Developer at DevShop",
+    source: "seeded",
+    matchScore: 82,
+  };
+  
+  const candidate5: Candidate = {
+    id: "cd-5",
+    name: "Charlie Brown",
+    email: "charlie.brown@example.com",
+    experience: "5+ years",
+    location: "San Francisco",
+    skills: ["React", "TypeScript", "GraphQL", "AWS"],
+    resume: "Senior engineer with expertise in React ecosystem and cloud infrastructure. Led multiple successful product launches.",
+    status: "pending",
+    headline: "Senior Software Engineer at CloudTech",
+    source: "seeded",
+    matchScore: 90,
+  };
+  
+  const candidate6: Candidate = {
+    id: "cd-6",
+    name: "Diana Prince",
+    email: "diana.prince@example.com",
+    experience: "3-5 years",
+    location: "Remote",
+    skills: ["JavaScript", "React", "Node.js"],
+    resume: "Passionate developer with experience in JavaScript and React. Always learning new technologies and best practices.",
+    status: "pending",
+    headline: "Software Engineer at CodeBase",
+    source: "seeded",
+    matchScore: 70,
   };
 
   mockData.candidates.set(`${jdId1}/cd-1`, candidate1);
   mockData.candidates.set(`${jdId1}/cd-2`, candidate2);
+  mockData.candidates.set(`${jdId1}/cd-4`, candidate4);
+  mockData.candidates.set(`${jdId1}/cd-5`, candidate5);
+  mockData.candidates.set(`${jdId1}/cd-6`, candidate6);
 
   // Sample candidates for jd-2
   const candidate3: Candidate = {
@@ -122,8 +181,11 @@ const initializeMockData = (): void => {
     experience: "5+ years",
     location: "New York",
     skills: ["Product Strategy", "Agile", "Analytics", "Leadership"],
-    resume: "Product Manager with extensive experience...",
+    resume: "Product Manager with extensive experience leading cross-functional teams and delivering successful products. Strong background in analytics and agile methodologies.",
     status: "pending",
+    headline: "Senior Product Manager at TechCorp",
+    source: "seeded",
+    matchScore: 88,
   };
 
   mockData.candidates.set(`${jdId2}/cd-3`, candidate3);
@@ -133,10 +195,11 @@ const initializeMockData = (): void => {
 initializeMockData();
 
 interface ParsedEndpoint {
-  type: "allJobs" | "jobDescription" | "candidates" | "candidate" | "unknown";
+  type: "allJobs" | "jobDescription" | "candidates" | "candidate" | "starred" | "externalSearch" | "unknown";
   jdId?: string;
   candidateId?: string;
   path?: string;
+  query?: string;
 }
 
 /**
@@ -151,12 +214,24 @@ const parseEndpoint = (path: string): ParsedEndpoint => {
   const jdIdMatch = path.match(/^\/([^/]+)$/);
   const candidatesMatch = path.match(/^\/([^/]+)\/cd$/);
   const candidateMatch = path.match(/^\/([^/]+)\/cd\/([^/]+)$/);
+  const starredMatch = path.match(/^\/([^/]+)\/starred$/);
+  const starredCandidateMatch = path.match(/^\/([^/]+)\/starred\/([^/]+)$/);
+  const externalSearchMatch = path.match(/^\/([^/]+)\/cd\/external-search$/);
 
   if (candidateMatch) {
     return { type: "candidate", jdId: candidateMatch[1], candidateId: candidateMatch[2] };
   }
   if (candidatesMatch) {
     return { type: "candidates", jdId: candidatesMatch[1] };
+  }
+  if (starredMatch) {
+    return { type: "starred", jdId: starredMatch[1] };
+  }
+  if (starredCandidateMatch) {
+    return { type: "starred", jdId: starredCandidateMatch[1], candidateId: starredCandidateMatch[2] };
+  }
+  if (externalSearchMatch) {
+    return { type: "externalSearch", jdId: externalSearchMatch[1] };
   }
   if (jdIdMatch) {
     return { type: "jobDescription", jdId: jdIdMatch[1] };
@@ -232,10 +307,31 @@ const handleGet = async <T = unknown>(path: string): Promise<T> => {
             location: candidate.location,
             skills: candidate.skills,
             status: candidate.status,
+            resume: candidate.resume,
+            avatar: candidate.avatar,
+            headline: candidate.headline,
+            source: candidate.source,
+            matchScore: candidate.matchScore,
           });
         }
       }
       return candidates as T;
+    }
+    
+    case "starred": {
+      if (!parsed.jdId) {
+        throw new Error("Job ID is required");
+      }
+      const starredIds = mockData.starredCandidates.get(parsed.jdId) || new Set<string>();
+      const starredCandidates = [];
+      for (const candidateId of starredIds) {
+        const key = `${parsed.jdId}/${candidateId}`;
+        const candidate = mockData.candidates.get(key);
+        if (candidate) {
+          starredCandidates.push(candidate);
+        }
+      }
+      return starredCandidates as T;
     }
 
     case "candidate": {
@@ -261,6 +357,8 @@ const handleGet = async <T = unknown>(path: string): Promise<T> => {
 const handlePost = async <T = unknown>(path: string, body: Record<string, unknown>): Promise<T> => {
   await simulateLatency();
 
+  const parsed = parseEndpoint(path);
+
   // POST /jd - Create job description
   if (path === "/jd" || path.match(/^\/jd$/)) {
     const jdId = `jd-${mockData.nextJdId++}`;
@@ -279,6 +377,47 @@ const handlePost = async <T = unknown>(path: string, body: Record<string, unknow
     };
     mockData.jobDescriptions.set(jdId, newJd);
     return newJd as T;
+  }
+
+  // POST /:jdId/cd/external-search - Search external candidates
+  if (parsed.type === "externalSearch" && parsed.jdId) {
+    const query = (body.query as string) || "";
+    const queryLower = query.toLowerCase();
+    
+    // Generate some mock external candidates
+    const externalCandidates: Candidate[] = [];
+    const names = ["Emma Davis", "Frank Miller", "Grace Lee", "Henry Wilson"];
+    const companies = ["BigTech", "StartupXYZ", "EnterpriseInc", "InnovationLab"];
+    
+    names.forEach((name, index) => {
+      const candidateId = `cd-ext-${mockData.nextCandidateId++}`;
+      const candidate: Candidate = {
+        id: candidateId,
+        name: name,
+        email: `${name.toLowerCase().replace(" ", ".")}@example.com`,
+        experience: index % 2 === 0 ? "5+ years" : "3-5 years",
+        location: index % 2 === 0 ? "San Francisco" : "Remote",
+        skills: ["React", "TypeScript", "Node.js", "GraphQL"],
+        resume: `Experienced developer with strong background in modern web technologies.`,
+        status: "pending",
+        headline: `Senior Engineer at ${companies[index]}`,
+        source: "external",
+        matchScore: 85 - (index * 5), // Varying match scores
+      };
+      externalCandidates.push(candidate);
+      mockData.candidates.set(`${parsed.jdId}/${candidateId}`, candidate);
+    });
+    
+    // Filter by query if provided
+    if (query) {
+      return externalCandidates.filter(c => 
+        c.name.toLowerCase().includes(queryLower) ||
+        c.headline?.toLowerCase().includes(queryLower) ||
+        c.skills.some(s => s.toLowerCase().includes(queryLower))
+      ) as T;
+    }
+    
+    return externalCandidates as T;
   }
 
   throw new Error(`POST endpoint not found: ${path}`);
@@ -319,7 +458,38 @@ const handlePut = async <T = unknown>(path: string, body: Record<string, unknown
     return jd as T;
   }
 
+  // PUT /:jdId/starred/:cdId - Add candidate to star list
+  if (parsed.type === "starred" && parsed.jdId && parsed.candidateId) {
+    const starred = mockData.starredCandidates.get(parsed.jdId) || new Set<string>();
+    starred.add(parsed.candidateId);
+    mockData.starredCandidates.set(parsed.jdId, starred);
+    return { success: true } as T;
+  }
+
   throw new Error(`PUT endpoint not found: ${path}`);
+};
+
+/**
+ * DELETE request handler
+ */
+const handleDelete = async <T = unknown>(path: string): Promise<T> => {
+  await simulateLatency();
+
+  const parsed = parseEndpoint(path);
+
+  // DELETE /:jdId/starred/:cdId - Remove candidate from star list
+  if (parsed.type === "starred" && parsed.jdId && parsed.candidateId) {
+    const starred = mockData.starredCandidates.get(parsed.jdId) || new Set<string>();
+    starred.delete(parsed.candidateId);
+    if (starred.size === 0) {
+      mockData.starredCandidates.delete(parsed.jdId);
+    } else {
+      mockData.starredCandidates.set(parsed.jdId, starred);
+    }
+    return { success: true } as T;
+  }
+
+  throw new Error(`DELETE endpoint not found: ${path}`);
 };
 
 /**
@@ -367,6 +537,20 @@ export const api = {
     } catch (error) {
       const errorMessage = error instanceof Error ? error.message : "Unknown error";
       throw new Error(`API PUT ${path}: ${errorMessage}`);
+    }
+  },
+
+  /**
+   * DELETE request
+   * @param path - REST endpoint path (e.g., "/jd-1/starred/cd-1")
+   * @returns Response data
+   */
+  async delete<T = unknown>(path: string): Promise<T> {
+    try {
+      return await handleDelete<T>(path);
+    } catch (error) {
+      const errorMessage = error instanceof Error ? error.message : "Unknown error";
+      throw new Error(`API DELETE ${path}: ${errorMessage}`);
     }
   },
 };

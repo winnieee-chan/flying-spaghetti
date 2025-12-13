@@ -123,7 +123,15 @@ const Dashboard = () => {
                 transition={{ duration: 0.3, delay: index * 0.1 }}
                 whileHover={{ y: -4 }}
               >
-                <Card shadow="sm" padding="lg" radius="md" withBorder h="100%">
+                <Card 
+                  shadow="sm" 
+                  padding="lg" 
+                  radius="md" 
+                  withBorder 
+                  h="100%"
+                  style={{ cursor: 'pointer' }}
+                  onClick={() => navigate(`/jobs/${job.id}`)}
+                >
                   <Stack gap="md">
                     <div>
                       <Title order={3} mb={4}>
