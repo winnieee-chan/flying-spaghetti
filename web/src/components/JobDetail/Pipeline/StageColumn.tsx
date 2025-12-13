@@ -8,8 +8,8 @@ import {
   Avatar,
   Badge,
 } from "@mantine/core";
-import { Candidate, PipelineStage } from "../../stores/jobStore";
-import useJobStore from "../../stores/jobStore";
+import { Candidate, PipelineStage } from "../../../stores/jobStore";
+import useJobStore from "../../../stores/jobStore";
 
 interface StageColumnProps {
   stage: PipelineStage;

@@ -109,7 +109,8 @@ const Dashboard = () => {
             py="lg"
             px={{ base: "md", sm: "xl", md: 48 }}
             style={{
-              background: "linear-gradient(135deg, #1a1b1e 0%, #25262b 50%, #2c2e33 100%)",
+              background: "white",
+              borderBottom: "1px solid #e9ecef",
             }}
           >
             <Group justify="space-between" wrap="wrap" gap="md">
@@ -120,18 +121,18 @@ const Dashboard = () => {
                   size={56}
                   radius="md"
                   style={{ 
-                    border: "2px solid rgba(255,255,255,0.2)",
-                    boxShadow: "0 4px 12px rgba(0,0,0,0.3)",
+                    border: "2px solid #e9ecef",
+                    boxShadow: "0 2px 8px rgba(0,0,0,0.08)",
                   }}
                 />
                 <div>
-                  <Text size="xl" fw={700} c="white">
+                  <Text size="xl" fw={700} c="dark">
                     {STARTUP_OWNER.companyName}
                   </Text>
                   <Group gap="xs" mt={4}>
                     <Badge
                       color={STARTUP_OWNER.planColor}
-                      variant="filled"
+                      variant="light"
                       size="sm"
                       leftSection={<IconSparkles size={12} />}
                     >
@@ -152,12 +153,12 @@ const Dashboard = () => {
                 <Box miw={180}>
                   <Group justify="space-between" mb={6}>
                     <Group gap={6}>
-                      <IconBriefcase size={14} style={{ color: "rgba(255,255,255,0.5)" }} />
-                      <Text size="xs" c="rgba(255,255,255,0.5)">
+                      <IconBriefcase size={14} style={{ color: "#868e96" }} />
+                      <Text size="xs" c="dimmed">
                         Jobs Usage
                       </Text>
                     </Group>
-                    <Text size="xs" c="white" fw={500}>
+                    <Text size="xs" c="dark" fw={500}>
                       {jobsUsed} / {STARTUP_OWNER.jobsLimit}
                     </Text>
                   </Group>
@@ -166,7 +167,7 @@ const Dashboard = () => {
                     size="sm"
                     radius="xl"
                     color={usagePercent > 80 ? "orange" : "violet"}
-                    style={{ background: "rgba(255,255,255,0.1)" }}
+                    style={{ background: "#e9ecef" }}
                   />
                   {usagePercent >= 80 && (
                     <Text size="xs" c="orange" mt={4}>
@@ -177,7 +178,7 @@ const Dashboard = () => {
                 <Button
                   leftSection={<IconPlus size={16} />}
                   onClick={() => navigate("/jobs/new")}
-                  variant="white"
+                  variant="filled"
                   color="dark"
                 >
                   Create Job
@@ -192,7 +193,7 @@ const Dashboard = () => {
             px={{ base: "md", sm: "xl", md: 48 }}
             style={{ 
               flex: 1,
-              background: "#f8f9fa",
+              background: "#fafafa",
             }}
           >
 

@@ -11,7 +11,7 @@ import {
   Alert,
 } from "@mantine/core";
 import { IconSparkles, IconAlertCircle } from "@tabler/icons-react";
-import { PipelineStage } from "../../stores/jobStore";
+import { PipelineStage } from "../../../stores/jobStore";
 
 interface BatchActionsBarProps {
   jobId: string;

@@ -224,11 +224,12 @@ const initializeMockData = (): void => {
 initializeMockData();
 
 interface ParsedEndpoint {
-  type: "allJobs" | "jobDescription" | "candidates" | "candidate" | "starred" | "externalSearch" | "batchMove" | "updateStage" | "unknown";
+  type: "allJobs" | "jobDescription" | "candidates" | "candidate" | "starred" | "externalSearch" | "batchMove" | "updateStage" | "aiAnalyze" | "aiDraftMessage" | "aiSummarize" | "aiSuggestMessage" | "aiSuggestTimes" | "aiDraftOffer" | "aiNegotiate" | "aiDecisionSummary" | "unknown";
   jdId?: string;
   candidateId?: string;
   path?: string;
   query?: string;
+  aiAction?: string;
 }
 
 /**
@@ -248,7 +249,39 @@ const parseEndpoint = (path: string): ParsedEndpoint => {
   const externalSearchMatch = path.match(/^\/([^/]+)\/cd\/external-search$/);
   const batchMoveMatch = path.match(/^\/([^/]+)\/cd\/batch-move$/);
   const updateStageMatch = path.match(/^\/([^/]+)\/cd\/([^/]+)\/stage$/);
+  const aiAnalyzeMatch = path.match(/^\/([^/]+)\/cd\/([^/]+)\/ai\/analyze$/);
+  const aiDraftMessageMatch = path.match(/^\/([^/]+)\/cd\/([^/]+)\/ai\/draft-message$/);
+  const aiSummarizeMatch = path.match(/^\/([^/]+)\/cd\/([^/]+)\/ai\/summarize-conversation$/);
+  const aiSuggestMessageMatch = path.match(/^\/([^/]+)\/cd\/([^/]+)\/ai\/suggest-message$/);
+  const aiSuggestTimesMatch = path.match(/^\/([^/]+)\/cd\/([^/]+)\/ai\/suggest-times$/);
+  const aiDraftOfferMatch = path.match(/^\/([^/]+)\/cd\/([^/]+)\/ai\/draft-offer$/);
+  const aiNegotiateMatch = path.match(/^\/([^/]+)\/cd\/([^/]+)\/ai\/negotiate$/);
+  const aiDecisionSummaryMatch = path.match(/^\/([^/]+)\/cd\/([^/]+)\/ai\/decision-summary$/);
 
+  if (aiAnalyzeMatch) {
+    return { type: "aiAnalyze", jdId: aiAnalyzeMatch[1], candidateId: aiAnalyzeMatch[2] };
+  }
+  if (aiDraftMessageMatch) {
+    return { type: "aiDraftMessage", jdId: aiDraftMessageMatch[1], candidateId: aiDraftMessageMatch[2] };
+  }
+  if (aiSummarizeMatch) {
+    return { type: "aiSummarize", jdId: aiSummarizeMatch[1], candidateId: aiSummarizeMatch[2] };
+  }
+  if (aiSuggestMessageMatch) {
+    return { type: "aiSuggestMessage", jdId: aiSuggestMessageMatch[1], candidateId: aiSuggestMessageMatch[2] };
+  }
+  if (aiSuggestTimesMatch) {
+    return { type: "aiSuggestTimes", jdId: aiSuggestTimesMatch[1], candidateId: aiSuggestTimesMatch[2] };
+  }
+  if (aiDraftOfferMatch) {
+    return { type: "aiDraftOffer", jdId: aiDraftOfferMatch[1], candidateId: aiDraftOfferMatch[2] };
+  }
+  if (aiNegotiateMatch) {
+    return { type: "aiNegotiate", jdId: aiNegotiateMatch[1], candidateId: aiNegotiateMatch[2] };
+  }
+  if (aiDecisionSummaryMatch) {
+    return { type: "aiDecisionSummary", jdId: aiDecisionSummaryMatch[1], candidateId: aiDecisionSummaryMatch[2] };
+  }
   if (candidateMatch) {
     return { type: "candidate", jdId: candidateMatch[1], candidateId: candidateMatch[2] };
   }
@@ -491,6 +524,127 @@ const handlePost = async <T = unknown>(path: string, body: Record<string, unknow
     }
 
     return { count: movedCount } as T;
+  }
+
+  // AI Endpoints
+  if (parsed.type === "aiAnalyze" && parsed.jdId && parsed.candidateId) {
+    const key = `${parsed.jdId}/${parsed.candidateId}`;
+    const candidate = mockData.candidates.get(key);
+    const job = mockData.jobDescriptions.get(parsed.jdId);
+    
+    if (!candidate || !job) {
+      throw new Error("Candidate or job not found");
+    }
+
+    // Mock AI analysis
+    const matchScore = candidate.matchScore || 70;
+    const fitScore = Math.min(100, matchScore + Math.floor(Math.random() * 10) - 5);
+    const recommendations = ["reach_out", "wait", "archive"] as const;
+    const recommendation = fitScore >= 80 ? "reach_out" : fitScore >= 60 ? "wait" : "archive";
+    const confidence = Math.min(100, fitScore + 10);
+
+    const strengths = candidate.skills.slice(0, 3).join(", ");
+    const summary = `Strong candidate with ${candidate.experience} of experience. Key strengths: ${strengths}. ${fitScore >= 80 ? "Highly recommended for outreach." : fitScore >= 60 ? "Worth considering, review carefully." : "May not be the best fit."}`;
+    
+    const suggestedMessage = fitScore >= 80 
+      ? `Hi ${candidate.name.split(" ")[0]},\n\nI came across your profile and was impressed by your experience with ${strengths}. We're looking for someone with your background to join our team at ${job.company}.\n\nWould you be open to a quick conversation?\n\nBest,\n[Your Name]`
+      : undefined;
+
+    return {
+      fitScore,
+      summary,
+      recommendation,
+      suggestedMessage,
+      confidence,
+    } as T;
+  }
+
+  if (parsed.type === "aiDraftMessage" && parsed.jdId && parsed.candidateId) {
+    const key = `${parsed.jdId}/${parsed.candidateId}`;
+    const candidate = mockData.candidates.get(key);
+    const job = mockData.jobDescriptions.get(parsed.jdId);
+    
+    if (!candidate || !job) {
+      throw new Error("Candidate or job not found");
+    }
+
+    const firstName = candidate.name.split(" ")[0];
+    const topSkills = candidate.skills.slice(0, 2).join(" and ");
+    return `Hi ${firstName},\n\nI noticed your background in ${topSkills} and thought you might be interested in our ${job.title} role at ${job.company}.\n\nWould you be open to a brief conversation this week?\n\nBest regards,\n[Your Name]` as T;
+  }
+
+  if (parsed.type === "aiSummarize" && parsed.jdId && parsed.candidateId) {
+    // Mock conversation summary
+    return "Candidate has shown strong interest and responded promptly. Discussed role requirements and candidate's experience. Next step: schedule technical interview." as T;
+  }
+
+  if (parsed.type === "aiSuggestMessage" && parsed.jdId && parsed.candidateId) {
+    const lastMessage = (body.lastMessage as string) || "";
+    // Mock next message suggestion
+    if (lastMessage.toLowerCase().includes("interested") || lastMessage.toLowerCase().includes("yes")) {
+      return "Great! Let's schedule a time to chat. Are you available this week? I can offer times on Tuesday afternoon or Wednesday morning." as T;
+    }
+    return "Thank you for your interest. Would you like to learn more about the role and our team?" as T;
+  }
+
+  if (parsed.type === "aiSuggestTimes" && parsed.jdId && parsed.candidateId) {
+    // Mock interview time suggestions (next 3 business days, 2pm-4pm)
+    const times: Date[] = [];
+    const now = new Date();
+    for (let i = 1; i <= 3; i++) {
+      const date = new Date(now);
+      date.setDate(now.getDate() + i);
+      date.setHours(14, 0, 0, 0); // 2pm
+      times.push(date);
+      const date2 = new Date(date);
+      date2.setHours(15, 30, 0, 0); // 3:30pm
+      times.push(date2);
+    }
+    return times as T;
+  }
+
+  if (parsed.type === "aiDraftOffer" && parsed.jdId && parsed.candidateId) {
+    const key = `${parsed.jdId}/${parsed.candidateId}`;
+    const candidate = mockData.candidates.get(key);
+    const job = mockData.jobDescriptions.get(parsed.jdId);
+    const terms = body.terms as Record<string, unknown> || {};
+    
+    if (!candidate || !job) {
+      throw new Error("Candidate or job not found");
+    }
+
+    const salary = (terms.salary as string) || "$120,000 - $150,000";
+    const startDate = (terms.startDate as string) || "2 weeks from acceptance";
+    
+    return `Dear ${candidate.name},\n\nWe are excited to extend an offer for the ${job.title} position at ${job.company}.\n\nPosition: ${job.title}\nSalary: ${salary}\nStart Date: ${startDate}\n\nWe believe your skills and experience make you an excellent fit for our team. We're looking forward to having you on board.\n\nPlease let us know if you have any questions or would like to discuss the offer further.\n\nBest regards,\n[Your Name]` as T;
+  }
+
+  if (parsed.type === "aiNegotiate" && parsed.jdId && parsed.candidateId) {
+    const request = (body.request as string) || "";
+    // Mock negotiation help
+    if (request.toLowerCase().includes("salary") || request.toLowerCase().includes("compensation")) {
+      return "I understand you'd like to discuss compensation. We have some flexibility within our range. What are your expectations? We can explore options that work for both of us." as T;
+    }
+    if (request.toLowerCase().includes("remote") || request.toLowerCase().includes("location")) {
+      return "We're open to discussing remote work arrangements. Let's find a solution that works for both parties." as T;
+    }
+    return "Thank you for bringing this up. Let's discuss how we can make this work for both of us. What specific aspects would you like to explore?" as T;
+  }
+
+  if (parsed.type === "aiDecisionSummary" && parsed.jdId && parsed.candidateId) {
+    const key = `${parsed.jdId}/${parsed.candidateId}`;
+    const candidate = mockData.candidates.get(key);
+    const decision = (body.decision as "hire" | "reject") || "reject";
+    
+    if (!candidate) {
+      throw new Error("Candidate not found");
+    }
+
+    if (decision === "hire") {
+      return `Decision: HIRE\n\n${candidate.name} demonstrated strong technical skills (${candidate.skills.slice(0, 3).join(", ")}) and excellent cultural fit. With ${candidate.experience} of experience, they are well-positioned to contribute immediately. Recommendation: Extend offer and proceed with onboarding.` as T;
+    } else {
+      return `Decision: REJECT\n\nWhile ${candidate.name} has relevant experience, there were concerns about fit for the role. The candidate's background in ${candidate.skills.slice(0, 2).join(" and ")} was noted, but may not align perfectly with our current needs.` as T;
+    }
   }
 
   throw new Error(`POST endpoint not found: ${path}`);

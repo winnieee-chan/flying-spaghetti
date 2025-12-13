@@ -20,7 +20,7 @@ import CandidatePoolBubble from "./CandidatePoolBubble";
 import CandidateSidePanel from "./CandidateSidePanel";
 import StarredDrawer from "./StarredDrawer";
 import CandidateListView from "./CandidateListView";
-import PipelineView from "./PipelineView";
+import PipelineView from "./Pipeline/PipelineView";
 
 const JobDetail = () => {
   const { id } = useParams<{ id: string }>();

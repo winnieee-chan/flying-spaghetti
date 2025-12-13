@@ -1,4 +1,3 @@
-import { motion } from "framer-motion";
 import {
   Group,
   Stack,
@@ -7,10 +6,9 @@ import {
   Alert,
 } from "@mantine/core";
 import { IconInfoCircle } from "@tabler/icons-react";
-import useJobStore from "../../stores/jobStore";
-import { Candidate } from "../../stores/jobStore";
+import useJobStore from "../../../stores/jobStore";
+import { Candidate } from "../../../stores/jobStore";
 import StageColumn from "./StageColumn";
-import BatchActionsBar from "./BatchActionsBar";
 
 interface PipelineViewProps {
   jobId: string;
@@ -58,9 +56,6 @@ const PipelineView = ({ jobId }: PipelineViewProps) => {
 
   return (
     <Stack gap="md">
-      {/* Batch Actions Bar */}
-      <BatchActionsBar jobId={jobId} stages={stages} />
-
       {pipelineCandidates.length === 0 ? (
         <Alert
           icon={<IconInfoCircle size={16} />}
