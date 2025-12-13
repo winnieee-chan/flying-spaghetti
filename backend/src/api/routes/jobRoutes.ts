@@ -34,10 +34,10 @@ router.post('/', async (req: Request, res: Response) => {
         const newJob = await createJob(jd_text, job_title, company_name);
 
         const newJobPost = {
-            id: Date.now().toString(), // Simple ID gen
-            companyName: 'Google',
-            role: "Software Engineer",
-            description: "This works."
+            id: newJob.jobId, // Simple ID gen
+            companyName: newJob.company_name!.toLowerCase(),
+            role: newJob.job_title.replace('Senior ', '').toLowerCase(),
+            description: newJob.jd_text,
         }
 
         await RabbitMqService.publishJob(newJobPost);
