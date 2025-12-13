@@ -1,23 +1,14 @@
-import type { Candidate } from "../stores/jobStore";
+import type { Candidate, CandidateFilters } from "../types";
 
 /**
  * Candidate Utilities
- * 
+ *
  * Shared search algorithm and statistics functions for candidate data.
  * All candidate-related data transformations should go through these utilities.
  */
 
-// ============================================================================
-// Types
-// ============================================================================
-
-export interface CandidateFilters {
-  keywords?: string[];
-  skills?: string[];
-  experience?: string[];
-  location?: string[];
-  minMatchScore?: number;
-}
+// Re-export CandidateFilters for backwards compatibility
+export type { CandidateFilters } from "../types";
 
 export interface DistributionEntry {
   label: string;

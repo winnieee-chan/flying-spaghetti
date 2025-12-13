@@ -128,7 +128,7 @@ const HeroSection = () => {
               padding: "0.875rem 2rem",
               fontSize: "1rem",
             }}
-            onClick={() => navigate("/dashboard")}
+            onClick={() => navigate("/")}
           >
             Get Started
           </Button>
