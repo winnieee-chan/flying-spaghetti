@@ -96,8 +96,15 @@ const extractWithOpenAI = async (jd_text: string, job_title: string): Promise<Ex
             temperature: 0.3
         })
     });
-
-    const data = await response.json() as any;
+    
+    const data = await response.json() as {
+        choices: Array<{
+            message: {
+                content: string;
+            };
+        }>;
+    };
+    
     const content = data.choices[0].message.content.trim();
     const jsonMatch = content.match(/\{[\s\S]*\}/);
     const extracted = JSON.parse(jsonMatch ? jsonMatch[0] : content);
@@ -166,6 +173,16 @@ Return only the JSON object, nothing else.`;
 
         } catch (error: any) {
             console.error('[LLM] Gemini API failed:', error.message);
+        }
+    }
+
+    // Try OpenAI fallback
+    if (process.env.OPENAI_API_KEY) {
+        try {
+            console.log('[LLM] Trying OpenAI fallback...');
+            return await extractWithOpenAI(jd_text, job_title);
+        } catch (error: any) {
+            console.warn('[LLM] OpenAI fallback failed:', error.message);
         }
     }
 

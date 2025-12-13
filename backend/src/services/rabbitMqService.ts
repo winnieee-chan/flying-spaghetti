@@ -1,13 +1,13 @@
 import amqp, { Connection, Channel } from 'amqplib';
-import { Candidate, JobPost } from '../types';
-import { readJsonFile } from '../utils/readJson';
+import { Candidate, JobPost } from '../types/index.js';
+import { readJsonFile } from '../utils/readJson.js';
 
 export class RabbitMqService {
     private static connection: amqp.Connection | null = null;
     private static channel: amqp.Channel | null = null;
     private static QUEUE_NAME = 'job_processing_queue';
 
-    static async init() {
+    static async init(): Promise<boolean> {
         try {
           const conn: any = await amqp.connect('amqp://localhost');
           this.connection = conn as amqp.Connection;
@@ -15,21 +15,25 @@ export class RabbitMqService {
 
           await this.channel.assertQueue(this.QUEUE_NAME, { durable: true });
           
-          console.log('Connected to RabbitMQ');
+          console.log('✅ Connected to RabbitMQ');
           
           this.startConsumer();
+          return true;
           
         } catch (error) {
-          console.error('RabbitMQ Connection Failed:', error);
-          process.exit(1);
+          console.warn('⚠️  RabbitMQ Connection Failed (continuing without RabbitMQ):', error instanceof Error ? error.message : error);
+          console.warn('   The server will start, but job queue features will be unavailable.');
+          return false;
         }
     }
 
-    static async publishJob(job: JobPost) {
-        if (!this.channel) await this.init();
-        
+    static async publishJob(job: JobPost): Promise<void> {
         if (!this.channel) {
-            throw new Error('Channel not available');
+            const connected = await this.init();
+            if (!connected || !this.channel) {
+                console.warn(`⚠️  Cannot publish job to queue (RabbitMQ unavailable): ${job.role} at ${job.companyName}`);
+                return;
+            }
         }
         
         const buffer = Buffer.from(JSON.stringify(job));
