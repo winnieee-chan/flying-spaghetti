@@ -1,4 +1,4 @@
-const { generateInterviewQuestions } = require("../integrations/geminiClient");
+import { generateInterviewQuestions } from "../integrations/geminiClient.js";
 
 // TODO:
 async function createInterviewAndQuestions(payload) {
@@ -12,4 +12,4 @@ async function createInterviewAndQuestions(payload) {
   return { questionsRaw: raw };
 }
 
-module.exports = { createInterviewAndQuestions };
+export { createInterviewAndQuestions };
