@@ -1,4 +1,5 @@
 import { useState, FormEvent, ChangeEvent } from "react";
+import axios from "axios";
 import {
     Box,
     Button,
@@ -12,17 +13,28 @@ const SetupNotification = () => {
     const [companies, setCompanies] = useState<string>("");
     const [roles, setRoles] = useState<string>("");
     const [keywords, setKeywords] = useState<string>("");
+    const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
+    const dummyCandidateId = "11234";
 
-    const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
+    const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
         event.preventDefault();
-        // Wrap all three keys together as an object with id
-        // so that can view them later in view noti page
-        // Wire this up to your API call when ready
-        console.log({
+        const payload = {
+            id: crypto.randomUUID(),
             companies: companies.split(",").map((c) => c.trim()).filter(Boolean),
             roles: roles.split(",").map((r) => r.trim()).filter(Boolean),
             keywords: keywords.split(",").map((k) => k.trim()).filter(Boolean),
-        });
+        };
+
+        setIsSubmitting(true);
+        try {
+            // Dummy API route for now — replace with your real endpoint.
+            await axios.post(`/candidates/${dummyCandidateId}/settings`, payload);
+            console.log("Notification saved:", payload);
+        } catch (error) {
+            console.error("Failed to save notification", error);
+        } finally {
+            setIsSubmitting(false);
+        }
     };
 
     return (
@@ -58,7 +70,7 @@ const SetupNotification = () => {
                         fullWidth
                     />
                     <Box display="flex" justifyContent="flex-end">
-                        <Button variant="contained" type="submit">
+                        <Button variant="contained" type="submit" disabled={isSubmitting}>
                             Save preferences
                         </Button>
                     </Box>
@@ -69,4 +81,3 @@ const SetupNotification = () => {
 };
 
 export default SetupNotification;
-

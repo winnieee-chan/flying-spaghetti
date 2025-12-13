@@ -1,4 +1,5 @@
-import { useMemo, useState, ChangeEvent } from "react";
+import { useMemo, useState, ChangeEvent, useEffect } from "react";
+import axios from "axios";
 import {
     Box,
     Button,
@@ -22,6 +23,14 @@ interface Notification {
 }
 
 const ViewNotification = () => {
+    const dummyCandidateId = "11234";
+    const fetchNotificationSettings = async () => {
+        const { data } = await axios.get<Notification[]>(`/candidates/${dummyCandidateId}/settings`);
+        setNotifications(Array.isArray(data) ? data : []);
+    };
+      
+    // useEffect(() => { fetchNotifications(); }, []);
+      
     const [notifications, setNotifications] = useState<Notification[]>([
         {
             id: 1,
@@ -43,6 +52,8 @@ const ViewNotification = () => {
         keywords: "",
     });
 
+    // const dummySettingId = "11234567";
+
     const editingNotification = useMemo(
         () => notifications.find((n) => n.id === editingId),
         [editingId, notifications]
@@ -62,11 +73,37 @@ const ViewNotification = () => {
         setFormValues({ companies: "", roles: "", keywords: "" });
     };
 
-    const handleDelete = (id: number) => {
-        setNotifications((prev) => prev.filter((n) => n.id !== id));
+    const handleDelete = async (deletingId: number) => {
+        /* const payload = {
+            id: deletingId,
+        };
+
+        try {
+            // Dummy API route for now — replace with your real endpoint.
+            await axios.delete(`/settings/${deletingId}`);
+            console.log("Notification deleted:", payload);
+            await fetchNotifications();
+        } catch (error) {
+            console.error("Failed to save notification", error);
+        } */
+        setNotifications((prev) => prev.filter((n) => n.id !== deletingId));
     };
 
-    const handleSave = () => {
+    const handleSave = async () => {
+        /* const payload = {
+            id: editingId,
+        };
+
+        try {
+            // Dummy API route for now — replace with your real endpoint.
+            await axios.patch(`/settings/${dummySettingId}`, payload);
+            console.log("Notification changed:", payload);
+            await fetchNotifications();
+        } catch (error) {
+            console.error("Failed to save notification", error);
+        } finally {
+            closeEdit();
+        } */
         setNotifications((prev) =>
             prev.map((n) =>
                 n.id === editingId

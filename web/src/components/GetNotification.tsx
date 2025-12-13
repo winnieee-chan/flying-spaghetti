@@ -8,6 +8,7 @@ import {
     Stack,
     Typography,
 } from "@mui/material";
+import axios from "axios";
 
 type ResponseStatus = "accepted" | "declined" | null;
 
@@ -18,6 +19,16 @@ type Notification = {
 };
 
 const GetNotification = () => {
+    const [notifications, setNotifications] = useState<Notification[]>([]);
+
+    const dummyCandidateId = "11234";
+    const fetchNotification = async () => {
+        const { data } = await axios.get<Notification[]>(`/candidates/${dummyCandidateId}/notifications`);
+        setNotifications(Array.isArray(data) ? data : []);
+    };
+
+    // useEffect(() => { fetchNotifications(); }, []);
+
     const [status, setStatus] = useState<ResponseStatus>(null);
 
     const notification: Notification = {
