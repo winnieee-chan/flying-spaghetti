@@ -1,4 +1,5 @@
 [
+<<<<<<< HEAD
     {
       "_id": "550e8400-e29b-41d4-a716-446655440001",
       "full_name": "Alex Chen",
@@ -51,3 +52,226 @@
       ]
     }
   ]
+=======
+  {
+    "_id": "550e8400-e29b-41d4-a716-446655440001",
+    "full_name": "Alex Chen",
+    "email": "alex.chen@gmail.com",
+    "bio": "Alex Chen is a dedicated Software Engineer who has spent the past two years driving technical innovation in Brisbane’s vibrant tech scene. Specializing in modern full-stack development, Alex has built a strong track record of delivering high-performance web applications using cutting-edge tools. His architectural foundation is built on Next.js, where he leverages server-side rendering to ensure speed and scalability, paired with Tailwind CSS to craft responsive, visually engaging user interfaces. Beyond the browser, Alex creates robust backend infrastructures using Supabase to manage authentication and real-time data needs efficiently. His engineering philosophy centers on connectivity and automation; he possesses deep experience in designing REST APIs and utilizing webhooks to facilitate seamless communication between diverse services. Alex has moved beyond simple request-response models to embrace event-driven systems, ensuring his applications are resilient and responsive to complex, real-time triggers. Furthermore, he has mastered critical financial integrations, implementing Stripe to handle secure payments and subscription models with precision. By combining these technologies, Alex has consistently delivered products that are not only technically sound but also drive business growth. His time in Brisbane has solidified his ability to solve complex problems through code, making him a versatile asset for any engineering team looking to modernize their stack and improve their digital infrastructure.",
+    "github_username": "alex-oss-dev",
+    "open_to_work": false,
+    "keywords": {
+      "role": "Software Engineer",
+      "skills": [
+        "Next.js",
+        "Tailwind CSS",
+        "Supabase",
+        "REST APIs",
+        "Webhooks",
+        "Event-driven systems",
+        "Stripe"
+      ],
+      "min_experience_years": 1,
+      "location": "Brisbane"
+    }
+  },
+  {
+    "_id": "550e8400-e29b-41d4-a716-446655440002",
+    "full_name": "Sarah O'Connor",
+    "email": "sarah.oconnor@outlook.com",
+    "bio": "Sarah O'Connor is a highly skilled Full Stack Developer based in Brisbane who specializes in the MERN stack. Over the past three years, she has architected dynamic web solutions for local fintech startups. Sarah possesses a deep understanding of React for building interactive frontends and utilizes Redux for complex state management. On the backend, she is proficient in Node.js and Express, designing scalable APIs that interact seamlessly with MongoDB databases. Recently, Sarah has focused on cloud integration, deploying serverless functions via AWS Lambda to optimize application performance. Her workflow is heavily integrated with CI/CD pipelines, ensuring rapid and reliable code deployment.",
+    "github_username": "soconnor-dev",
+    "open_to_work": true,
+    "keywords": {
+      "role": "Full Stack Developer",
+      "skills": [
+        "React",
+        "Node.js",
+        "MongoDB",
+        "Express",
+        "AWS Lambda",
+        "Redux",
+        "CI/CD"
+      ],
+      "min_experience_years": 3,
+      "location": "Brisbane"
+    }
+  },
+  {
+    "_id": "550e8400-e29b-41d4-a716-446655440003",
+    "full_name": "David Nguyen",
+    "email": "d.nguyen.code@gmail.com",
+    "bio": "David Nguyen is a Backend Engineer focused on data-intensive applications in the Brisbane logistics sector. With a strong background in Python, David leverages the Django framework to build secure and maintainable server-side logic. He is an expert in database optimization, specifically working with PostgreSQL to handle complex queries and large datasets. David advocates for containerization and uses Docker extensively to ensure consistent development and production environments. His recent projects involve building RESTful services that integrate with Redis for caching, significantly reducing latency in high-traffic systems. He is currently exploring machine learning integrations to enhance predictive analytics capabilities.",
+    "github_username": "nguyen-backend",
+    "open_to_work": false,
+    "keywords": {
+      "role": "Backend Engineer",
+      "skills": [
+        "Python",
+        "Django",
+        "PostgreSQL",
+        "Docker",
+        "Redis",
+        "Rest APIs",
+        "Linux"
+      ],
+      "min_experience_years": 4,
+      "location": "Sydney"
+    }
+  },
+  {
+    "_id": "550e8400-e29b-41d4-a716-446655440004",
+    "full_name": "Emily Stone",
+    "email": "estone.tech@yahoo.com",
+    "bio": "Emily Stone is a creative Frontend Developer in Brisbane with a passion for user experience and interface design. She works primarily with Vue.js and the Nuxt.js framework to deliver SEO-friendly, server-side rendered applications. Emily has a strong command of SCSS and modern CSS architectures, allowing her to build modular and reusable design systems. She is experienced in integrating Firebase for backend-as-a-service features, including authentication and real-time database updates. Emily prioritizes accessibility and performance, regularly using Google Lighthouse to audit and improve her code. Her ability to collaborate with designers and translate Figma prototypes into pixel-perfect code makes her a valuable asset to product teams.",
+    "github_username": "emily-vue",
+    "open_to_work": true,
+    "keywords": {
+      "role": "Frontend Developer",
+      "skills": [
+        "Vue.js",
+        "Nuxt.js",
+        "Firebase",
+        "SCSS",
+        "JavaScript",
+        "Figma",
+        "Google Cloud"
+      ],
+      "min_experience_years": 2,
+      "location": "Melbourne"
+    }
+  },
+  {
+    "_id": "550e8400-e29b-41d4-a716-446655440005",
+    "full_name": "Marcus Thorne",
+    "email": "marcus.thorne@enterprise.net",
+    "bio": "Marcus Thorne is a Senior Software Engineer with over five years of experience building enterprise-grade systems in Brisbane. Specializing in the Microsoft ecosystem, Marcus is an expert in C# and .NET Core, which he uses to build robust microservices architectures. He has extensive experience deploying to Microsoft Azure, utilizing Azure Functions and Service Bus for event-driven messaging. Marcus is proficient in SQL Server for relational data management and Entity Framework for ORM implementation. His work often involves modernizing legacy systems and implementing strict security protocols, including OAuth2 and OpenID Connect. Marcus acts as a mentor for junior developers, advocating for clean code principles and comprehensive unit testing.",
+    "github_username": "mthorne-dotnet",
+    "open_to_work": false,
+    "keywords": {
+      "role": "Senior Software Engineer",
+      "skills": [
+        "C#",
+        ".NET Core",
+        "Azure",
+        "Microservices",
+        "SQL Server",
+        "OAuth2",
+        "Docker"
+      ],
+      "min_experience_years": 5,
+      "location": "Singapore"
+    }
+  },
+  {
+    "_id": "550e8400-e29b-41d4-a716-446655440006",
+    "full_name": "Jessica Li",
+    "email": "jessica.li.ops@gmail.com",
+    "bio": "Jessica Li is a DevOps Engineer and Site Reliability Engineer (SRE) helping Brisbane companies scale their infrastructure. She specializes in Golang for writing high-performance tooling and backend services. Jessica is deeply experienced with Kubernetes orchestration and uses Terraform for Infrastructure as Code (IaC) to manage multi-cloud environments. She implements monitoring solutions using Prometheus and Grafana to ensure system health and rapid incident response. Jessica also has experience with gRPC for efficient inter-service communication. Her focus is on automating toil and ensuring 99.9% uptime for mission-critical applications.",
+    "github_username": "jess-ops",
+    "open_to_work": true,
+    "keywords": {
+      "role": "DevOps Engineer",
+      "skills": [
+        "Go",
+        "Kubernetes",
+        "Terraform",
+        "AWS",
+        "Prometheus",
+        "Grafana",
+        "gRPC"
+      ],
+      "min_experience_years": 4,
+      "location": "Penang"
+    }
+  },
+  {
+    "_id": "550e8400-e29b-41d4-a716-446655440007",
+    "full_name": "Samuel Wright",
+    "email": "sam.wright.java@gmail.com",
+    "bio": "Samuel Wright is a backend specialist working in Brisbane's insurance technology sector. He relies on Java and the Spring Boot framework to build complex, transaction-heavy applications. Samuel has integrated Apache Kafka to handle real-time data streaming and event processing across distributed systems. He uses Jenkins for automated build pipelines and is proficient in managing dependencies with Maven. Samuel is well-versed in both SQL and NoSQL paradigms, frequently using Cassandra for high-availability data storage. His coding style emphasizes strict typing and object-oriented design patterns to ensure long-term maintainability.",
+    "github_username": "swright-code",
+    "open_to_work": false,
+    "keywords": {
+      "role": "Backend Developer",
+      "skills": [
+        "Java",
+        "Spring Boot",
+        "Kafka",
+        "Cassandra",
+        "Jenkins",
+        "Maven",
+        "Git"
+      ],
+      "min_experience_years": 6,
+      "location": "Osaka"
+    }
+  },
+  {
+    "_id": "550e8400-e29b-41d4-a716-446655440008",
+    "full_name": "Zoe Patel",
+    "email": "zoe.patel.mobile@icloud.com",
+    "bio": "Zoe Patel is a Mobile Application Developer in Brisbane passionate about building cross-platform experiences. She utilizes React Native and TypeScript to develop apps for both iOS and Android from a single codebase. Zoe works extensively with GraphQL and Apollo Client to manage data fetching and state efficiently on mobile devices. She has experience integrating native device features such as the camera, geolocation, and push notifications using Expo. Zoe focuses on creating fluid animations and responsive layouts that adhere to Material Design and Human Interface Guidelines. She recently led a project migrating a legacy app to a modern React Native architecture.",
+    "github_username": "zoe-mobile",
+    "open_to_work": true,
+    "keywords": {
+      "role": "Mobile Developer",
+      "skills": [
+        "React Native",
+        "TypeScript",
+        "GraphQL",
+        "Apollo",
+        "Expo",
+        "Android",
+        "iOS"
+      ],
+      "min_experience_years": 3,
+      "location": "Tokyo"
+    }
+  },
+  {
+    "_id": "550e8400-e29b-41d4-a716-446655440009",
+    "full_name": "Liam Johnson",
+    "email": "liam.j.rails@gmail.com",
+    "bio": "Liam Johnson is a Product Engineer based in Brisbane who thrives in rapid-prototyping environments. He is an expert in Ruby on Rails, using it to build full-featured web applications with speed and precision. Liam leverages Hotwire and Turbo to create modern, reactive frontends without the complexity of heavy JavaScript frameworks. For background processing, he utilizes Sidekiq and Redis to manage job queues effectively. Liam is comfortable deploying to Heroku and managing PostgreSQL databases. He is a strong advocate for Test-Driven Development (TDD) using RSpec to ensure code quality and prevent regression in fast-moving projects.",
+    "github_username": "liam-rb",
+    "open_to_work": true,
+    "keywords": {
+      "role": "Product Engineer",
+      "skills": [
+        "Ruby on Rails",
+        "PostgreSQL",
+        "Hotwire",
+        "Sidekiq",
+        "Redis",
+        "Heroku",
+        "RSpec"
+      ],
+      "min_experience_years": 5,
+      "location": "Brisbane"
+    }
+  },
+  {
+    "_id": "550e8400-e29b-41d4-a716-446655440010",
+    "full_name": "Chloe Bennett",
+    "email": "chloe.bennett.web@gmail.com",
+    "bio": "Chloe Bennett is a Web Developer in Brisbane bridging the gap between traditional PHP and modern JavaScript stacks. She specializes in the Laravel framework, utilizing its elegant syntax to build secure backends and APIs. Chloe often pairs Laravel with Vue.js via Inertia.js to create monolithic single-page applications that offer the best of both worlds. She is experienced in managing MySQL databases and uses Laravel Forge for server provisioning and deployment. Chloe has also worked with Tailwind CSS to rapidly style custom components. Her recent work includes building a custom e-commerce platform with integrated payment gateways and inventory management.",
+    "github_username": "chloe-codes",
+    "open_to_work": false,
+    "keywords": {
+      "role": "Web Developer",
+      "skills": [
+        "PHP",
+        "Laravel",
+        "Vue.js",
+        "MySQL",
+        "Inertia.js",
+        "Tailwind CSS",
+        "Git"
+      ],
+      "min_experience_years": 2,
+      "location": "Sydney"
+    }
+  }
+]
+>>>>>>> fix/candidate-json
