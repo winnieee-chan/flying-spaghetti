@@ -9,17 +9,25 @@ import {
     Typography,
 } from "@mui/material";
 
-const GetNotification = () => {
-    const [status, setStatus] = useState(null);
+type ResponseStatus = "accepted" | "declined" | null;
 
-    const notification = {
+type Notification = {
+    company: string;
+    summary: string;
+    mainSkill: string;
+};
+
+const GetNotification = () => {
+    const [status, setStatus] = useState<ResponseStatus>(null);
+
+    const notification: Notification = {
         company: "Acme Corp",
         summary:
             "Building a new customer-facing dashboard to visualize real-time usage data across the platform.",
         mainSkill: "React",
     };
 
-    const handleRespond = (response) => {
+    const handleRespond = (response: Exclude<ResponseStatus, null>) => {
         setStatus(response);
         console.log(`User responded: ${response}`);
     };

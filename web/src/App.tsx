@@ -8,6 +8,7 @@ function App() {
   return (
     <Router>
       <Routes>
+        <Route path="/" element={<Dashboard />} />
         <Route path="/noti/set" element={<SetupNotification />} />
         <Route path="/noti/view" element={<ViewNotification />} />
         <Route path="/noti/get" element={<GetNotification />} />
@@ -17,3 +18,4 @@ function App() {
 }
 
 export default App
+

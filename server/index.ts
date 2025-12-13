@@ -1,4 +1,4 @@
-import express from "express";
+import express, { type Request, type Response } from "express";
 import cors from "cors";
 import dotenv from "dotenv";
 import { swaggerSpec, swaggerUi } from "./swagger.js";
@@ -28,7 +28,7 @@ app.use(express.json());
  *                   type: boolean
  *                   example: true
  */
-app.get("/health", (req, res) => res.json({ ok: true }));
+app.get("/health", (req: Request, res: Response) => res.json({ ok: true }));
 
 // Swagger UI
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
@@ -40,3 +40,4 @@ app.listen(3001, () => {
   console.log("API http://localhost:3001");
   console.log("Swagger UI available at http://localhost:3001/api-docs");
 });
+
