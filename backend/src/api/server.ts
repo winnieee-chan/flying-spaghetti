@@ -7,6 +7,7 @@ import swaggerUi from 'swagger-ui-express';
 import YAML from 'yamljs';
 import jobRoutes from './routes/jobRoutes.js';
 import candidateRoutes from './routes/candidateRoutes.js';
+import { RabbitMqService } from '../services/rabbitMqService.js';
 
 dotenv.config();
 
@@ -26,10 +27,26 @@ app.get('/', (req, res) => res.send('🚀 StartupSignal API is operational. Visi
 app.use('/api/v1/jobs', jobRoutes);
 app.use('/api/candidates', candidateRoutes);
 
-app.listen(PORT, () => {
-    console.log(`✅ API Server running on http://localhost:${PORT}`);
-    console.log(`📖 Docs available at http://localhost:${PORT}/api-docs`);
-});
+const startServer = async () => {
+    try {
+      // 1. Initialize RabbitMQ BEFORE starting the server
+      await RabbitMqService.init();
+  
+      // 2. Start Express
+      app.listen(PORT, () => {
+        console.log(`🚀 Server running on port ${PORT}`);
+      });
+      
+    } catch (error) {
+      console.error('Failed to start server:', error);
+    }
+};
+
+startServer();
+// app.listen(PORT, () => {
+//     console.log(`✅ API Server running on http://localhost:${PORT}`);
+//     console.log(`📖 Docs available at http://localhost:${PORT}/api-docs`);
+// });
 
 export default app;
 

@@ -107,14 +107,14 @@ const db = {
         const candidate = candidates.find(c => c._id === candidateId);
         if (!candidate) return null;
         
-        const scoreData = candidate.scores.find(s => s.job_id === jobId);
+        const scoreData = candidate.scores?.find(s => s.job_id === jobId);
         if (!scoreData) return null;
         
         // This structure assumes CandidateScore includes all detailed fields needed for the frontend
         return {
             candidateId: candidate._id,
             full_name: candidate.full_name,
-            headline: candidate.headline,
+            headline: candidate.headline || '',
             github_username: candidate.github_username,
             open_to_work: candidate.open_to_work,
             score: scoreData.score,
