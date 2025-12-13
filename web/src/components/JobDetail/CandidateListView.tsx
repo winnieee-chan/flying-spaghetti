@@ -1,0 +1,290 @@
+import { useState, useMemo } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import {
+  Modal,
+  Title,
+  Text,
+  Group,
+  Stack,
+  Badge,
+  Card,
+  TextInput,
+  ScrollArea,
+  Avatar,
+  Grid,
+  Progress,
+  ActionIcon,
+} from "@mantine/core";
+import { IconSearch, IconStar, IconStarFilled, IconMapPin, IconBriefcase } from "@tabler/icons-react";
+import useJobStore, { type Candidate } from "../../stores/jobStore";
+
+interface CandidateListViewProps {
+  opened: boolean;
+  onClose: () => void;
+  jobId: string;
+}
+
+const CandidateListView = ({ opened, onClose, jobId }: CandidateListViewProps) => {
+  const { 
+    filteredCandidates, 
+    candidates,
+    selectCandidate, 
+    toggleStarCandidate, 
+    starredCandidates 
+  } = useJobStore();
+  
+  const [searchQuery, setSearchQuery] = useState("");
+  
+  const starredIds = starredCandidates.get(jobId) || new Set<string>();
+  
+  // Use filtered candidates from store
+  const displayCandidates = filteredCandidates.length > 0 ? filteredCandidates : candidates;
+  
+  // Apply local search on top of store filters
+  const searchedCandidates = useMemo(() => {
+    if (!searchQuery.trim()) return displayCandidates;
+    const query = searchQuery.toLowerCase();
+    return displayCandidates.filter(c => 
+      c.name.toLowerCase().includes(query) ||
+      c.headline?.toLowerCase().includes(query) ||
+      c.skills.some(s => s.toLowerCase().includes(query)) ||
+      c.location.toLowerCase().includes(query)
+    );
+  }, [displayCandidates, searchQuery]);
+  
+  // Sort by match score
+  const sortedCandidates = useMemo(() => 
+    [...searchedCandidates].sort((a, b) => (b.matchScore || 0) - (a.matchScore || 0)),
+    [searchedCandidates]
+  );
+  
+  // Top 5 matches
+  const topMatches = sortedCandidates.slice(0, 5);
+  
+  // Location stats
+  const locationStats = useMemo(() => {
+    const stats: Record<string, number> = {};
+    displayCandidates.forEach(c => {
+      stats[c.location] = (stats[c.location] || 0) + 1;
+    });
+    return Object.entries(stats)
+      .sort((a, b) => b[1] - a[1])
+      .slice(0, 5);
+  }, [displayCandidates]);
+  
+  // Experience stats
+  const experienceStats = useMemo(() => {
+    const stats: Record<string, number> = {};
+    displayCandidates.forEach(c => {
+      stats[c.experience] = (stats[c.experience] || 0) + 1;
+    });
+    return Object.entries(stats).sort((a, b) => b[1] - a[1]);
+  }, [displayCandidates]);
+  
+  // Top skills
+  const topSkills = useMemo(() => {
+    const skills: Record<string, number> = {};
+    displayCandidates.forEach(c => {
+      c.skills.forEach(skill => {
+        skills[skill] = (skills[skill] || 0) + 1;
+      });
+    });
+    return Object.entries(skills)
+      .sort((a, b) => b[1] - a[1])
+      .slice(0, 8);
+  }, [displayCandidates]);
+
+  const handleCandidateClick = (candidate: Candidate) => {
+    selectCandidate(candidate);
+  };
+
+  return (
+    <Modal
+      opened={opened}
+      onClose={onClose}
+      size="xl"
+      title={
+        <Group gap="sm">
+          <Title order={3}>Candidate Pool</Title>
+          <Badge size="lg" variant="light" color="blue">
+            {displayCandidates.length} candidates
+          </Badge>
+        </Group>
+      }
+      styles={{
+        body: { padding: 0 },
+        header: { padding: "1rem 1.5rem", borderBottom: "1px solid var(--mantine-color-gray-2)" },
+      }}
+    >
+      <Stack gap={0}>
+        {/* Summary Stats Section */}
+        <Card p="lg" radius={0} style={{ borderBottom: "1px solid var(--mantine-color-gray-2)" }}>
+          <Grid>
+            {/* Top Matches */}
+            <Grid.Col span={{ base: 12, md: 4 }}>
+              <Stack gap="xs">
+                <Text size="xs" fw={600} c="dimmed" tt="uppercase">Top Matches</Text>
+                <Stack gap={4}>
+                  {topMatches.map((candidate, i) => (
+                    <Group key={candidate.id} gap="xs" wrap="nowrap">
+                      <Text size="xs" c="dimmed" w={16}>{i + 1}.</Text>
+                      <Text size="sm" lineClamp={1} style={{ flex: 1 }}>{candidate.name}</Text>
+                      <Badge size="xs" color="green" variant="light">
+                        {candidate.matchScore}%
+                      </Badge>
+                    </Group>
+                  ))}
+                </Stack>
+              </Stack>
+            </Grid.Col>
+            
+            {/* Primary Locations */}
+            <Grid.Col span={{ base: 12, md: 4 }}>
+              <Stack gap="xs">
+                <Text size="xs" fw={600} c="dimmed" tt="uppercase">Primary Locations</Text>
+                <Stack gap={4}>
+                  {locationStats.map(([location, count]) => (
+                    <Group key={location} gap="xs" wrap="nowrap">
+                      <IconMapPin size={12} style={{ color: "var(--mantine-color-dimmed)" }} />
+                      <Text size="sm" style={{ flex: 1 }}>{location}</Text>
+                      <Text size="xs" c="dimmed">{count}</Text>
+                    </Group>
+                  ))}
+                </Stack>
+              </Stack>
+            </Grid.Col>
+            
+            {/* Experience Breakdown */}
+            <Grid.Col span={{ base: 12, md: 4 }}>
+              <Stack gap="xs">
+                <Text size="xs" fw={600} c="dimmed" tt="uppercase">Experience Levels</Text>
+                <Stack gap={4}>
+                  {experienceStats.map(([exp, count]) => (
+                    <Group key={exp} gap="xs" wrap="nowrap">
+                      <IconBriefcase size={12} style={{ color: "var(--mantine-color-dimmed)" }} />
+                      <Text size="sm" style={{ flex: 1 }}>{exp}</Text>
+                      <Text size="xs" c="dimmed">{count}</Text>
+                    </Group>
+                  ))}
+                </Stack>
+              </Stack>
+            </Grid.Col>
+          </Grid>
+          
+          {/* Top Skills */}
+          <Stack gap="xs" mt="md">
+            <Text size="xs" fw={600} c="dimmed" tt="uppercase">Top Skills in Pool</Text>
+            <Group gap="xs">
+              {topSkills.map(([skill, count]) => (
+                <Badge key={skill} variant="light" color="violet" size="sm">
+                  {skill} ({count})
+                </Badge>
+              ))}
+            </Group>
+          </Stack>
+        </Card>
+        
+        {/* Search Bar */}
+        <Card p="md" radius={0} style={{ borderBottom: "1px solid var(--mantine-color-gray-2)" }}>
+          <TextInput
+            placeholder="Search candidates by name, skills, location..."
+            leftSection={<IconSearch size={16} />}
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+          />
+          {searchQuery && (
+            <Text size="xs" c="dimmed" mt="xs">
+              Showing {sortedCandidates.length} of {displayCandidates.length} candidates
+            </Text>
+          )}
+        </Card>
+        
+        {/* Candidate List */}
+        <ScrollArea h={400} p="md">
+          <Stack gap="sm">
+            <AnimatePresence>
+              {sortedCandidates.map((candidate, index) => {
+                const isStarred = starredIds.has(candidate.id);
+                return (
+                  <motion.div
+                    key={candidate.id}
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -10 }}
+                    transition={{ delay: index * 0.02 }}
+                  >
+                    <Card
+                      shadow="xs"
+                      padding="sm"
+                      radius="md"
+                      withBorder
+                      style={{ cursor: "pointer" }}
+                      onClick={() => handleCandidateClick(candidate)}
+                    >
+                      <Group wrap="nowrap" justify="space-between">
+                        <Group wrap="nowrap" gap="sm">
+                          <Avatar 
+                            size="md" 
+                            color="blue" 
+                            radius="xl"
+                          >
+                            {candidate.name.charAt(0)}
+                          </Avatar>
+                          <Stack gap={2}>
+                            <Group gap="xs">
+                              <Text size="sm" fw={500}>{candidate.name}</Text>
+                              {candidate.matchScore && candidate.matchScore >= 80 && (
+                                <Badge size="xs" color="green" variant="light">
+                                  {candidate.matchScore}% match
+                                </Badge>
+                              )}
+                            </Group>
+                            <Text size="xs" c="dimmed" lineClamp={1}>
+                              {candidate.headline}
+                            </Text>
+                            <Group gap={4}>
+                              <Text size="xs" c="dimmed">{candidate.location}</Text>
+                              <Text size="xs" c="dimmed">•</Text>
+                              <Text size="xs" c="dimmed">{candidate.experience}</Text>
+                            </Group>
+                          </Stack>
+                        </Group>
+                        <Group gap="xs">
+                          <Group gap={4}>
+                            {candidate.skills.slice(0, 2).map(skill => (
+                              <Badge key={skill} size="xs" variant="outline" color="gray">
+                                {skill}
+                              </Badge>
+                            ))}
+                            {candidate.skills.length > 2 && (
+                              <Badge size="xs" variant="outline" color="gray">
+                                +{candidate.skills.length - 2}
+                              </Badge>
+                            )}
+                          </Group>
+                          <ActionIcon
+                            variant="subtle"
+                            color={isStarred ? "yellow" : "gray"}
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              toggleStarCandidate(jobId, candidate.id);
+                            }}
+                          >
+                            {isStarred ? <IconStarFilled size={18} /> : <IconStar size={18} />}
+                          </ActionIcon>
+                        </Group>
+                      </Group>
+                    </Card>
+                  </motion.div>
+                );
+              })}
+            </AnimatePresence>
+          </Stack>
+        </ScrollArea>
+      </Stack>
+    </Modal>
+  );
+};
+
+export default CandidateListView;
+

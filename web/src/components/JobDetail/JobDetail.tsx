@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import {
@@ -7,21 +7,22 @@ import {
   Button,
   Text,
   Group,
-  Stack,
   Loader,
   Alert,
-  Paper,
+  Card,
 } from "@mantine/core";
-import { IconAlertCircle, IconArrowLeft, IconStar } from "@tabler/icons-react";
+import { IconAlertCircle, IconArrowLeft } from "@tabler/icons-react";
 import useJobStore from "../../stores/jobStore";
-import FilterBar from "./FilterBar";
-import CandidateBubbles from "./CandidateBubbles";
+import CompactFilterBar from "./CompactFilterBar";
+import CandidatePoolBubble from "./CandidatePoolBubble";
 import CandidateSidePanel from "./CandidateSidePanel";
 import StarredDrawer from "./StarredDrawer";
+import CandidateListView from "./CandidateListView";
 
 const JobDetail = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
+  const [listViewOpen, setListViewOpen] = useState(false);
   const {
     currentJob,
     candidates,
@@ -90,75 +91,77 @@ const JobDetail = () => {
   }
 
   const starredCount = id ? getStarredCandidates(id).length : 0;
-  const displayCandidates = filteredCandidates.length > 0 ? filteredCandidates : candidates;
+  const displayCount = filteredCandidates.length > 0 ? filteredCandidates.length : candidates.length;
 
   return (
     <Container size="xl" py="xl">
       {/* Header */}
       <motion.div
-        initial={{ opacity: 0, y: -20 }}
+        initial={{ opacity: 0, y: -10 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.3 }}
+        transition={{ duration: 0.2 }}
       >
-        <Group mb="xl" align="flex-start">
-          <Button
-            variant="subtle"
-            leftSection={<IconArrowLeft size={16} />}
-            onClick={() => navigate("/")}
-          >
-            Back
-          </Button>
-          <Stack gap="xs" style={{ flex: 1 }}>
-            <Title order={1}>{currentJob.title}</Title>
-            <Group gap="md">
+        <Group justify="space-between" mb="xl">
+          <Group gap="md">
+            <Button
+              variant="subtle"
+              size="sm"
+              leftSection={<IconArrowLeft size={16} />}
+              onClick={() => navigate("/")}
+            >
+              Back
+            </Button>
+            <div>
+              <Title order={2}>{currentJob.title}</Title>
               <Text size="sm" c="dimmed">
-                {currentJob.company}
+                {currentJob.company} • Created {formatDate(currentJob.createdAt)}
               </Text>
-              <Text size="sm" c="dimmed">
-                Created {formatDate(currentJob.createdAt)}
-              </Text>
-            </Group>
-          </Stack>
+            </div>
+          </Group>
         </Group>
       </motion.div>
 
       {/* Filter Bar */}
       <motion.div
-        initial={{ opacity: 0, y: 20 }}
+        initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.3, delay: 0.1 }}
+        transition={{ duration: 0.2, delay: 0.1 }}
       >
-        <Paper shadow="sm" p="md" radius="md" withBorder mb="xl">
-          <FilterBar />
-        </Paper>
+        <Card shadow="sm" padding="sm" radius="md" withBorder mb="xl">
+          <CompactFilterBar />
+        </Card>
       </motion.div>
 
-      {/* Bubble Canvas */}
+      {/* Main Visualization */}
       <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
+        initial={{ opacity: 0, scale: 0.95 }}
+        animate={{ opacity: 1, scale: 1 }}
         transition={{ duration: 0.3, delay: 0.2 }}
       >
-        <Paper
-          shadow="sm"
-          p="xl"
-          radius="md"
-          withBorder
-          style={{ minHeight: "500px", position: "relative" }}
-          mb="xl"
-        >
-          <CandidateBubbles candidates={displayCandidates} jobId={id || ""} />
-        </Paper>
+        <Card shadow="sm" padding="xl" radius="md" withBorder>
+          <CandidatePoolBubble 
+            totalCount={candidates.length}
+            filteredCount={displayCount}
+            jobId={id || ""}
+            onBubbleClick={() => setListViewOpen(true)}
+          />
+        </Card>
       </motion.div>
 
       {/* Starred Drawer */}
       {id && starredCount > 0 && <StarredDrawer jobId={id} />}
 
-      {/* Side Panel */}
+      {/* Candidate List Modal */}
+      <CandidateListView
+        opened={listViewOpen}
+        onClose={() => setListViewOpen(false)}
+        jobId={id || ""}
+      />
+
+      {/* Side Panel for individual candidate */}
       <CandidateSidePanel />
     </Container>
   );
 };
 
 export default JobDetail;
-

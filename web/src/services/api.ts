@@ -58,7 +58,107 @@ const mockData: MockData = {
   nextCandidateId: 1,
 };
 
-// Initialize with some sample data
+// Data pools for generating candidates
+const FIRST_NAMES = [
+  "James", "Mary", "John", "Patricia", "Robert", "Jennifer", "Michael", "Linda",
+  "William", "Elizabeth", "David", "Barbara", "Richard", "Susan", "Joseph", "Jessica",
+  "Thomas", "Sarah", "Charles", "Karen", "Christopher", "Lisa", "Daniel", "Nancy",
+  "Matthew", "Betty", "Anthony", "Margaret", "Mark", "Sandra", "Donald", "Ashley",
+  "Steven", "Kimberly", "Paul", "Emily", "Andrew", "Donna", "Joshua", "Michelle",
+  "Kevin", "Dorothy", "Brian", "Carol", "George", "Amanda", "Timothy", "Melissa",
+  "Ronald", "Deborah", "Edward", "Stephanie", "Jason", "Rebecca", "Jeffrey", "Sharon",
+  "Ryan", "Laura", "Jacob", "Cynthia", "Gary", "Kathleen", "Nicholas", "Amy",
+  "Eric", "Angela", "Jonathan", "Shirley", "Stephen", "Anna", "Larry", "Brenda",
+  "Justin", "Pamela", "Scott", "Emma", "Brandon", "Nicole", "Benjamin", "Helen",
+  "Samuel", "Samantha", "Raymond", "Katherine", "Gregory", "Christine", "Frank", "Debra",
+  "Alexander", "Rachel", "Patrick", "Carolyn", "Jack", "Janet", "Dennis", "Catherine"
+];
+
+const LAST_NAMES = [
+  "Smith", "Johnson", "Williams", "Brown", "Jones", "Garcia", "Miller", "Davis",
+  "Rodriguez", "Martinez", "Hernandez", "Lopez", "Gonzalez", "Wilson", "Anderson", "Thomas",
+  "Taylor", "Moore", "Jackson", "Martin", "Lee", "Perez", "Thompson", "White",
+  "Harris", "Sanchez", "Clark", "Ramirez", "Lewis", "Robinson", "Walker", "Young",
+  "Allen", "King", "Wright", "Scott", "Torres", "Nguyen", "Hill", "Flores",
+  "Green", "Adams", "Nelson", "Baker", "Hall", "Rivera", "Campbell", "Mitchell",
+  "Carter", "Roberts", "Chen", "Wu", "Kim", "Park", "Patel", "Shah",
+  "Kumar", "Singh", "Cohen", "Sharma", "Nakamura", "Yamamoto", "Muller", "Schmidt"
+];
+
+const LOCATIONS = [
+  "Sydney", "Melbourne", "Brisbane", "Perth", "Adelaide",
+  "Canberra", "Gold Coast", "Newcastle", "Hobart", "Remote",
+  "Darwin", "Wollongong", "Geelong", "Cairns", "Townsville"
+];
+
+const EXPERIENCE_LEVELS = ["0-2 years", "2-3 years", "3-5 years", "5-7 years", "7-10 years", "10+ years"];
+
+const SKILLS_POOL = [
+  // Frontend
+  "React", "TypeScript", "JavaScript", "Vue.js", "Angular", "Svelte", "Next.js",
+  "CSS", "Tailwind", "SCSS", "HTML5", "Redux", "GraphQL", "REST APIs",
+  // Backend
+  "Node.js", "Python", "Go", "Java", "Rust", "Ruby", "C++",
+  "PostgreSQL", "MongoDB", "Redis", "MySQL", "DynamoDB",
+  // DevOps & Cloud
+  "AWS", "GCP", "Azure", "Docker", "Kubernetes", "Terraform", "CI/CD",
+  // General
+  "Git", "Agile", "System Design", "Testing", "Performance", "Security",
+  "Machine Learning", "Data Structures", "Algorithms"
+];
+
+const COMPANIES = [
+  "Google", "Meta", "Amazon", "Apple", "Microsoft", "Netflix", "Uber", "Airbnb",
+  "Stripe", "Shopify", "Databricks", "Snowflake", "Figma", "Notion", "Slack",
+  "LinkedIn", "Twitter", "Pinterest", "Snap", "Dropbox", "Spotify", "Square",
+  "Coinbase", "Robinhood", "Plaid", "Rippling", "Brex", "Ramp", "Scale AI",
+  "OpenAI", "Anthropic", "DeepMind", "Hugging Face", "Cohere", "Midjourney"
+];
+
+const TITLES = [
+  "Software Engineer", "Senior Software Engineer", "Staff Engineer", 
+  "Frontend Engineer", "Senior Frontend Engineer", "Backend Engineer",
+  "Full Stack Engineer", "Platform Engineer", "Infrastructure Engineer",
+  "Engineering Manager", "Tech Lead", "Principal Engineer"
+];
+
+// Helper to pick random items
+const pickRandom = <T>(arr: T[]): T => arr[Math.floor(Math.random() * arr.length)];
+const pickRandomN = <T>(arr: T[], n: number): T[] => {
+  const shuffled = [...arr].sort(() => Math.random() - 0.5);
+  return shuffled.slice(0, n);
+};
+
+// Generate a candidate
+const generateCandidate = (id: number): Candidate => {
+  const firstName = pickRandom(FIRST_NAMES);
+  const lastName = pickRandom(LAST_NAMES);
+  const name = `${firstName} ${lastName}`;
+  const email = `${firstName.toLowerCase()}.${lastName.toLowerCase()}@example.com`;
+  const experience = pickRandom(EXPERIENCE_LEVELS);
+  const location = pickRandom(LOCATIONS);
+  const numSkills = 3 + Math.floor(Math.random() * 5); // 3-7 skills
+  const skills = pickRandomN(SKILLS_POOL, numSkills);
+  const company = pickRandom(COMPANIES);
+  const title = pickRandom(TITLES);
+  const matchScore = 50 + Math.floor(Math.random() * 50); // 50-100
+  
+  return {
+    id: `cd-${id}`,
+    name,
+    email,
+    experience,
+    location,
+    skills,
+    resume: `${title} with ${experience} of experience. Skilled in ${skills.slice(0, 3).join(", ")}. Currently at ${company}.`,
+    status: "pending",
+    headline: `${title} at ${company}`,
+    source: "seeded",
+    matchScore,
+  };
+};
+
+// Initialize with sample data
 const initializeMockData = (): void => {
   const jdId1 = "jd-1";
   const jdId2 = "jd-2";
@@ -70,12 +170,12 @@ const initializeMockData = (): void => {
   mockData.jobDescriptions.set(jdId1, {
     id: jdId1,
     title: "Senior Frontend Engineer",
-    description: "We are looking for an experienced frontend engineer...",
+    description: "We are looking for an experienced frontend engineer to join our team and build next-generation web applications.",
     company: "Acme Corp",
     createdAt: twoDaysAgo.toISOString(),
     filters: {
-      experience: ["3-5 years", "5+ years"],
-      location: ["Remote", "San Francisco"],
+      experience: ["3-5 years", "5-7 years", "7-10 years"],
+      location: ["Remote", "Sydney", "Melbourne"],
       skills: ["React", "TypeScript", "Node.js"],
     },
     message: "Hello! We have an exciting opportunity that matches your profile...",
@@ -84,111 +184,30 @@ const initializeMockData = (): void => {
   mockData.jobDescriptions.set(jdId2, {
     id: jdId2,
     title: "Product Manager",
-    description: "Join our team as a Product Manager...",
+    description: "Join our team as a Product Manager leading cross-functional initiatives.",
     company: "Globex",
     createdAt: fiveDaysAgo.toISOString(),
     filters: {
-      experience: ["5+ years"],
-      location: ["New York", "Remote"],
-      skills: ["Product Strategy", "Agile", "Analytics"],
+      experience: ["5-7 years", "7-10 years", "10+ years"],
+      location: ["Brisbane", "Remote"],
+      skills: ["Agile", "System Design", "Data Structures"],
     },
     message: "Hi! We'd love to discuss a Product Manager role...",
   });
 
-  // Sample candidates for jd-1
-  const candidate1: Candidate = {
-    id: "cd-1",
-    name: "John Doe",
-    email: "john.doe@example.com",
-    experience: "5+ years",
-    location: "San Francisco",
-    skills: ["React", "TypeScript", "Node.js", "GraphQL"],
-    resume: "Experienced frontend engineer with 5+ years of experience building scalable web applications. Specialized in React and TypeScript with a strong background in modern frontend architecture.",
-    status: "pending",
-    headline: "Senior Frontend Engineer at Google",
-    source: "seeded",
-    matchScore: 95,
-  };
-
-  const candidate2: Candidate = {
-    id: "cd-2",
-    name: "Jane Smith",
-    email: "jane.smith@example.com",
-    experience: "3-5 years",
-    location: "Remote",
-    skills: ["React", "JavaScript", "CSS"],
-    resume: "Frontend developer specializing in React and modern JavaScript. Passionate about creating beautiful user interfaces and improving user experience.",
-    status: "pending",
-    headline: "Frontend Developer at StartupCo",
-    source: "seeded",
-    matchScore: 75,
-  };
+  // Generate 120 candidates for jd-1
+  for (let i = 1; i <= 120; i++) {
+    const candidate = generateCandidate(i);
+    mockData.candidates.set(`${jdId1}/${candidate.id}`, candidate);
+  }
   
-  // Add more candidates for better visualization
-  const candidate4: Candidate = {
-    id: "cd-4",
-    name: "Alice Williams",
-    email: "alice.williams@example.com",
-    experience: "3-5 years",
-    location: "Remote",
-    skills: ["React", "TypeScript", "Vue.js", "Testing"],
-    resume: "Full-stack developer with focus on frontend. Experience with React, TypeScript, and Vue.js. Strong testing background.",
-    status: "pending",
-    headline: "Full-Stack Developer at DevShop",
-    source: "seeded",
-    matchScore: 82,
-  };
+  // Generate 50 candidates for jd-2
+  for (let i = 121; i <= 170; i++) {
+    const candidate = generateCandidate(i);
+    mockData.candidates.set(`${jdId2}/${candidate.id}`, candidate);
+  }
   
-  const candidate5: Candidate = {
-    id: "cd-5",
-    name: "Charlie Brown",
-    email: "charlie.brown@example.com",
-    experience: "5+ years",
-    location: "San Francisco",
-    skills: ["React", "TypeScript", "GraphQL", "AWS"],
-    resume: "Senior engineer with expertise in React ecosystem and cloud infrastructure. Led multiple successful product launches.",
-    status: "pending",
-    headline: "Senior Software Engineer at CloudTech",
-    source: "seeded",
-    matchScore: 90,
-  };
-  
-  const candidate6: Candidate = {
-    id: "cd-6",
-    name: "Diana Prince",
-    email: "diana.prince@example.com",
-    experience: "3-5 years",
-    location: "Remote",
-    skills: ["JavaScript", "React", "Node.js"],
-    resume: "Passionate developer with experience in JavaScript and React. Always learning new technologies and best practices.",
-    status: "pending",
-    headline: "Software Engineer at CodeBase",
-    source: "seeded",
-    matchScore: 70,
-  };
-
-  mockData.candidates.set(`${jdId1}/cd-1`, candidate1);
-  mockData.candidates.set(`${jdId1}/cd-2`, candidate2);
-  mockData.candidates.set(`${jdId1}/cd-4`, candidate4);
-  mockData.candidates.set(`${jdId1}/cd-5`, candidate5);
-  mockData.candidates.set(`${jdId1}/cd-6`, candidate6);
-
-  // Sample candidates for jd-2
-  const candidate3: Candidate = {
-    id: "cd-3",
-    name: "Bob Johnson",
-    email: "bob.johnson@example.com",
-    experience: "5+ years",
-    location: "New York",
-    skills: ["Product Strategy", "Agile", "Analytics", "Leadership"],
-    resume: "Product Manager with extensive experience leading cross-functional teams and delivering successful products. Strong background in analytics and agile methodologies.",
-    status: "pending",
-    headline: "Senior Product Manager at TechCorp",
-    source: "seeded",
-    matchScore: 88,
-  };
-
-  mockData.candidates.set(`${jdId2}/cd-3`, candidate3);
+  mockData.nextCandidateId = 171;
 };
 
 // Initialize mock data on module load
