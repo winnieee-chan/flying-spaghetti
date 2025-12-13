@@ -1,12 +1,12 @@
 # Integration Testing Guide
 
-This guide helps you test the full integration between frontend and backend.
+This guide helps you test the full integration between frontend and server.
 
 ## Prerequisites
 
 1. **Backend server running:**
    ```bash
-   cd backend
+   cd server
    npm run dev
    ```
 
@@ -19,7 +19,7 @@ This guide helps you test the full integration between frontend and backend.
 
 3. **Run data migration (if needed):**
    ```bash
-   cd backend
+   cd server
    npm run migrate
    ```
 
@@ -118,34 +118,34 @@ This guide helps you test the full integration between frontend and backend.
 ### Check Data Transformations
 
 1. **Job Fields:**
-   - `id` (frontend) ↔ `jobId` (backend) ✓
-   - `title` (frontend) ↔ `job_title` (backend) ✓
-   - `description` (frontend) ↔ `jd_text` (backend) ✓
-   - `company` (frontend) ↔ `company_name` (backend) ✓
-   - `filters` (frontend) ↔ `extracted_keywords` (backend) ✓
-   - `pipelineStages` (frontend) ↔ `pipelineStages` (backend) ✓
+   - `id` (frontend) ↔ `jobId` (server) ✓
+   - `title` (frontend) ↔ `job_title` (server) ✓
+   - `description` (frontend) ↔ `jd_text` (server) ✓
+   - `company` (frontend) ↔ `company_name` (server) ✓
+   - `filters` (frontend) ↔ `extracted_keywords` (server) ✓
+   - `pipelineStages` (frontend) ↔ `pipelineStages` (server) ✓
 
 2. **Candidate Fields:**
-   - `id` (frontend) ↔ `candidateId` (backend) ✓
-   - `name` (frontend) ↔ `full_name` (backend) ✓
-   - `matchScore` (frontend) ↔ `score` (backend) ✓
-   - `pipelineStage` (frontend) ↔ `pipelineStage` (backend) ✓
+   - `id` (frontend) ↔ `candidateId` (server) ✓
+   - `name` (frontend) ↔ `full_name` (server) ✓
+   - `matchScore` (frontend) ↔ `score` (server) ✓
+   - `pipelineStage` (frontend) ↔ `pipelineStage` (server) ✓
    - `experience`, `location`, `skills` extracted correctly ✓
 
 ## Common Issues & Solutions
 
 ### Issue: No jobs showing
 **Solution:** 
-- Check backend server is running
-- Verify `backend/src/data/jobs.json` has data
+- Check server server is running
+- Verify `server/src/data/jobs.json` has data
 - Check browser console for errors
 - Verify API_BASE_URL is correct
 
 ### Issue: No candidates for job
 **Solution:**
-- Run migration: `npm run migrate` in backend
+- Run migration: `npm run migrate` in server
 - Verify candidates have scores for that job
-- Check `backend/src/data/candidates.json` has scores array
+- Check `server/src/data/candidates.json` has scores array
 
 ### Issue: Pipeline stages not working
 **Solution:**
@@ -157,7 +157,7 @@ This guide helps you test the full integration between frontend and backend.
 **Solution:**
 - Check `GEMINI_API_KEY` is set (optional - will use fallback)
 - Verify AI service is imported correctly
-- Check error logs in backend console
+- Check error logs in server console
 
 ### Issue: CORS errors
 **Solution:**
@@ -183,7 +183,7 @@ This will test:
 
 1. **Start Backend:**
    ```bash
-   cd backend
+   cd server
    npm run migrate  # Run migration first
    npm run dev
    ```

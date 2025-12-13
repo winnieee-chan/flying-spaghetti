@@ -4,9 +4,9 @@ This guide will help you test all 17 frontend-compatible API endpoints we just b
 
 ## Prerequisites
 
-1. **Start the backend server:**
+1. **Start the server server:**
    ```bash
-   cd backend
+   cd server
    npm install  # if you haven't already
    npm start
    # or
@@ -320,14 +320,14 @@ curl -X POST http://localhost:3000/550e8400-e29b-41d4-a716-446655440010/cd/550e8
 
 ### Step 1: Update Frontend API Configuration
 
-Make sure your frontend is configured to use the backend API instead of mocks.
+Make sure your frontend is configured to use the server API instead of mocks.
 
 **Check `web/src/services/config.ts`:**
 ```typescript
 // Should be set to false to use real API
 export const USE_MOCKS = false;
 
-// Should point to your backend
+// Should point to your server
 export const API_BASE_URL = "http://localhost:3000";
 ```
 
@@ -340,8 +340,8 @@ npm run dev
 
 ### Step 3: Test in Browser
 
-1. **Dashboard** - Should show jobs from backend
-2. **Job Detail** - Should show candidates from backend
+1. **Dashboard** - Should show jobs from server
+2. **Job Detail** - Should show candidates from server
 3. **Candidate Actions** - Test pipeline stage updates, messaging, AI features
 
 ---
@@ -395,19 +395,19 @@ chmod +x test-api.sh
 ## Common Issues & Solutions
 
 ### Issue: "Cannot GET /jd"
-**Solution:** Make sure the server is running and routes are registered correctly. Check `backend/src/api/server.ts`
+**Solution:** Make sure the server is running and routes are registered correctly. Check `server/src/api/server.ts`
 
 ### Issue: "Job not found"
-**Solution:** Use an actual job ID from your `backend/src/data/jobs.json` file
+**Solution:** Use an actual job ID from your `server/src/data/jobs.json` file
 
 ### Issue: "Candidate not found"
-**Solution:** Make sure the candidate has a score entry for that job in `backend/src/data/candidates.json`
+**Solution:** Make sure the candidate has a score entry for that job in `server/src/data/candidates.json`
 
 ### Issue: AI endpoints return fallback responses
 **Solution:** Check if `GEMINI_API_KEY` is set in your `.env` file. AI endpoints will work without it but use simpler fallback logic.
 
 ### Issue: CORS errors when testing from frontend
-**Solution:** Add CORS middleware to `backend/src/api/server.ts`:
+**Solution:** Add CORS middleware to `server/src/api/server.ts`:
 ```typescript
 import cors from 'cors';
 app.use(cors());

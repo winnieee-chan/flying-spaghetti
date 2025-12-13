@@ -2,24 +2,24 @@
 
 ## Overview
 
-Successfully implemented all 17 frontend API endpoints in the backend, matching frontend requirements exactly without changing the frontend code.
+Successfully implemented all 17 frontend API endpoints in the server, matching frontend requirements exactly without changing the frontend code.
 
 ## Completed Tasks
 
 ### ✅ Phase 1: Data Transformation Adapters
-- **Created `backend/src/utils/frontendAdapter.ts`**
-  - `adaptJobToFrontend()` - Converts backend Job to frontend Job format
-  - `adaptJobsToFrontend()` - Converts array of backend jobs
-  - `adaptCandidateToFrontend()` - Converts backend CandidateScore to frontend Candidate
+- **Created `server/src/utils/frontendAdapter.ts`**
+  - `adaptJobToFrontend()` - Converts server Job to frontend Job format
+  - `adaptJobsToFrontend()` - Converts array of server jobs
+  - `adaptCandidateToFrontend()` - Converts server CandidateScore to frontend Candidate
   - `adaptCandidatesToFrontend()` - Converts array of candidate scores
   - Handles field mapping: `jobId` → `id`, `job_title` → `title`, `jd_text` → `description`, etc.
   - Transforms `extracted_keywords` → `filters` (experience, location, skills)
   - Extracts experience, location, skills from candidate data
 
-- **Created `backend/src/utils/backendAdapter.ts`**
-  - `adaptFiltersToExtractedKeywords()` - Converts frontend filters to backend extracted_keywords
-  - `adaptJobInputToBackend()` - Converts frontend job input to backend format
-  - `adaptJobUpdateToBackend()` - Converts frontend job update to backend format
+- **Created `server/src/utils/serverAdapter.ts`**
+  - `adaptFiltersToExtractedKeywords()` - Converts frontend filters to server extracted_keywords
+  - `adaptJobInputToBackend()` - Converts frontend job input to server format
+  - `adaptJobUpdateToBackend()` - Converts frontend job update to server format
 
 ### ✅ Phase 2: URL Path Alignment
 - **Created new route files matching frontend paths exactly:**
@@ -31,13 +31,13 @@ Successfully implemented all 17 frontend API endpoints in the backend, matching 
 
 ### ✅ Phase 3: Core Job Endpoints
 - **GET `/jd`** - List all jobs (frontend format)
-  - Transforms backend jobs to frontend format
+  - Transforms server jobs to frontend format
   - Adds `candidateCount` for each job
   - Includes `filters` and `pipelineStages`
 
 - **POST `/jd`** - Create job (frontend format)
   - Accepts frontend format: `{ title, description, company, filters, message, pipelineStages }`
-  - Transforms to backend format and creates job
+  - Transforms to server format and creates job
   - Returns frontend format
 
 - **GET `/:jdId`** - Get job by ID (frontend format)
@@ -80,7 +80,7 @@ Successfully implemented all 17 frontend API endpoints in the backend, matching 
   - Message structure matches frontend `Message` type
 
 ### ✅ Phase 6: AI Endpoints (8 endpoints)
-- **Created `backend/src/services/aiService.ts`**
+- **Created `server/src/services/aiService.ts`**
   - Extends LLM service with frontend-specific AI functions
   - Uses Google Gemini API with fallbacks
   - All functions return frontend-expected formats
@@ -124,7 +124,7 @@ Successfully implemented all 17 frontend API endpoints in the backend, matching 
   - Returns summary text
 
 ### ✅ Phase 7: Database Extensions
-- **Extended `backend/src/db/db.ts`** with new methods:
+- **Extended `server/src/db/db.ts`** with new methods:
   - `updateCandidatePipelineStage()` - Update pipeline stage
   - `batchUpdateCandidateStages()` - Batch update stages
   - `addMessageToConversation()` - Store messages
@@ -136,7 +136,7 @@ Successfully implemented all 17 frontend API endpoints in the backend, matching 
   - `getCandidateScoreForJob()` - Now includes all new fields
 
 ### ✅ Phase 8: Type Updates
-- **Updated `backend/src/types/index.ts`**:
+- **Updated `server/src/types/index.ts`**:
   - Added `pipelineStages` and `message` to `Job` interface
   - Added `scores` array to `Candidate` interface with new fields
   - Added `pipelineStage`, `conversationHistory`, AI fields to `CandidateScore`
@@ -145,7 +145,7 @@ Successfully implemented all 17 frontend API endpoints in the backend, matching 
 ## File Structure
 
 ```
-backend/
+server/
 ├── src/
 │   ├── api/
 │   │   ├── routes/
@@ -157,7 +157,7 @@ backend/
 │   │   └── server.ts (modified - registered new routes)
 │   ├── utils/
 │   │   ├── frontendAdapter.ts (NEW)
-│   │   └── backendAdapter.ts (NEW)
+│   │   └── serverAdapter.ts (NEW)
 │   ├── services/
 │   │   └── aiService.ts (NEW)
 │   ├── db/
@@ -196,7 +196,7 @@ backend/
 ## Next Steps
 
 ### Remaining Tasks
-1. **Mock Data Migration** - Convert frontend mock data to backend format (optional, can use existing data)
+1. **Mock Data Migration** - Convert frontend mock data to server format (optional, can use existing data)
 2. **Testing** - Test all endpoints with frontend to verify integration
 
 ### Testing Checklist

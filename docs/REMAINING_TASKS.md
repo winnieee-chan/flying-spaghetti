@@ -23,7 +23,7 @@ We've completed **8 out of 10 tasks**. Here's what's left:
 
 **What to do:**
 ```bash
-cd backend
+cd server
 npm run migrate
 ```
 
@@ -34,8 +34,8 @@ npm run migrate
 - Generates score breakdowns and outreach messages
 
 **Files created:**
-- ✅ `backend/src/utils/migrateMockData.ts` - Migration script
-- ✅ `backend/package.json` - Added `migrate` script
+- ✅ `server/src/utils/migrateMockData.ts` - Migration script
+- ✅ `server/package.json` - Added `migrate` script
 
 **Next step:** Run the migration script
 
@@ -46,8 +46,8 @@ npm run migrate
 **Status:** Test scripts and guides created, ready to test
 
 **What to do:**
-1. Run migration first: `cd backend && npm run migrate`
-2. Start backend: `cd backend && npm run dev`
+1. Run migration first: `cd server && npm run migrate`
+2. Start server: `cd server && npm run dev`
 3. Configure frontend: Set `USE_MOCKS = false` in `web/src/services/config.ts`
 4. Start frontend: `cd web && npm run dev`
 5. Test in browser following `INTEGRATION_TEST.md`
@@ -66,14 +66,14 @@ npm run migrate
 
 ### 1. Migrate Data (5 minutes)
 ```bash
-cd backend
+cd server
 npm run migrate
 ```
 
 ### 2. Test Integration (15-30 minutes)
 ```bash
-# Terminal 1: Start backend
-cd backend
+# Terminal 1: Start server
+cd server
 npm run dev
 
 # Terminal 2: Start frontend
@@ -95,13 +95,13 @@ npm run dev
 
 ## What's Already Working
 
-All backend API endpoints are implemented and ready:
+All server API endpoints are implemented and ready:
 - ✅ 4 Job endpoints
 - ✅ 4 Candidate endpoints  
 - ✅ 1 Message endpoint
 - ✅ 8 AI endpoints
 
-The backend is **production-ready** - we just need to:
+The server is **production-ready** - we just need to:
 1. Migrate the data (ensure compatibility)
 2. Test everything works end-to-end
 

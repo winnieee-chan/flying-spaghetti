@@ -1,9 +1,9 @@
 # flying-spaghetti-
 
-Monorepo with **separate frontend + backend** (pure JavaScript).
+Monorepo with **separate frontend + server** (pure JavaScript).
 
 - **Frontend:** Vite + React (JS)
-- **Backend:** Node + Express (JS)
+- **Server:** Node + Express (JS)
 - **Dev:** run both with one command
 
 ## Prerequisites
@@ -23,7 +23,7 @@ npm -v
 ```
 .
 ├── web/        # Frontend (Vite + React)
-└── backend/     # Backend (Express)
+└── server/     # Server (Express)
 ```
 
 ## Quick start
@@ -38,9 +38,9 @@ npm run dev
 This starts:
 
 - Frontend: [http://localhost:5173](http://localhost:5173)
-- Backend: [http://localhost:3001](http://localhost:3001)
+- Server: [http://localhost:3000](http://localhost:3000)
 
-> Note: backend logs may show `nodemon clean exit - waiting for changes` — this is normal (it’s just waiting for file changes).
+> Note: server logs may show `nodemon clean exit - waiting for changes` — this is normal (it’s just waiting for file changes).
 
 ## Frontend setup
 
@@ -54,7 +54,7 @@ Env file:
 Create `web/.env`:
 
 ```bash
-VITE_API_URL=http://localhost:3001
+VITE_API_URL=http://localhost:3000
 ```
 
 Run frontend only:
@@ -65,7 +65,7 @@ npm run dev:web
 npm --prefix web run dev
 ```
 
-## Backend setup
+## Server setup
 
 Install dependencies:
 
@@ -73,7 +73,7 @@ Install dependencies:
 npm --prefix server install
 ```
 
-Run backend only:
+Run server only:
 
 ```bash
 npm run dev:server
@@ -84,11 +84,11 @@ npm --prefix server run dev
 Health check:
 
 ```bash
-curl http://localhost:3001/health
+curl http://localhost:3000/
 ```
 
 ## Useful scripts (root)
 
-- `npm run dev` – run frontend + backend
+- `npm run dev` – run frontend + server
 - `npm run dev:web` – run frontend only
-- `npm run dev:server` – run backend only
+- `npm run dev:server` – run server only

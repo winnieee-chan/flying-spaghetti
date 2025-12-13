@@ -66,6 +66,13 @@
             "content": "Test message from API test script",
             "timestamp": "2025-12-13T13:02:15.020Z",
             "aiDrafted": false
+          },
+          {
+            "id": "msg-1765631908811-a6f37bdd",
+            "from": "founder",
+            "content": "Test message from API test script",
+            "timestamp": "2025-12-13T13:18:28.812Z",
+            "aiDrafted": false
           }
         ]
       },
