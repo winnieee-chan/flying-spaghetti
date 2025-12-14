@@ -7,6 +7,7 @@
 import express, { Request, Response } from 'express';
 import db from '../../db/db.js';
 import { createJob } from '../../services/jobService.js';
+import { sourceCandidatesForJob } from '../../services/sourcingService.js';
 import { adaptJobToFrontend, adaptJobsToFrontend } from '../../utils/frontendAdapter.js';
 import { adaptJobInputToBackend, adaptJobUpdateToBackend } from '../../utils/backendAdapter.js';
 import type { Job as BackendJob } from '../../types/index.js';
@@ -46,6 +47,17 @@ router.post('/jd', async (req: Request, res: Response) => {
             db.updateJob(newBackendJob.jobId, {
                 extracted_keywords: backendInput.extracted_keywords,
             });
+        }
+
+        // Automatically source candidates when job is created
+        console.log(`[Frontend API] Auto-sourcing candidates for new job: ${newBackendJob.jobId}`);
+        try {
+            const profiles = await sourceCandidatesForJob(newBackendJob);
+            const savedCount = await db.addOrUpdateCandidates(profiles);
+            console.log(`[Frontend API] Auto-sourced and saved ${savedCount} candidates for job ${newBackendJob.jobId}`);
+        } catch (sourcingError) {
+            console.warn(`[Frontend API] Failed to auto-source candidates (non-critical):`, sourcingError);
+            // Don't fail job creation if sourcing fails
         }
 
         // Store frontend-specific fields

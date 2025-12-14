@@ -343,4 +343,60 @@ export const jsonDb = {
 
         return results;
     },
+
+    // 13. Create/Update: Add or update candidates (for sourcing)
+    addOrUpdateCandidates: (candidates: Candidate[]): number => {
+        const existingCandidates = readCandidatesFile();
+        let added = 0;
+        let updated = 0;
+
+        candidates.forEach(newCandidate => {
+            const existingIndex = existingCandidates.findIndex(c => c._id === newCandidate._id);
+            
+            if (existingIndex === -1) {
+                // New candidate - add it
+                existingCandidates.push(newCandidate);
+                added++;
+            } else {
+                // Existing candidate - merge scores
+                const existing = existingCandidates[existingIndex];
+                
+                // Merge scores array (add new job scores, update existing ones)
+                if (!existing.scores) {
+                    existing.scores = [];
+                }
+                
+                newCandidate.scores?.forEach(newScore => {
+                    const existingScoreIndex = existing.scores!.findIndex(
+                        (s: any) => s.job_id === newScore.job_id
+                    );
+                    
+                    if (existingScoreIndex === -1) {
+                        // New score entry for this job
+                        existing.scores!.push(newScore);
+                    } else {
+                        // Update existing score entry
+                        existing.scores![existingScoreIndex] = newScore;
+                    }
+                });
+                
+                // Update other fields if they're more complete
+                if (newCandidate.bio && (!existing.bio || existing.bio.length < newCandidate.bio.length)) {
+                    existing.bio = newCandidate.bio;
+                }
+                if (newCandidate.headline && !existing.headline) {
+                    existing.headline = newCandidate.headline;
+                }
+                if (newCandidate.enrichment && !existing.enrichment) {
+                    existing.enrichment = newCandidate.enrichment;
+                }
+                
+                updated++;
+            }
+        });
+
+        writeCandidatesFile(existingCandidates);
+        console.log(`[DB] Added ${added} new candidates, updated ${updated} existing candidates`);
+        return added + updated;
+    },
 };

@@ -22181,5 +22181,161 @@
         "outreach_messages": []
       }
     ]
+  },
+  {
+    "_id": "9e489db2-ec0a-41c2-9711-7617909883fa",
+    "full_name": "Alex Chen",
+    "email": "alex.chen@example.com",
+    "bio": "Senior Senior Backend Engineer. Senior Senior Backend Engineer at Tech Startup Inc. Senior Backend Engineer at Digital Agency",
+    "github_username": "alex-dev",
+    "open_to_work": true,
+    "keywords": {
+      "role": "Senior Senior Backend Engineer",
+      "skills": [
+        "Ml",
+        "Git",
+        "Agile"
+      ],
+      "years_of_experience": 2,
+      "location": "Sydney, Australia"
+    },
+    "notificationSettings": [],
+    "mailbox": [],
+    "scores": [
+      {
+        "job_id": "9a6027aa-0b53-4f4f-8c45-7cee2f6a2a2c",
+        "score": 95,
+        "breakdown_json": [
+          {
+            "signal": "role_match",
+            "value": 30,
+            "reason": "Role matches: Senior Senior Backend Engineer"
+          },
+          {
+            "signal": "skill_match",
+            "value": 40,
+            "reason": "Matched 1 skills: Ml"
+          },
+          {
+            "signal": "location",
+            "value": 15,
+            "reason": "Location: Sydney, Australia vs Remote"
+          },
+          {
+            "signal": "experience",
+            "value": 10,
+            "reason": "2 years of experience (required: 3)"
+          }
+        ],
+        "outreach_messages": [
+          "Hi Alex, I noticed your experience with Ml and thought you might be interested in our Senior Backend Engineer role at Lyra."
+        ],
+        "conversationHistory": [],
+        "pipelineStage": "sourced"
+      }
+    ]
+  },
+  {
+    "_id": "45a917e7-1496-4598-8d3b-b689e57b737e",
+    "full_name": "Taylor Lee",
+    "email": "taylor.lee@example.com",
+    "bio": "Lead Senior Backend Engineer. Lead Senior Backend Engineer at Innovation Labs. Senior Senior Backend Engineer at Software House",
+    "github_username": "taylor-codes",
+    "open_to_work": true,
+    "keywords": {
+      "role": "Lead Senior Backend Engineer",
+      "skills": [
+        "Ml"
+      ],
+      "years_of_experience": 2,
+      "location": "Brisbane, Australia"
+    },
+    "notificationSettings": [],
+    "mailbox": [],
+    "scores": [
+      {
+        "job_id": "9a6027aa-0b53-4f4f-8c45-7cee2f6a2a2c",
+        "score": 95,
+        "breakdown_json": [
+          {
+            "signal": "role_match",
+            "value": 30,
+            "reason": "Role matches: Lead Senior Backend Engineer"
+          },
+          {
+            "signal": "skill_match",
+            "value": 40,
+            "reason": "Matched 1 skills: Ml"
+          },
+          {
+            "signal": "location",
+            "value": 15,
+            "reason": "Location: Brisbane, Australia vs Remote"
+          },
+          {
+            "signal": "experience",
+            "value": 10,
+            "reason": "2 years of experience (required: 3)"
+          }
+        ],
+        "outreach_messages": [
+          "Hi Taylor, I noticed your experience with Ml and thought you might be interested in our Senior Backend Engineer role at Lyra."
+        ],
+        "conversationHistory": [],
+        "pipelineStage": "sourced"
+      }
+    ]
+  },
+  {
+    "_id": "c4fee30a-d6f3-4c6b-a2f5-f26254be6dde",
+    "full_name": "Jordan Smith",
+    "email": "jordan.smith@example.com",
+    "bio": "Senior Backend Engineer Specialist. Senior Backend Engineer Specialist at Enterprise Corp",
+    "github_username": "j-smith",
+    "open_to_work": true,
+    "keywords": {
+      "role": "Senior Backend Engineer Specialist",
+      "skills": [
+        "Docker",
+        "CI/CD"
+      ],
+      "years_of_experience": 1,
+      "location": "Melbourne, Australia"
+    },
+    "notificationSettings": [],
+    "mailbox": [],
+    "scores": [
+      {
+        "job_id": "9a6027aa-0b53-4f4f-8c45-7cee2f6a2a2c",
+        "score": 50,
+        "breakdown_json": [
+          {
+            "signal": "role_match",
+            "value": 30,
+            "reason": "Role matches: Senior Backend Engineer Specialist"
+          },
+          {
+            "signal": "skill_match",
+            "value": 0,
+            "reason": "No direct skill matches"
+          },
+          {
+            "signal": "location",
+            "value": 15,
+            "reason": "Location: Melbourne, Australia vs Remote"
+          },
+          {
+            "signal": "experience",
+            "value": 5,
+            "reason": "1 years of experience (required: 3)"
+          }
+        ],
+        "outreach_messages": [
+          "Hi Jordan, I noticed your background and thought you might be interested in our Senior Backend Engineer role at Lyra."
+        ],
+        "conversationHistory": [],
+        "pipelineStage": "sourced"
+      }
+    ]
   }
 ]

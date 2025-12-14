@@ -77,4 +77,9 @@ export default {
     }): Promise<Candidate[]> => {
         return await db.searchCandidates(query, filters);
     },
+
+    // Add or update candidates (for sourcing)
+    addOrUpdateCandidates: async (candidates: Candidate[]): Promise<number> => {
+        return await jsonDb.addOrUpdateCandidates(candidates);
+    },
 };

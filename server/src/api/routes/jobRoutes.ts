@@ -46,6 +46,17 @@ router.post('/', async (req: Request, res: Response) => {
 
         await RabbitMqService.publishJob(newJobPost);
 
+        // Automatically source candidates when job is created
+        console.log(`[API] Auto-sourcing candidates for new job: ${newJob.jobId}`);
+        try {
+            const profiles = await sourceCandidatesForJob(newJob);
+            const savedCount = await db.addOrUpdateCandidates(profiles);
+            console.log(`[API] Auto-sourced and saved ${savedCount} candidates for job ${newJob.jobId}`);
+        } catch (sourcingError) {
+            console.warn(`[API] Failed to auto-source candidates (non-critical):`, sourcingError);
+            // Don't fail job creation if sourcing fails
+        }
+
         res.status(201).json({
             jobId: newJob.jobId,
             status: newJob.status,
@@ -261,14 +272,34 @@ router.post('/:jobId/source', async (req: JobRequest, res: Response) => {
 
     try {
         console.log(`[API] Starting candidate sourcing for job: ${req.jobId}`);
+        console.log(`[API] Job details:`, { jobId: req.job.jobId, title: req.job.job_title, company: req.job.company_name });
 
         // Call the sourcing service
         const profiles = await sourceCandidatesForJob(req.job);
+        console.log(`[API] Sourcing service returned ${profiles.length} candidates`);
+
+        // Verify jobId matches
+        if (profiles.length > 0 && profiles[0].scores?.[0]?.job_id) {
+            console.log(`[API] Sample candidate job_id: ${profiles[0].scores[0].job_id}, expected: ${req.jobId}`);
+            if (profiles[0].scores[0].job_id !== req.jobId) {
+                console.warn(`[API] WARNING: Job ID mismatch! Expected ${req.jobId}, got ${profiles[0].scores[0].job_id}`);
+            }
+        }
+
+        // Save candidates to database
+        const savedCount = await db.addOrUpdateCandidates(profiles);
+        console.log(`[API] Saved ${savedCount} candidates to database`);
+
+        // Verify they were saved correctly
+        const verifyCandidates = await db.getCandidatesByJobId(req.jobId);
+        console.log(`[API] Verification: Found ${verifyCandidates.length} candidates for job ${req.jobId} after save`);
 
         res.status(200).json({
             jobId: req.jobId,
-            message: `Successfully found ${profiles.length} LinkedIn profiles.`,
+            message: `Successfully found ${profiles.length} LinkedIn profiles and saved ${savedCount} candidates.`,
             profilesFound: profiles.length,
+            candidatesSaved: savedCount,
+            candidatesRetrievable: verifyCandidates.length,
             profiles: profiles // Return all the raw LinkedIn data
         });
     } catch (error) {

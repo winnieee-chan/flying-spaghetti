@@ -6,6 +6,7 @@
 
 import express, { Request, Response } from 'express';
 import db from '../../db/db.js';
+import { sourceCandidatesForJob } from '../../services/sourcingService.js';
 import { adaptCandidatesToFrontend, adaptCandidateToFrontend } from '../../utils/frontendAdapter.js';
 import { getTalentPoolAnalytics, getJobAnalytics } from '../../services/analyticsService.js';
 import { randomUUID } from 'crypto';
@@ -45,19 +46,54 @@ router.get('/:jobId/cd/analytics', async (req: Request, res: Response) => {
 router.get('/:jdId/cd', async (req: Request, res: Response) => {
     try {
         const { jdId } = req.params;
+        console.log(`[Frontend API] Fetching candidates for job: ${jdId}`);
         
         // Get candidates from backend
-        const candidateScores = await db.getCandidatesByJobId(jdId);
+        let candidateScores = await db.getCandidatesByJobId(jdId);
+        console.log(`[Frontend API] Found ${candidateScores.length} candidate scores for job ${jdId}`);
+        
+        // If no candidates found, try to auto-source them
+        if (candidateScores.length === 0) {
+            console.log(`[Frontend API] No candidates found, attempting to auto-source for job ${jdId}`);
+            try {
+                const job = db.getJobById(jdId);
+                if (job && job.extracted_keywords) {
+                    console.log(`[Frontend API] Job found with keywords, sourcing candidates...`);
+                    const profiles = await sourceCandidatesForJob(job);
+                    const savedCount = await db.addOrUpdateCandidates(profiles);
+                    console.log(`[Frontend API] Auto-sourced and saved ${savedCount} candidates for job ${jdId}`);
+                    
+                    // Retry fetching candidates
+                    candidateScores = await db.getCandidatesByJobId(jdId);
+                    console.log(`[Frontend API] After sourcing, found ${candidateScores.length} candidate scores`);
+                } else {
+                    console.warn(`[Frontend API] Job not found or missing keywords, cannot source candidates`);
+                }
+            } catch (sourcingError) {
+                console.error(`[Frontend API] Failed to auto-source candidates:`, sourcingError);
+                // Continue with empty list rather than failing
+            }
+        }
+        
+        if (candidateScores.length > 0) {
+            console.log(`[Frontend API] Sample candidateId from score: ${candidateScores[0].candidateId}`);
+        }
         
         // Get full candidate data
-        const backendCandidatesPromises = candidateScores.map(score => 
-            db.getCandidateById(score.candidateId)
-        );
+        const backendCandidatesPromises = candidateScores.map(async (score) => {
+            const candidate = await db.getCandidateById(score.candidateId);
+            if (!candidate) {
+                console.warn(`[Frontend API] Candidate not found for ID: ${score.candidateId}`);
+            }
+            return candidate;
+        });
         const backendCandidates = (await Promise.all(backendCandidatesPromises))
             .filter((c): c is NonNullable<typeof c> => c !== undefined);
+        console.log(`[Frontend API] Retrieved ${backendCandidates.length} full candidate records (expected ${candidateScores.length})`);
 
         // Transform to frontend format
         const frontendCandidates = adaptCandidatesToFrontend(candidateScores, backendCandidates);
+        console.log(`[Frontend API] Returning ${frontendCandidates.length} candidates in frontend format`);
 
         res.status(200).json(frontendCandidates);
     } catch (error: any) {
