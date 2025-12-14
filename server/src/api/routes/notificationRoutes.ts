@@ -156,15 +156,29 @@ router.put('/candidates/:candidateId/filters/:filterId', async (req: Request, re
     }
 });
 
-// router.get('/candidates/:candidateId/notifications', async (req: Request, res: Response) => {
-//     try {
+router.get('/candidates/:candidateId/notifications', async (req: Request, res: Response) => {
+    try {
+        const candidates = await readJsonFile<Candidate[]>(CANDIDATE_FILE_PATH);
+        const { candidateId } = req.params;
+
+        const candidateIdx = candidates!.findIndex(candidate => candidate._id === candidateId);
+
+        if (candidateIdx === -1) {
+            return res.status(404).json({
+                message: "Not found."
+            })
+        }
+
+        res.status(200).json({
+            emails: candidates![candidateIdx].mailbox
+        })
 
 
 
-//     } catch (error: any) {
-//         console.error('Error analyzing candidate:', error);
-//         res.status(500).json({ message: error.message || 'Internal server error' });
-//     }
-// });
+    } catch (error: any) {
+        console.error('Error analyzing candidate:', error);
+        res.status(500).json({ message: error.message || 'Internal server error' });
+    }
+});
 
 export default router;

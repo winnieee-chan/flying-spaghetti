@@ -1,6 +1,16 @@
 [
   {
     "_id": "550e8400-e29b-41d4-a716-446655440001",
+    "mailbox": [
+      {
+        "date": "1,765,684,744,647",
+        "context": "Hi undefined, we'd like to connect..."
+      },
+      {
+        "date": "1,765,684,750,069",
+        "context": "Hi undefined, we'd like to connect..."
+      }
+    ],
     "full_name": "Alex Chen",
     "email": "alex.chen@gmail.com",
     "bio": "Alex Chen is a dedicated Software Engineer who has spent the past two years driving technical innovation in Brisbane’s vibrant tech scene. Specializing in modern full-stack development, Alex has built a strong track record of delivering high-performance web applications using cutting-edge tools. His architectural foundation is built on Next.js, where he leverages server-side rendering to ensure speed and scalability, paired with Tailwind CSS to craft responsive, visually engaging user interfaces. Beyond the browser, Alex creates robust backend infrastructures using Supabase to manage authentication and real-time data needs efficiently. His engineering philosophy centers on connectivity and automation; he possesses deep experience in designing REST APIs and utilizing webhooks to facilitate seamless communication between diverse services. Alex has moved beyond simple request-response models to embrace event-driven systems, ensuring his applications are resilient and responsive to complex, real-time triggers. Furthermore, he has mastered critical financial integrations, implementing Stripe to handle secure payments and subscription models with precision. By combining these technologies, Alex has consistently delivered products that are not only technically sound but also drive business growth. His time in Brisbane has solidified his ability to solve complex problems through code, making him a versatile asset for any engineering team looking to modernize their stack and improve their digital infrastructure.",
@@ -448,6 +458,7 @@
   },
   {
     "_id": "550e8400-e29b-41d4-a716-446655440002",
+    "mailbox": [],
     "full_name": "Sarah O'Connor",
     "email": "sarah.oconnor@outlook.com",
     "bio": "Sarah O'Connor is a highly skilled Full Stack Developer based in Brisbane who specializes in the MERN stack. Over the past three years, she has architected dynamic web solutions for local fintech startups. Sarah possesses a deep understanding of React for building interactive frontends and utilizes Redux for complex state management. On the backend, she is proficient in Node.js and Express, designing scalable APIs that interact seamlessly with MongoDB databases. Recently, Sarah has focused on cloud integration, deploying serverless functions via AWS Lambda to optimize application performance. Her workflow is heavily integrated with CI/CD pipelines, ensuring rapid and reliable code deployment.",
@@ -857,6 +868,7 @@
   },
   {
     "_id": "550e8400-e29b-41d4-a716-446655440003",
+    "mailbox": [],
     "full_name": "David Nguyen",
     "email": "d.nguyen.code@gmail.com",
     "bio": "David Nguyen is a Backend Engineer focused on data-intensive applications in the Brisbane logistics sector. With a strong background in Python, David leverages the Django framework to build secure and maintainable server-side logic. He is an expert in database optimization, specifically working with PostgreSQL to handle complex queries and large datasets. David advocates for containerization and uses Docker extensively to ensure consistent development and production environments. His recent projects involve building RESTful services that integrate with Redis for caching, significantly reducing latency in high-traffic systems. He is currently exploring machine learning integrations to enhance predictive analytics capabilities.",
@@ -1252,6 +1264,7 @@
   },
   {
     "_id": "550e8400-e29b-41d4-a716-446655440004",
+    "mailbox": [],
     "full_name": "Emily Stone",
     "email": "estone.tech@yahoo.com",
     "bio": "Emily Stone is a creative Frontend Developer in Brisbane with a passion for user experience and interface design. She works primarily with Vue.js and the Nuxt.js framework to deliver SEO-friendly, server-side rendered applications. Emily has a strong command of SCSS and modern CSS architectures, allowing her to build modular and reusable design systems. She is experienced in integrating Firebase for backend-as-a-service features, including authentication and real-time database updates. Emily prioritizes accessibility and performance, regularly using Google Lighthouse to audit and improve her code. Her ability to collaborate with designers and translate Figma prototypes into pixel-perfect code makes her a valuable asset to product teams.",
@@ -1637,6 +1650,7 @@
   },
   {
     "_id": "550e8400-e29b-41d4-a716-446655440005",
+    "mailbox": [],
     "full_name": "Marcus Thorne",
     "email": "marcus.thorne@enterprise.net",
     "bio": "Marcus Thorne is a Senior Software Engineer with over five years of experience building enterprise-grade systems in Brisbane. Specializing in the Microsoft ecosystem, Marcus is an expert in C# and .NET Core, which he uses to build robust microservices architectures. He has extensive experience deploying to Microsoft Azure, utilizing Azure Functions and Service Bus for event-driven messaging. Marcus is proficient in SQL Server for relational data management and Entity Framework for ORM implementation. His work often involves modernizing legacy systems and implementing strict security protocols, including OAuth2 and OpenID Connect. Marcus acts as a mentor for junior developers, advocating for clean code principles and comprehensive unit testing.",
@@ -2022,6 +2036,7 @@
   },
   {
     "_id": "550e8400-e29b-41d4-a716-446655440006",
+    "mailbox": [],
     "full_name": "Jessica Li",
     "email": "jessica.li.ops@gmail.com",
     "bio": "Jessica Li is a DevOps Engineer and Site Reliability Engineer (SRE) helping Brisbane companies scale their infrastructure. She specializes in Golang for writing high-performance tooling and backend services. Jessica is deeply experienced with Kubernetes orchestration and uses Terraform for Infrastructure as Code (IaC) to manage multi-cloud environments. She implements monitoring solutions using Prometheus and Grafana to ensure system health and rapid incident response. Jessica also has experience with gRPC for efficient inter-service communication. Her focus is on automating toil and ensuring 99.9% uptime for mission-critical applications.",
@@ -2407,6 +2422,7 @@
   },
   {
     "_id": "550e8400-e29b-41d4-a716-446655440007",
+    "mailbox": [],
     "full_name": "Samuel Wright",
     "email": "sam.wright.java@gmail.com",
     "bio": "Samuel Wright is a backend specialist working in Brisbane's insurance technology sector. He relies on Java and the Spring Boot framework to build complex, transaction-heavy applications. Samuel has integrated Apache Kafka to handle real-time data streaming and event processing across distributed systems. He uses Jenkins for automated build pipelines and is proficient in managing dependencies with Maven. Samuel is well-versed in both SQL and NoSQL paradigms, frequently using Cassandra for high-availability data storage. His coding style emphasizes strict typing and object-oriented design patterns to ensure long-term maintainability.",
@@ -2792,6 +2808,7 @@
   },
   {
     "_id": "550e8400-e29b-41d4-a716-446655440008",
+    "mailbox": [],
     "full_name": "Zoe Patel",
     "email": "zoe.patel.mobile@icloud.com",
     "bio": "Zoe Patel is a Mobile Application Developer in Brisbane passionate about building cross-platform experiences. She utilizes React Native and TypeScript to develop apps for both iOS and Android from a single codebase. Zoe works extensively with GraphQL and Apollo Client to manage data fetching and state efficiently on mobile devices. She has experience integrating native device features such as the camera, geolocation, and push notifications using Expo. Zoe focuses on creating fluid animations and responsive layouts that adhere to Material Design and Human Interface Guidelines. She recently led a project migrating a legacy app to a modern React Native architecture.",
@@ -3177,6 +3194,7 @@
   },
   {
     "_id": "550e8400-e29b-41d4-a716-446655440009",
+    "mailbox": [],
     "full_name": "Liam Johnson",
     "email": "liam.j.rails@gmail.com",
     "bio": "Liam Johnson is a Product Engineer based in Brisbane who thrives in rapid-prototyping environments. He is an expert in Ruby on Rails, using it to build full-featured web applications with speed and precision. Liam leverages Hotwire and Turbo to create modern, reactive frontends without the complexity of heavy JavaScript frameworks. For background processing, he utilizes Sidekiq and Redis to manage job queues effectively. Liam is comfortable deploying to Heroku and managing PostgreSQL databases. He is a strong advocate for Test-Driven Development (TDD) using RSpec to ensure code quality and prevent regression in fast-moving projects.",
@@ -3562,6 +3580,7 @@
   },
   {
     "_id": "550e8400-e29b-41d4-a716-446655440010",
+    "mailbox": [],
     "full_name": "Chloe Bennett",
     "email": "chloe.bennett.web@gmail.com",
     "bio": "Chloe Bennett is a Web Developer in Brisbane bridging the gap between traditional PHP and modern JavaScript stacks. She specializes in the Laravel framework, utilizing its elegant syntax to build secure backends and APIs. Chloe often pairs Laravel with Vue.js via Inertia.js to create monolithic single-page applications that offer the best of both worlds. She is experienced in managing MySQL databases and uses Laravel Forge for server provisioning and deployment. Chloe has also worked with Tailwind CSS to rapidly style custom components. Her recent work includes building a custom e-commerce platform with integrated payment gateways and inventory management.",
@@ -3947,6 +3966,7 @@
   },
   {
     "_id": "dbf28e4b-b772-4f51-aaf2-a1adbdd16dde",
+    "mailbox": [],
     "full_name": "Phoenix Moore",
     "email": "phoenix.moore@outlook.com",
     "bio": "Phoenix is an experienced Backend Engineer with 9 years of professional experience, currently based in Darwin. Specializing in Docker, Kubernetes, AWS, Phoenix has a proven track record of building scalable systems and delivering high-quality software solutions. With expertise in modern development practices and a passion for clean code, Phoenix brings both technical depth and collaborative spirit to engineering teams.",
@@ -4308,6 +4328,7 @@
   },
   {
     "_id": "8218b50a-b311-49b8-bd92-42f85b823fb1",
+    "mailbox": [],
     "full_name": "Sage Wilson",
     "email": "sage.wilson@protonmail.com",
     "bio": "Sage is an experienced Full Stack Engineer with 4 years of professional experience, currently based in Darwin. Specializing in Node.js, Express, MongoDB, Sage has a proven track record of building scalable systems and delivering high-quality software solutions. With expertise in modern development practices and a passion for clean code, Sage brings both technical depth and collaborative spirit to engineering teams.",
@@ -4669,6 +4690,7 @@
   },
   {
     "_id": "394b3836-b8bd-4577-98c8-03d7f8e37d0a",
+    "mailbox": [],
     "full_name": "Skylar Lee",
     "email": "skylar.lee@gmail.com",
     "bio": "Skylar is an experienced DevOps Engineer with 5 years of professional experience, currently based in Brisbane. Specializing in Python, TensorFlow, PyTorch, Skylar has a proven track record of building scalable systems and delivering high-quality software solutions. With expertise in modern development practices and a passion for clean code, Skylar brings both technical depth and collaborative spirit to engineering teams.",
@@ -5030,6 +5052,7 @@
   },
   {
     "_id": "f5ce0444-7985-41a7-8ba2-3c8108d32a97",
+    "mailbox": [],
     "full_name": "Cameron Garcia",
     "email": "cameron.garcia@gmail.com",
     "bio": "Cameron is an experienced ML Engineer with 2 years of professional experience, currently based in Canberra. Specializing in JavaScript, TypeScript, React, Cameron has a proven track record of building scalable systems and delivering high-quality software solutions. With expertise in modern development practices and a passion for clean code, Cameron brings both technical depth and collaborative spirit to engineering teams.",
@@ -5391,6 +5414,7 @@
   },
   {
     "_id": "f75d08bf-62c0-4304-b1dc-2b87e59232a0",
+    "mailbox": [],
     "full_name": "Reese Johnson",
     "email": "reese.johnson@outlook.com",
     "bio": "Reese is an experienced Backend Engineer with 1 years of professional experience, currently based in Sydney. Specializing in Python, Postgres, Airflow, Reese has a proven track record of building scalable systems and delivering high-quality software solutions. With expertise in modern development practices and a passion for clean code, Reese brings both technical depth and collaborative spirit to engineering teams.",
@@ -5753,6 +5777,7 @@
   },
   {
     "_id": "75effd68-7649-41e4-921f-87b5a173a8f6",
+    "mailbox": [],
     "full_name": "Quinn Wilson",
     "email": "quinn.wilson@outlook.com",
     "bio": "Quinn is an experienced Software Engineer with 3 years of professional experience, currently based in Brisbane. Specializing in React, TypeScript, Next.js, Quinn has a proven track record of building scalable systems and delivering high-quality software solutions. With expertise in modern development practices and a passion for clean code, Quinn brings both technical depth and collaborative spirit to engineering teams.",
@@ -6114,6 +6139,7 @@
   },
   {
     "_id": "ed11cae6-1672-4281-9ff8-aa6749385ca0",
+    "mailbox": [],
     "full_name": "Taylor Walker",
     "email": "taylor.walker@protonmail.com",
     "bio": "Taylor is an experienced Full Stack Engineer with 5 years of professional experience, currently based in Perth. Specializing in Java, Spring Boot, MySQL, Taylor has a proven track record of building scalable systems and delivering high-quality software solutions. With expertise in modern development practices and a passion for clean code, Taylor brings both technical depth and collaborative spirit to engineering teams.",
@@ -6476,6 +6502,7 @@
   },
   {
     "_id": "2753df76-459d-421b-b461-fc29f465d557",
+    "mailbox": [],
     "full_name": "Riley Rodriguez",
     "email": "riley.rodriguez@gmail.com",
     "bio": "Riley is an experienced Full Stack Engineer with 8 years of professional experience, currently based in Canberra. Specializing in JavaScript, TypeScript, React, Riley has a proven track record of building scalable systems and delivering high-quality software solutions. With expertise in modern development practices and a passion for clean code, Riley brings both technical depth and collaborative spirit to engineering teams.",
@@ -6837,6 +6864,7 @@
   },
   {
     "_id": "73b1c39b-484c-4566-aee4-d5e757f8544f",
+    "mailbox": [],
     "full_name": "Parker Moore",
     "email": "parker.moore@protonmail.com",
     "bio": "Parker is an experienced Frontend Engineer with 10 years of professional experience, currently based in Sydney. Specializing in Go, Kubernetes, Redis, Parker has a proven track record of building scalable systems and delivering high-quality software solutions. With expertise in modern development practices and a passion for clean code, Parker brings both technical depth and collaborative spirit to engineering teams.",
@@ -7209,6 +7237,7 @@
   },
   {
     "_id": "0ef2c307-8de7-440c-b888-c30b26137298",
+    "mailbox": [],
     "full_name": "Riley Lee",
     "email": "riley.lee@gmail.com",
     "bio": "Riley is an experienced DevOps Engineer with 5 years of professional experience, currently based in Sydney. Specializing in Python, FastAPI, Postgres, Riley has a proven track record of building scalable systems and delivering high-quality software solutions. With expertise in modern development practices and a passion for clean code, Riley brings both technical depth and collaborative spirit to engineering teams.",
@@ -7569,6 +7598,7 @@
   },
   {
     "_id": "dfc30b11-f2d7-41ad-afef-9dafbb9ca492",
+    "mailbox": [],
     "full_name": "Jordan Jackson",
     "email": "jordan.jackson@gmail.com",
     "bio": "Jordan is an experienced Software Engineer with 9 years of professional experience, currently based in Perth. Specializing in JavaScript, TypeScript, React, Jordan has a proven track record of building scalable systems and delivering high-quality software solutions. With expertise in modern development practices and a passion for clean code, Jordan brings both technical depth and collaborative spirit to engineering teams.",
@@ -7929,6 +7959,7 @@
   },
   {
     "_id": "90b94ab4-5135-4b5d-991b-2aa499ecc1f7",
+    "mailbox": [],
     "full_name": "Morgan Williams",
     "email": "morgan.williams@outlook.com",
     "bio": "Morgan is an experienced ML Engineer with 5 years of professional experience, currently based in Sydney. Specializing in Python, Postgres, Airflow, Morgan has a proven track record of building scalable systems and delivering high-quality software solutions. With expertise in modern development practices and a passion for clean code, Morgan brings both technical depth and collaborative spirit to engineering teams.",
@@ -8289,6 +8320,7 @@
   },
   {
     "_id": "b262d655-ada3-4811-a9eb-0c37b88a0902",
+    "mailbox": [],
     "full_name": "River Johnson",
     "email": "river.johnson@yahoo.com",
     "bio": "River is an experienced Frontend Engineer with 6 years of professional experience, currently based in Melbourne. Specializing in JavaScript, TypeScript, React, River has a proven track record of building scalable systems and delivering high-quality software solutions. With expertise in modern development practices and a passion for clean code, River brings both technical depth and collaborative spirit to engineering teams.",
@@ -8650,6 +8682,7 @@
   },
   {
     "_id": "f84f106b-f91d-43cc-932d-3f6e908500c4",
+    "mailbox": [],
     "full_name": "Casey Thompson",
     "email": "casey.thompson@protonmail.com",
     "bio": "Casey is an experienced Full Stack Engineer with 7 years of professional experience, currently based in Canberra. Specializing in Go, Kubernetes, Redis, Casey has a proven track record of building scalable systems and delivering high-quality software solutions. With expertise in modern development practices and a passion for clean code, Casey brings both technical depth and collaborative spirit to engineering teams.",
@@ -9011,6 +9044,7 @@
   },
   {
     "_id": "9769a390-8abc-4e9b-bb3f-2d4c3fa296d6",
+    "mailbox": [],
     "full_name": "Taylor Wilson",
     "email": "taylor.wilson@outlook.com",
     "bio": "Taylor is an experienced Backend Engineer with 2 years of professional experience, currently based in Brisbane. Specializing in React, TypeScript, Next.js, Taylor has a proven track record of building scalable systems and delivering high-quality software solutions. With expertise in modern development practices and a passion for clean code, Taylor brings both technical depth and collaborative spirit to engineering teams.",
@@ -9371,6 +9405,7 @@
   },
   {
     "_id": "5baf7053-3989-43e2-b2c1-7c551cfed2fd",
+    "mailbox": [],
     "full_name": "Dakota Walker",
     "email": "dakota.walker@gmail.com",
     "bio": "Dakota is an experienced Data Engineer with 8 years of professional experience, currently based in Adelaide. Specializing in Python, TensorFlow, PyTorch, Dakota has a proven track record of building scalable systems and delivering high-quality software solutions. With expertise in modern development practices and a passion for clean code, Dakota brings both technical depth and collaborative spirit to engineering teams.",
@@ -9732,6 +9767,7 @@
   },
   {
     "_id": "2060c3c9-176d-4a49-82c9-2de1b310da3a",
+    "mailbox": [],
     "full_name": "Alex Wilson",
     "email": "alex.wilson@protonmail.com",
     "bio": "Alex is an experienced DevOps Engineer with 9 years of professional experience, currently based in Perth. Specializing in Docker, Kubernetes, AWS, Alex has a proven track record of building scalable systems and delivering high-quality software solutions. With expertise in modern development practices and a passion for clean code, Alex brings both technical depth and collaborative spirit to engineering teams.",
@@ -10093,6 +10129,7 @@
   },
   {
     "_id": "8f54cb49-67fb-45d3-86ba-5033ee0dcd80",
+    "mailbox": [],
     "full_name": "Riley Garcia",
     "email": "riley.garcia@outlook.com",
     "bio": "Riley is an experienced Backend Engineer with 10 years of professional experience, currently based in Darwin. Specializing in Java, Spring Boot, MySQL, Riley has a proven track record of building scalable systems and delivering high-quality software solutions. With expertise in modern development practices and a passion for clean code, Riley brings both technical depth and collaborative spirit to engineering teams.",
@@ -10454,6 +10491,7 @@
   },
   {
     "_id": "6fc51754-ec55-4f4d-a395-68fe7aa6c8d6",
+    "mailbox": [],
     "full_name": "Sam Hernandez",
     "email": "sam.hernandez@gmail.com",
     "bio": "Sam is an experienced Data Engineer with 4 years of professional experience, currently based in Perth. Specializing in React, TypeScript, Next.js, Sam has a proven track record of building scalable systems and delivering high-quality software solutions. With expertise in modern development practices and a passion for clean code, Sam brings both technical depth and collaborative spirit to engineering teams.",
@@ -10814,6 +10852,7 @@
   },
   {
     "_id": "abbcc382-b996-4d45-808a-9210360d1b29",
+    "mailbox": [],
     "full_name": "Morgan Rodriguez",
     "email": "morgan.rodriguez@outlook.com",
     "bio": "Morgan is an experienced Full Stack Engineer with 6 years of professional experience, currently based in Sydney. Specializing in JavaScript, TypeScript, React, Morgan has a proven track record of building scalable systems and delivering high-quality software solutions. With expertise in modern development practices and a passion for clean code, Morgan brings both technical depth and collaborative spirit to engineering teams.",
@@ -11176,6 +11215,7 @@
   },
   {
     "_id": "bb535aba-c681-4fc9-b31d-1d29ef59d6c3",
+    "mailbox": [],
     "full_name": "Jamie Miller",
     "email": "jamie.miller@outlook.com",
     "bio": "Jamie is an experienced ML Engineer with 4 years of professional experience, currently based in Sydney. Specializing in JavaScript, TypeScript, React, Jamie has a proven track record of building scalable systems and delivering high-quality software solutions. With expertise in modern development practices and a passion for clean code, Jamie brings both technical depth and collaborative spirit to engineering teams.",
@@ -11538,6 +11578,7 @@
   },
   {
     "_id": "24710881-ba0a-4e79-8e2c-2bee677d882f",
+    "mailbox": [],
     "full_name": "Casey White",
     "email": "casey.white@yahoo.com",
     "bio": "Casey is an experienced Data Engineer with 4 years of professional experience, currently based in Adelaide. Specializing in Python, FastAPI, Postgres, Casey has a proven track record of building scalable systems and delivering high-quality software solutions. With expertise in modern development practices and a passion for clean code, Casey brings both technical depth and collaborative spirit to engineering teams.",
@@ -11900,6 +11941,7 @@
   },
   {
     "_id": "d1ef5632-a6c5-41ab-a135-fede1c20627c",
+    "mailbox": [],
     "full_name": "Jamie Hernandez",
     "email": "jamie.hernandez@protonmail.com",
     "bio": "Jamie is an experienced DevOps Engineer with 2 years of professional experience, currently based in Perth. Specializing in Python, Postgres, Airflow, Jamie has a proven track record of building scalable systems and delivering high-quality software solutions. With expertise in modern development practices and a passion for clean code, Jamie brings both technical depth and collaborative spirit to engineering teams.",
@@ -12262,6 +12304,7 @@
   },
   {
     "_id": "506879d3-1799-4a8b-abe2-9c1c93b693e4",
+    "mailbox": [],
     "full_name": "Jamie White",
     "email": "jamie.white@protonmail.com",
     "bio": "Jamie is an experienced ML Engineer with 10 years of professional experience, currently based in Perth. Specializing in Node.js, Express, MongoDB, Jamie has a proven track record of building scalable systems and delivering high-quality software solutions. With expertise in modern development practices and a passion for clean code, Jamie brings both technical depth and collaborative spirit to engineering teams.",
@@ -12622,6 +12665,7 @@
   },
   {
     "_id": "de4f2719-29c1-484a-b849-920591cee696",
+    "mailbox": [],
     "full_name": "Casey Jones",
     "email": "casey.jones@protonmail.com",
     "bio": "Casey is an experienced Frontend Engineer with 6 years of professional experience, currently based in Canberra. Specializing in JavaScript, TypeScript, React, Casey has a proven track record of building scalable systems and delivering high-quality software solutions. With expertise in modern development practices and a passion for clean code, Casey brings both technical depth and collaborative spirit to engineering teams.",
@@ -12982,6 +13026,7 @@
   },
   {
     "_id": "9af14c7a-73f4-440a-a07c-deab0310ffcc",
+    "mailbox": [],
     "full_name": "Alex Miller",
     "email": "alex.miller@protonmail.com",
     "bio": "Alex is an experienced DevOps Engineer with 5 years of professional experience, currently based in Perth. Specializing in Java, Spring Boot, MySQL, Alex has a proven track record of building scalable systems and delivering high-quality software solutions. With expertise in modern development practices and a passion for clean code, Alex brings both technical depth and collaborative spirit to engineering teams.",
@@ -13343,6 +13388,7 @@
   },
   {
     "_id": "99596115-9424-43a4-a5fc-be8a27b1e2c7",
+    "mailbox": [],
     "full_name": "Avery Thompson",
     "email": "avery.thompson@gmail.com",
     "bio": "Avery is an experienced Data Engineer with 8 years of professional experience, currently based in Canberra. Specializing in Python, Postgres, Airflow, Avery has a proven track record of building scalable systems and delivering high-quality software solutions. With expertise in modern development practices and a passion for clean code, Avery brings both technical depth and collaborative spirit to engineering teams.",
@@ -13704,6 +13750,7 @@
   },
   {
     "_id": "0a893e4a-c0eb-4bfa-b371-d297a993af9e",
+    "mailbox": [],
     "full_name": "Dakota Brown",
     "email": "dakota.brown@gmail.com",
     "bio": "Dakota is an experienced Full Stack Engineer with 4 years of professional experience, currently based in Darwin. Specializing in Java, Spring Boot, MySQL, Dakota has a proven track record of building scalable systems and delivering high-quality software solutions. With expertise in modern development practices and a passion for clean code, Dakota brings both technical depth and collaborative spirit to engineering teams.",
@@ -14064,6 +14111,7 @@
   },
   {
     "_id": "bc85ca20-14bb-46d8-ad8a-3aa22aa600d0",
+    "mailbox": [],
     "full_name": "Alex Thomas",
     "email": "alex.thomas@gmail.com",
     "bio": "Alex is an experienced Frontend Engineer with 9 years of professional experience, currently based in Darwin. Specializing in React, TypeScript, Next.js, Alex has a proven track record of building scalable systems and delivering high-quality software solutions. With expertise in modern development practices and a passion for clean code, Alex brings both technical depth and collaborative spirit to engineering teams.",
@@ -14425,6 +14473,7 @@
   },
   {
     "_id": "146e247c-32eb-4aee-84f4-053fb1ee75b1",
+    "mailbox": [],
     "full_name": "Quinn Young",
     "email": "quinn.young@gmail.com",
     "bio": "Quinn is an experienced Frontend Engineer with 6 years of professional experience, currently based in Melbourne. Specializing in Node.js, Express, MongoDB, Quinn has a proven track record of building scalable systems and delivering high-quality software solutions. With expertise in modern development practices and a passion for clean code, Quinn brings both technical depth and collaborative spirit to engineering teams.",

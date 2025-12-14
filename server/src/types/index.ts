@@ -74,6 +74,13 @@ export interface Candidate {
     aiSummary?: string;
     aiRecommendation?: string;
   }>;
+  mailbox: Email[];
+}
+
+interface Email {
+  date: Date;
+  sender: string;
+  context: string;
 }
 
 export interface CandidateScore {
