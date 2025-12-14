@@ -78,7 +78,7 @@ export interface Candidate {
 }
 
 interface Email {
-  date: Date;
+  date: Date | number; // Accept Date or timestamp number for frontend compatibility
   sender: string;
   context: string;
 }

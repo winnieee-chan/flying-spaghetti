@@ -182,7 +182,7 @@ router.post('/:jobId/candidates/sendall', async (req: JobRequest, res: Response)
         }
 
         const newEmail = {
-            date: Date.now().toLocaleString(),
+            date: Date.now(), // Store as timestamp number for frontend compatibility
             sender: sender as string,
             context: result.message
         }
@@ -202,7 +202,7 @@ router.post('/:jobId/candidates/sendall', async (req: JobRequest, res: Response)
 // POST /jobs/:jobId/candidates/:candidateId/send - Send message to specific candidate
 router.post('/:jobId/candidates/:candidateId/send', async (req: JobRequest, res: Response) => {
     const { candidateId } = req.params;
-    const { sender } = req.body;
+    const { sender, message: customMessage } = req.body;
 
     if (!req.jobId) {
         return res.status(404).json({ message: "Job not found." });
@@ -214,7 +214,8 @@ router.post('/:jobId/candidates/:candidateId/send', async (req: JobRequest, res:
         return res.status(404).json({ message: "Candidate not found for this job." });
     }
 
-    const message = candidateData.outreach_messages?.[0] || `Hi ${candidateData.full_name}, we'd like to connect...`;
+    // Use custom message if provided, otherwise fall back to outreach message
+    const message = customMessage || candidateData.outreach_messages?.[0] || `Hi ${candidateData.full_name}, we'd like to connect...`;
 
     const candidates = await readJsonFile<Candidate[]>(CANDIDATE_FILE_PATH);
 
@@ -234,7 +235,7 @@ router.post('/:jobId/candidates/:candidateId/send', async (req: JobRequest, res:
     };
 
     const email = {
-        date: Date.now().toLocaleString(),
+        date: Date.now(), // Store as timestamp number for frontend compatibility
         sender: sender as string,
         context: message as string
     }

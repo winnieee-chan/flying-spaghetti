@@ -9,6 +9,11 @@
       {
         "date": "1,765,684,750,069",
         "context": "Hi undefined, we'd like to connect..."
+      },
+      {
+        "date": 1765754109154,
+        "sender": "Lyra",
+        "context": "New job opportunity: Frontend engineer at Lyra. jd..."
       }
     ],
     "full_name": "Alex Chen",
@@ -42,6 +47,16 @@
         "keywords": [
           "TypeScript"
         ]
+      },
+      {
+        "id": "bd7de79d-3a58-42dc-ba66-96e2fdbedb06",
+        "companyNames": [
+          "lyra"
+        ],
+        "jobRoles": [
+          "frontend engineer"
+        ],
+        "keywords": []
       }
     ],
     "scores": [
@@ -1725,7 +1740,13 @@
   },
   {
     "_id": "550e8400-e29b-41d4-a716-446655440005",
-    "mailbox": [],
+    "mailbox": [
+      {
+        "date": "1,765,753,798,500",
+        "sender": "CoolStartup Co.",
+        "context": "Hi undefined, we'd like to connect..."
+      }
+    ],
     "full_name": "Marcus Thorne",
     "email": "marcus.thorne@enterprise.net",
     "bio": "Marcus Thorne is a Senior Software Engineer with over five years of experience building enterprise-grade systems in Brisbane. Specializing in the Microsoft ecosystem, Marcus is an expert in C# and .NET Core, which he uses to build robust microservices architectures. He has extensive experience deploying to Microsoft Azure, utilizing Azure Functions and Service Bus for event-driven messaging. Marcus is proficient in SQL Server for relational data management and Entity Framework for ORM implementation. His work often involves modernizing legacy systems and implementing strict security protocols, including OAuth2 and OpenID Connect. Marcus acts as a mentor for junior developers, advocating for clean code principles and comprehensive unit testing.",
@@ -2081,7 +2102,17 @@
         ],
         "outreach_messages": [
           "Hi Marcus, I noticed your experience with C# and thought you might be interested in our Senior Backend Engineer role at CoolStartup Co.."
-        ]
+        ],
+        "conversationHistory": [
+          {
+            "id": "msg-1765753798251-12863812",
+            "from": "founder",
+            "content": "Hi Marcus,\n\nI noticed your background and thought you might be interested in our Senior Backend Engineer role at CoolStartup Co..\n\nWould you be open to a brief conversation?\n\nBest regards",
+            "timestamp": "2025-12-14T23:09:58.252Z",
+            "aiDrafted": false
+          }
+        ],
+        "pipelineStage": "engaged"
       },
       {
         "job_id": "5b4f8d8d-aa78-4e87-a489-77eb7dee2f43",

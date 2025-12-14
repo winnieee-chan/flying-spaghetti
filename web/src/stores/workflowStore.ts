@@ -26,7 +26,8 @@ interface WorkflowStore extends AsyncState {
     jobId: string,
     candidateId: string,
     message: string,
-    onUpdateCandidate: (candidateId: string, updates: Partial<Candidate>) => void
+    onUpdateCandidate: (candidateId: string, updates: Partial<Candidate>) => void,
+    sender?: string
   ) => Promise<void>;
 
   // Hiring decisions
@@ -112,10 +113,38 @@ const useWorkflowStore = create<WorkflowStore>((set, get) => ({
     jobId: string,
     candidateId: string,
     message: string,
-    onUpdateCandidate: (candidateId: string, updates: Partial<Candidate>) => void
+    onUpdateCandidate: (candidateId: string, updates: Partial<Candidate>) => void,
+    sender?: string
   ) => {
     return asyncAction(set, async () => {
+      // Send to conversation history (frontend route)
       await api.post(`/${jobId}/cd/${candidateId}/messages`, { content: message });
+
+      // Also send to candidate mailbox (backend route)
+      try {
+        const senderName = sender || "Recruiter";
+        // Backend route is mounted at /api/v1/jobs
+        // Use the same base URL pattern as notification components
+        const backendBaseUrl = "http://localhost:3000/api/v1";
+        const response = await fetch(`${backendBaseUrl}/jobs/${jobId}/candidates/${candidateId}/send`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ 
+            sender: senderName,
+            message: message // Send the custom message to update mailbox
+          }),
+        });
+        
+        if (!response.ok) {
+          const errorData = await response.json().catch(() => ({}));
+          throw new Error(errorData.message || `Failed to update mailbox: ${response.statusText}`);
+        }
+      } catch (error) {
+        // Log but don't fail - mailbox is optional
+        console.warn("Failed to send to mailbox (non-critical):", error);
+      }
 
       // Create new message
       const newMessage: Message = {

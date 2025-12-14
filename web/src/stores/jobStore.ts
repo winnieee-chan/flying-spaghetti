@@ -75,7 +75,22 @@ const useJobStoreBase = create<JobStore>((set, get) => ({
 
   createJob: async (jobData: Partial<Job>) => {
     return asyncAction(set, async () => {
-      const newJob = await api.post<Job>("/jd", jobData);
+      // Transform frontend format to backend API format
+      const backendPayload = {
+        jd_text: jobData.description || "",
+        job_title: jobData.title || "",
+        company_name: jobData.company || "",
+      };
+
+      // Call backend API /api/v1/jobs
+      const response = await api.post<{ jobId: string; status: string; extracted_keywords?: any }>(
+        "/api/v1/jobs",
+        backendPayload
+      );
+
+      // Fetch the created job in frontend format
+      const newJob = await api.get<Job>(`/${response.jobId}`);
+      
       set((state) => ({
         jobs: [...state.jobs, newJob],
         currentJob: newJob,
@@ -229,12 +244,13 @@ const useJobStore = () => {
     getWorkflowState: workflowStore.getWorkflowState,
     updateWorkflowStep: workflowStore.updateWorkflowStep,
     saveDraftMessage: workflowStore.saveDraftMessage,
-    sendMessage: (jobId: string, candidateId: string, message: string) =>
+    sendMessage: (jobId: string, candidateId: string, message: string, sender?: string) =>
       workflowStore.sendMessage(
         jobId,
         candidateId,
         message,
-        candidateStore.updateCandidate
+        candidateStore.updateCandidate,
+        sender || jobStore.currentJob?.company || "Recruiter"
       ),
     recordHiringDecision: (
       jobId: string,

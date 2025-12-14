@@ -34,9 +34,10 @@ const GetNotification = () => {
                 `${BACKEND_URL}/candidates/${activeCandidate.id}/notifications`
             );
             setEmails(Array.isArray(data.emails) ? data.emails : []);
-        } catch (err) {
+        } catch (err: any) {
             console.error("Failed to fetch mailbox", err);
-            setError("Failed to fetch mailbox");
+            const errorMessage = err?.response?.data?.message || err?.message || "Failed to fetch mailbox";
+            setError(errorMessage);
             setEmails([]);
         } finally {
             setLoading(false);

@@ -39,8 +39,10 @@ const SetupNotification = () => {
             await axios.post(`${BACKEND_URL}/candidates/${activeCandidate.id}/filter`, payload);
             console.log("Notification saved:", payload);
             setShowSuccess(true);
-        } catch (error) {
+        } catch (error: any) {
             console.error("Failed to save notification", error);
+            const errorMessage = error?.response?.data?.message || error?.message || "Failed to save notification preferences";
+            alert(errorMessage);
         } finally {
             setIsSubmitting(false);
         }

@@ -2,6 +2,7 @@ import amqp from 'amqplib';
 import { Candidate, JobPost } from '../types/index.js';
 import { readJsonFile } from '../utils/readJson.js';
 import { CANDIDATE_FILE_PATH } from '../utils/utils.js';
+import { writeJsonFile } from '../utils/writeJson.js';
 
 /**
  * RabbitMQ-backed notification dispatcher.
@@ -57,7 +58,9 @@ export class RabbitMqService {
         const isMatch = this.checkUserMatch(candidate, job);
         if (isMatch) {
           console.log(`   MATCH: ${candidate.full_name} <${candidate.email}> for ${job.role} at ${job.companyName}`);
-          // TODO: Send email/SMS/notification here
+          
+          // Send notification to candidate's mailbox
+          await this.sendNotificationToMailbox(candidate, job);
         }
       });
 
@@ -112,5 +115,44 @@ export class RabbitMqService {
 
       return true;
     });
+  }
+
+  private static async sendNotificationToMailbox(candidate: Candidate, job: JobPost): Promise<void> {
+    try {
+      const candidates = await readJsonFile<Candidate[]>(CANDIDATE_FILE_PATH);
+      if (!candidates) {
+        console.warn('[RabbitMqService] Cannot send notification: candidates file not found');
+        return;
+      }
+
+      const candidateIdx = candidates.findIndex(c => c._id === candidate._id);
+      if (candidateIdx === -1) {
+        console.warn(`[RabbitMqService] Candidate ${candidate._id} not found in file`);
+        return;
+      }
+
+      // Ensure mailbox exists
+      if (!candidates[candidateIdx].mailbox) {
+        candidates[candidateIdx].mailbox = [];
+      }
+
+      // Create notification message
+      const companyName = job.companyName.charAt(0).toUpperCase() + job.companyName.slice(1);
+      const roleName = job.role.charAt(0).toUpperCase() + job.role.slice(1);
+      const notificationMessage = `New job opportunity: ${roleName} at ${companyName}. ${job.description.substring(0, 200)}...`;
+
+      const email = {
+        date: Date.now(),
+        sender: companyName,
+        context: notificationMessage
+      };
+
+      candidates[candidateIdx].mailbox.push(email);
+      await writeJsonFile(CANDIDATE_FILE_PATH, candidates);
+
+      console.log(`   ✅ Notification sent to mailbox: ${candidate.full_name}`);
+    } catch (error) {
+      console.error(`[RabbitMqService] Error sending notification to ${candidate.full_name}:`, error);
+    }
   }
 }

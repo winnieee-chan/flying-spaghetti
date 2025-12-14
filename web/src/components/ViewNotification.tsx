@@ -36,8 +36,10 @@ const ViewNotification = () => {
                 `${BACKEND_URL}/candidates/${activeCandidate.id}/filter`
             );
             setNotifications(Array.isArray(data.notificationFilters) ? data.notificationFilters : []);
-        } catch (error) {
+        } catch (error: any) {
             console.error("Failed to load notification settings", error);
+            const errorMessage = error?.response?.data?.message || error?.message || "Failed to load notification settings";
+            console.error(errorMessage);
             setNotifications([]);
         }
     };
@@ -90,8 +92,10 @@ const ViewNotification = () => {
         try {
             await axios.delete(`${BACKEND_URL}/candidates/${activeCandidate.id}/filters/${deletingId}`);
             await fetchNotificationSettings();
-        } catch (error) {
+        } catch (error: any) {
             console.error("Failed to delete notification", error);
+            const errorMessage = error?.response?.data?.message || error?.message || "Failed to delete notification";
+            alert(errorMessage);
         }
     };
 
@@ -120,8 +124,10 @@ const ViewNotification = () => {
             );
             await fetchNotificationSettings();
             closeEdit();
-        } catch (error) {
+        } catch (error: any) {
             console.error("Failed to save notification", error);
+            const errorMessage = error?.response?.data?.message || error?.message || "Failed to save notification";
+            alert(errorMessage);
         }
     };
 
