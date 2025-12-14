@@ -618,27 +618,5 @@
         "order": 2
       }
     ]
-  },
-  {
-    "jobId": "9a6027aa-0b53-4f4f-8c45-7cee2f6a2a2c",
-    "jd_text": "We are looking for an extremely high-leverage engineer capable of fluidly moving between our primary customer-facing service and our underlying data/ML infrastructure. You will manage the entire stack from concept to production. You must be comfortable with ambiguity.",
-    "job_title": "Senior Backend Engineer",
-    "company_name": "Lyra",
-    "status": "PROCESSED_KEYWORDS",
-    "extracted_keywords": {
-      "role": "Senior Backend Engineer",
-      "skills": [
-        "Ml"
-      ],
-      "min_experience_years": 3,
-      "location": "Remote"
-    },
-    "scoring_ratios": {
-      "startup_exp_weight": 0.3,
-      "oss_activity_weight": 0.5,
-      "tech_match_weight": 0.2
-    },
-    "recruiterId": 1,
-    "createdAt": "2025-12-14T23:20:51.726Z"
   }
 ]
