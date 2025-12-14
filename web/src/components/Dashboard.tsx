@@ -16,13 +16,10 @@ import {
   Box,
   Progress,
   TextInput,
-  Pagination,
-  Menu,
   Select,
-  ActionIcon,
   Popover,
 } from "@mantine/core";
-import { IconAlertCircle, IconPlus, IconCalendar, IconUsers, IconSparkles, IconBriefcase, IconSearch, IconChevronDown, IconArrowsSort, IconFilter } from "@tabler/icons-react";
+import { IconAlertCircle, IconPlus, IconCalendar, IconUsers, IconSparkles, IconBriefcase, IconSearch, IconArrowsSort } from "@tabler/icons-react";
 import useJobStore from "../stores/jobStore";
 
 // Hardcoded startup owner data - in production this would come from auth/API
@@ -68,18 +65,12 @@ const Dashboard = () => {
   const [fieldMenuOpened, setFieldMenuOpened] = useState(false);
   const [sortField, setSortField] = useState<SortField>("date");
   const [sortDirection, setSortDirection] = useState<SortDirection>("desc");
-  const [activePage, setActivePage] = useState(1);
   const inputRef = useRef<HTMLInputElement>(null);
-  const PAGE_SIZE = 6;
 
   useEffect(() => {
     fetchJobs();
   }, [fetchJobs]);
 
-  // Reset to page 1 when search query or sort changes
-  useEffect(() => {
-    setActivePage(1);
-  }, [searchQuery, sortField, sortDirection]);
 
   const formatDate = (dateString: string): string => {
     const date = new Date(dateString);
@@ -279,13 +270,6 @@ const Dashboard = () => {
     [filteredJobs, sortField, sortDirection]
   );
 
-  // Calculate pagination
-  const totalPages = Math.ceil(sortedJobs.length / PAGE_SIZE);
-  const paginatedJobs = useMemo(
-    () => sortedJobs.slice((activePage - 1) * PAGE_SIZE, activePage * PAGE_SIZE),
-    [sortedJobs, activePage]
-  );
-
 
   if (loading) {
     return (
@@ -414,7 +398,8 @@ const Dashboard = () => {
 
           {/* Jobs Section */}
           <Box 
-            p="xl" 
+            pt="md"
+            pb="md"
             px={{ base: "md", sm: "xl", md: 48 }}
             style={{ 
               flex: 1,
@@ -425,7 +410,7 @@ const Dashboard = () => {
           >
             {/* Search Bar and Results Count */}
             {jobs.length > 0 && (
-              <Stack gap="md" mb="xl">
+              <Stack gap="xs" mb="md" mt="xs">
                 <Group gap="md" align="flex-end" style={{ width: "100%" }}>
                   {/* Search Input with Field Dropdown */}
                   <Popover
@@ -445,12 +430,6 @@ const Dashboard = () => {
                         onFocus={() => setFieldMenuOpened(true)}
                         onBlur={() => setTimeout(() => setFieldMenuOpened(false), 200)}
                         style={{ flex: 1 }}
-                        styles={{
-                          input: {
-                            height: "54px",
-                            minHeight: "54px",
-                          },
-                        }}
                       />
                     </Popover.Target>
                     <Popover.Dropdown>
@@ -536,17 +515,11 @@ const Dashboard = () => {
                       { value: "description-asc", label: "Description (Shortest)" },
                     ]}
                     style={{ width: 180, flexShrink: 0 }}
-                    styles={{
-                      input: {
-                        height: "54px",
-                        minHeight: "54px",
-                      },
-                    }}
                   />
                 </Group>
                 <Group gap="xs">
                   <Text size="sm" c="dimmed">
-                    Showing {paginatedJobs.length} of {sortedJobs.length} job{sortedJobs.length !== 1 ? "s" : ""}
+                    Showing {sortedJobs.length} of {sortedJobs.length} job{sortedJobs.length !== 1 ? "s" : ""}
                   </Text>
                   {searchQuery && (
                     <Badge variant="light" color="blue" size="sm">
@@ -630,10 +603,10 @@ const Dashboard = () => {
                 </Stack>
               </motion.div>
             ) : (
-              /* Job Cards Grid with Pagination */
-              <Box style={{ display: "flex", flexDirection: "column", flex: 1, minHeight: 0 }}>
-                <Grid style={{ flex: 1 }}>
-                  {paginatedJobs.map((job: Job, index: number) => (
+              /* Job Cards Grid */
+              <Box>
+                <Grid>
+                  {sortedJobs.map((job: Job, index: number) => (
                     <Grid.Col key={job.id} span={{ base: 12, sm: 6, lg: 4 }}>
                       <motion.div
                         initial={{ opacity: 0, y: 20 }}
@@ -707,22 +680,6 @@ const Dashboard = () => {
                     </Grid.Col>
                   ))}
                 </Grid>
-
-                {/* Pagination - Fixed at bottom */}
-                {totalPages > 1 && (
-                  <Box style={{ marginTop: "auto", paddingTop: "xl" }}>
-                    <Group justify="center">
-                      <Pagination
-                        value={activePage}
-                        onChange={setActivePage}
-                        total={totalPages}
-                        size="md"
-                        radius="md"
-                        withEdges
-                      />
-                    </Group>
-                  </Box>
-                )}
               </Box>
             )}
           </Box>
