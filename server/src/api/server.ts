@@ -10,6 +10,7 @@ import candidateRoutes from './routes/candidateRoutes.js';
 import frontendJobRoutes from './routes/frontendJobRoutes.js';
 import frontendCandidateRoutes from './routes/frontendCandidateRoutes.js';
 import frontendAiRoutes from './routes/frontendAiRoutes.js';
+import notificationRoutes from './routes/notificationRoutes.js';
 import { RabbitMqService } from '../services/rabbitMqService.js';
 import { getElasticsearchConfig } from '../config/elasticsearch.js';
 import { ensureIndexExists, checkElasticsearchHealth } from '../services/elasticsearchService.js';
@@ -48,6 +49,7 @@ app.get('/', (req, res) => res.send('🚀 StartupSignal API is operational. Visi
 // Backend API routes (existing, for backward compatibility)
 app.use('/api/v1/jobs', jobRoutes);
 app.use('/api/candidates', candidateRoutes);
+app.use('/api/v1', notificationRoutes)
 
 // Frontend-compatible routes (matching frontend API paths)
 app.use('/', frontendJobRoutes); // GET/POST /jd, GET/PUT /:jdId

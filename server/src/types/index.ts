@@ -130,6 +130,7 @@ export interface JobPost {
 
 
 export interface NotificationFilter {
+  id: string,
   companyNames?: string[];
   jobRoles?: string[];
   keywords?: string[];
