@@ -1,4 +1,5 @@
 import { useMemo, useState, ChangeEvent, useEffect } from "react";
+import { BACKEND_URL, demoCandidateId } from "../utils/utils.ts";
 import axios from "axios";
 import {
     Box,
@@ -16,22 +17,29 @@ import {
 } from "@mui/material";
 
 interface Notification {
-    id: number;
-    companies: string[];
-    roles: string[];
+    id: string;
+    companyNames: string[];
+    jobRoles: string[];
     keywords: string[];
 }
 
 const ViewNotification = () => {
-    const dummyCandidateId = "11234";
+    const [notifications, setNotifications] = useState<Notification[]>([]);
     const fetchNotificationSettings = async () => {
-        const { data } = await axios.get<Notification[]>(`/candidates/${dummyCandidateId}/settings`);
-        setNotifications(Array.isArray(data) ? data : []);
+        try {
+            const { data } = await axios.get<{ notificationFilters: Notification[] }>(
+                `${BACKEND_URL}/candidates/${demoCandidateId}/filter`
+            );
+            setNotifications(Array.isArray(data.notificationFilters) ? data.notificationFilters : []);
+        } catch (error) {
+            console.error("Failed to load notification settings", error);
+            setNotifications([]);
+        }
     };
       
-    // useEffect(() => { fetchNotifications(); }, []);
+    useEffect(() => { fetchNotificationSettings(); }, []);
       
-    const [notifications, setNotifications] = useState<Notification[]>([
+    /* const [notifications, setNotifications] = useState<Notification[]>([
         {
             id: 1,
             companies: ["Acme Corp", "Globex"],
@@ -44,8 +52,8 @@ const ViewNotification = () => {
             roles: ["Backend Engineer"],
             keywords: ["PostgreSQL", "API", "Performance"],
         },
-    ]);
-    const [editingId, setEditingId] = useState<number | null>(null);
+    ]); */
+    const [editingId, setEditingId] = useState<string | null>(null);
     const [formValues, setFormValues] = useState({
         companies: "",
         roles: "",
@@ -62,8 +70,8 @@ const ViewNotification = () => {
     const openEdit = (notification: Notification) => {
         setEditingId(notification.id);
         setFormValues({
-            companies: notification.companies.join(", "),
-            roles: notification.roles.join(", "),
+            companies: notification.companyNames.join(", "),
+            roles: notification.jobRoles.join(", "),
             keywords: notification.keywords.join(", "),
         });
     };
@@ -73,59 +81,43 @@ const ViewNotification = () => {
         setFormValues({ companies: "", roles: "", keywords: "" });
     };
 
-    const handleDelete = async (deletingId: number) => {
-        /* const payload = {
-            id: deletingId,
-        };
-
+    const handleDelete = async (deletingId: string) => {
         try {
-            // Dummy API route for now — replace with your real endpoint.
-            await axios.delete(`/settings/${deletingId}`);
-            console.log("Notification deleted:", payload);
-            await fetchNotifications();
+            await axios.delete(`${BACKEND_URL}/candidates/${demoCandidateId}/filters/${deletingId}`);
+            await fetchNotificationSettings();
         } catch (error) {
-            console.error("Failed to save notification", error);
-        } */
-        setNotifications((prev) => prev.filter((n) => n.id !== deletingId));
+            console.error("Failed to delete notification", error);
+        }
     };
 
     const handleSave = async () => {
-        /* const payload = {
-            id: editingId,
+        if (!editingId) return;
+
+        const payload = {
+            companyNames: formValues.companies
+                .split(",")
+                .map((c) => c.trim())
+                .filter(Boolean),
+            jobRoles: formValues.roles
+                .split(",")
+                .map((r) => r.trim())
+                .filter(Boolean),
+            keywords: formValues.keywords
+                .split(",")
+                .map((k) => k.trim())
+                .filter(Boolean),
         };
 
         try {
-            // Dummy API route for now — replace with your real endpoint.
-            await axios.patch(`/settings/${dummySettingId}`, payload);
-            console.log("Notification changed:", payload);
-            await fetchNotifications();
+            await axios.put(
+                `${BACKEND_URL}/candidates/${demoCandidateId}/filters/${editingId}`,
+                payload
+            );
+            await fetchNotificationSettings();
+            closeEdit();
         } catch (error) {
             console.error("Failed to save notification", error);
-        } finally {
-            closeEdit();
-        } */
-        setNotifications((prev) =>
-            prev.map((n) =>
-                n.id === editingId
-                    ? {
-                          ...n,
-                          companies: formValues.companies
-                              .split(",")
-                              .map((c) => c.trim())
-                              .filter(Boolean),
-                          roles: formValues.roles
-                              .split(",")
-                              .map((r) => r.trim())
-                              .filter(Boolean),
-                          keywords: formValues.keywords
-                              .split(",")
-                              .map((k) => k.trim())
-                              .filter(Boolean),
-                      }
-                    : n
-            )
-        );
-        closeEdit();
+        }
     };
 
     if (!notifications.length) {
@@ -165,7 +157,7 @@ const ViewNotification = () => {
                                             Companies
                                         </Typography>
                                         <Stack direction="row" spacing={1} flexWrap="wrap">
-                                            {notification.companies.map((company) => (
+                                            {notification.companyNames.map((company) => (
                                                 <Chip
                                                     key={company}
                                                     label={company}
@@ -184,7 +176,7 @@ const ViewNotification = () => {
                                             Roles
                                         </Typography>
                                         <Stack direction="row" spacing={1} flexWrap="wrap">
-                                            {notification.roles.map((role) => (
+                                            {notification.jobRoles.map((role) => (
                                                 <Chip
                                                     key={role}
                                                     label={role}
@@ -284,4 +276,3 @@ const ViewNotification = () => {
 };
 
 export default ViewNotification;
-

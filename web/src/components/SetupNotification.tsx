@@ -1,5 +1,7 @@
 import { useState, FormEvent, ChangeEvent } from "react";
+import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import {demoCandidateId, BACKEND_URL, generateUUID} from '../utils/utils.ts';
 import {
     Box,
     Button,
@@ -14,22 +16,23 @@ const SetupNotification = () => {
     const [roles, setRoles] = useState<string>("");
     const [keywords, setKeywords] = useState<string>("");
     const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
-    const dummyCandidateId = "11234";
+    const navigate = useNavigate();
+    // const candidateId = generateUUID();
 
     const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
         event.preventDefault();
         const payload = {
-            id: crypto.randomUUID(),
-            companies: companies.split(",").map((c) => c.trim()).filter(Boolean),
-            roles: roles.split(",").map((r) => r.trim()).filter(Boolean),
+            companyNames: companies.split(",").map((c) => c.trim()).filter(Boolean),
+            jobRoles: roles.split(",").map((r) => r.trim()).filter(Boolean),
             keywords: keywords.split(",").map((k) => k.trim()).filter(Boolean),
         };
 
         setIsSubmitting(true);
         try {
             // Dummy API route for now — replace with your real endpoint.
-            await axios.post(`/candidates/${dummyCandidateId}/settings`, payload);
+            await axios.post(`${BACKEND_URL}/candidates/${demoCandidateId}/filter`, payload);
             console.log("Notification saved:", payload);
+            navigate("/noti/view");
         } catch (error) {
             console.error("Failed to save notification", error);
         } finally {
