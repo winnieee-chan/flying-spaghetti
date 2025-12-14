@@ -10,6 +10,7 @@ import { createJob } from '../../services/jobService.js';
 import { adaptJobToFrontend, adaptJobsToFrontend } from '../../utils/frontendAdapter.js';
 import { adaptJobInputToBackend, adaptJobUpdateToBackend } from '../../utils/backendAdapter.js';
 import type { Job as BackendJob } from '../../types/index.js';
+import { RabbitMqService } from '../../services/rabbitMqService.js';
 
 const router = express.Router();
 
@@ -67,6 +68,17 @@ router.post('/jd', async (req: Request, res: Response) => {
 
         const candidates = await db.getCandidatesByJobId(updatedJob.jobId);
         const frontendJobResponse = adaptJobToFrontend(updatedJob, candidates.length);
+
+        const newJob = await createJob(backendInput.jd_text, backendInput.job_title, backendInput.company_name);
+
+        const newJobPost = {
+            id: newJob.jobId, // Simple ID gen
+            companyName: backendInput.company_name!.toLowerCase(),
+            role: backendInput.job_title.replace('Senior ', '').toLowerCase(),
+            description: backendInput.jd_text,
+        }
+
+        await RabbitMqService.publishJob(newJobPost);
 
         res.status(201).json(frontendJobResponse);
     } catch (error: any) {
