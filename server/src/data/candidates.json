@@ -30,7 +30,20 @@
       "years_of_experience": 1,
       "location": "Brisbane"
     },
-    "notificationSettings": [],
+    "notificationSettings": [
+      {
+        "id": "ea1ce7be-75a6-499e-9f2e-311387cdf718",
+        "companyNames": [
+          "Google"
+        ],
+        "jobRoles": [
+          "Backend Engineer"
+        ],
+        "keywords": [
+          "TypeScript"
+        ]
+      }
+    ],
     "scores": [
       {
         "job_id": "550e8400-e29b-41d4-a716-446655440010",
@@ -478,7 +491,44 @@
       "years_of_experience": 3,
       "location": "Brisbane"
     },
-    "notificationSettings": [],
+    "notificationSettings": [
+      {
+        "id": "28b4f744-d514-42e7-a9b8-e1f6f3f8207f",
+        "companyNames": [
+          "UNSW"
+        ],
+        "jobRoles": [
+          "Casual Academic"
+        ],
+        "keywords": [
+          "CV"
+        ]
+      },
+      {
+        "id": "56cf1ce8-4085-4ac6-8340-68ed699b3fa7",
+        "companyNames": [
+          "Acme Corp"
+        ],
+        "jobRoles": [
+          "Frontend Engineer"
+        ],
+        "keywords": [
+          "TypeScript"
+        ]
+      },
+      {
+        "id": "693deb1f-2dbc-4dc6-a471-d643b07c31a4",
+        "companyNames": [
+          "Initech"
+        ],
+        "jobRoles": [
+          "Product Manager"
+        ],
+        "keywords": [
+          "Node js"
+        ]
+      }
+    ],
     "scores": [
       {
         "job_id": "550e8400-e29b-41d4-a716-446655440010",
@@ -888,7 +938,32 @@
       "years_of_experience": 4,
       "location": "Sydney"
     },
-    "notificationSettings": [],
+    "notificationSettings": [
+      {
+        "id": "066ef913-3bdc-4cab-b685-bc8103513018",
+        "companyNames": [
+          "GHD"
+        ],
+        "jobRoles": [
+          "Structural engineer"
+        ],
+        "keywords": [
+          "AutoCAD"
+        ]
+      },
+      {
+        "id": "805d4bef-3383-4141-b8c9-0ed6d0c74fcb",
+        "companyNames": [
+          "Globex"
+        ],
+        "jobRoles": [
+          "Frontend engineer"
+        ],
+        "keywords": [
+          "TypeScript"
+        ]
+      }
+    ],
     "scores": [
       {
         "job_id": "550e8400-e29b-41d4-a716-446655440010",

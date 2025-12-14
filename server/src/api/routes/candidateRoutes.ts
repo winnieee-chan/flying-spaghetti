@@ -4,7 +4,7 @@ import db from '../../db/db.js';
 const router = express.Router();
 
 // POST /candidates/:candidateId/send - Send a job message to a candidate
-router.post('/:candidateId/send', (req: Request, res: Response) => {
+router.post('/:candidateId/send', async (req: Request, res: Response) => {
     const { candidateId } = req.params;
     const { jobId } = req.body;
 
@@ -12,7 +12,7 @@ router.post('/:candidateId/send', (req: Request, res: Response) => {
         return res.status(400).json({ message: "Missing required field: jobId." });
     }
 
-    const candidateData = db.getCandidateScoreForJob(candidateId, jobId);
+    const candidateData = await db.getCandidateScoreForJob(candidateId, jobId);
 
     if (!candidateData) {
         return res.status(404).json({ message: "Candidate not found for this job." });
@@ -30,10 +30,10 @@ router.post('/:candidateId/send', (req: Request, res: Response) => {
 });
 
 // GET /candidates/:candidateId - Get candidate full profile
-router.get('/:candidateId', (req: Request, res: Response) => {
+router.get('/:candidateId', async (req: Request, res: Response) => {
     const { candidateId } = req.params;
 
-    const candidate = db.getCandidateById(candidateId);
+    const candidate = await db.getCandidateById(candidateId);
 
     if (!candidate) {
         return res.status(404).json({ message: "Candidate not found." });
@@ -55,12 +55,12 @@ router.get('/:candidateId', (req: Request, res: Response) => {
 });
 
 // GET /candidates - Get all candidates (optional: with filters)
-router.get('/', (req: Request, res: Response) => {
+router.get('/', async (req: Request, res: Response) => {
     const { open_to_work, min_score, job_id } = req.query;
 
     // If job_id is provided, get candidates for that job
     if (job_id && typeof job_id === 'string') {
-        let candidates = db.getCandidatesByJobId(job_id);
+        let candidates = await db.getCandidatesByJobId(job_id);
 
         if (open_to_work === 'true') {
             candidates = candidates.filter(c => c.open_to_work);
@@ -94,4 +94,3 @@ router.get('/', (req: Request, res: Response) => {
 });
 
 export default router;
-

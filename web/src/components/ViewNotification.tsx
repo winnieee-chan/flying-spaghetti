@@ -1,6 +1,7 @@
 import { useMemo, useState, ChangeEvent, useEffect } from "react";
-import { BACKEND_URL, demoCandidateId } from "../utils/utils.ts";
+import { BACKEND_URL } from "../utils/utils.ts";
 import axios from "axios";
+import { useActiveCandidate } from "../context/ActiveCandidateContext";
 import {
     Box,
     Button,
@@ -15,6 +16,8 @@ import {
     TextField,
     Typography,
 } from "@mui/material";
+import NotificationNavBar from "./NotificationNavBar";
+import { useNavigate } from "react-router-dom";
 
 interface Notification {
     id: string;
@@ -25,10 +28,12 @@ interface Notification {
 
 const ViewNotification = () => {
     const [notifications, setNotifications] = useState<Notification[]>([]);
+    const { activeCandidate } = useActiveCandidate();
+    const navigate = useNavigate();
     const fetchNotificationSettings = async () => {
         try {
             const { data } = await axios.get<{ notificationFilters: Notification[] }>(
-                `${BACKEND_URL}/candidates/${demoCandidateId}/filter`
+                `${BACKEND_URL}/candidates/${activeCandidate.id}/filter`
             );
             setNotifications(Array.isArray(data.notificationFilters) ? data.notificationFilters : []);
         } catch (error) {
@@ -36,8 +41,8 @@ const ViewNotification = () => {
             setNotifications([]);
         }
     };
-      
-    useEffect(() => { fetchNotificationSettings(); }, []);
+    
+    useEffect(() => { fetchNotificationSettings(); }, [activeCandidate.id]);
       
     /* const [notifications, setNotifications] = useState<Notification[]>([
         {
@@ -83,7 +88,7 @@ const ViewNotification = () => {
 
     const handleDelete = async (deletingId: string) => {
         try {
-            await axios.delete(`${BACKEND_URL}/candidates/${demoCandidateId}/filters/${deletingId}`);
+            await axios.delete(`${BACKEND_URL}/candidates/${activeCandidate.id}/filters/${deletingId}`);
             await fetchNotificationSettings();
         } catch (error) {
             console.error("Failed to delete notification", error);
@@ -110,7 +115,7 @@ const ViewNotification = () => {
 
         try {
             await axios.put(
-                `${BACKEND_URL}/candidates/${demoCandidateId}/filters/${editingId}`,
+                `${BACKEND_URL}/candidates/${activeCandidate.id}/filters/${editingId}`,
                 payload
             );
             await fetchNotificationSettings();
@@ -122,7 +127,9 @@ const ViewNotification = () => {
 
     if (!notifications.length) {
         return (
-            <Box>
+            <Box position="relative" p={3}>
+                <NotificationNavBar />
+                
                 <Typography variant="h4" gutterBottom>
                     Notifications
                 </Typography>
@@ -134,7 +141,9 @@ const ViewNotification = () => {
     }
 
     return (
-        <Box>
+        <Box position="relative" p={3}>
+            <NotificationNavBar />
+            
             <Typography variant="h4" gutterBottom>
                 Notifications
             </Typography>

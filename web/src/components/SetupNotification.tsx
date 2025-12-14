@@ -1,7 +1,8 @@
-import { useState, FormEvent, ChangeEvent, useEffect } from "react";
+import { useState, FormEvent, ChangeEvent } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import {demoCandidateId, BACKEND_URL, CANDIDATE_API_URL} from '../utils/utils.ts';
+import { BACKEND_URL } from '../utils/utils.ts';
+import { useActiveCandidate } from "../context/ActiveCandidateContext";
 import {
     Box,
     Button,
@@ -14,29 +15,16 @@ import {
     TextField,
     Typography,
 } from "@mui/material";
+import NotificationNavBar from "./NotificationNavBar";
 
 const SetupNotification = () => {
     const [companies, setCompanies] = useState<string>("");
     const [roles, setRoles] = useState<string>("");
     const [keywords, setKeywords] = useState<string>("");
     const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
-    const [candidateName, setCandidateName] = useState<string>("");
     const [showSuccess, setShowSuccess] = useState<boolean>(false);
     const navigate = useNavigate();
-
-    useEffect(() => {
-        const fetchCandidateName = async () => {
-            try {
-                const { data } = await axios.get<{ full_name?: string }>(
-                    `${CANDIDATE_API_URL}/candidates/${demoCandidateId}`
-                );
-                setCandidateName(data.full_name || "");
-            } catch (error) {
-                console.error("Failed to fetch candidate info", error);
-            }
-        };
-        fetchCandidateName();
-    }, []);
+    const { activeCandidate } = useActiveCandidate();
 
     const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
         event.preventDefault();
@@ -48,7 +36,7 @@ const SetupNotification = () => {
 
         setIsSubmitting(true);
         try {
-            await axios.post(`${BACKEND_URL}/candidates/${demoCandidateId}/filter`, payload);
+            await axios.post(`${BACKEND_URL}/candidates/${activeCandidate.id}/filter`, payload);
             console.log("Notification saved:", payload);
             setShowSuccess(true);
         } catch (error) {
@@ -59,14 +47,15 @@ const SetupNotification = () => {
     };
 
     return (
-        <Paper elevation={2} sx={{ p: 3 }}>
-            <Stack direction="row" alignItems="baseline" spacing={1}>
-                <Typography variant="h5" gutterBottom>
+        <Paper elevation={2} sx={{ p: 3, position: "relative" }}>
+            <NotificationNavBar />
+            <Stack direction="row" alignItems="center" spacing={1}>
+                <Typography variant="h4" gutterBottom sx={{ mb: 0 }}>
                     Set up notifications
                 </Typography>
-                {candidateName && (
-                    <Typography variant="subtitle1" color="text.secondary">
-                        for {candidateName}
+                {activeCandidate.name && (
+                    <Typography variant="subtitle1" color="text.secondary" sx={{ mb: 0 }}>
+                        for <strong>{activeCandidate.name}</strong>
                     </Typography>
                 )}
             </Stack>
@@ -108,7 +97,7 @@ const SetupNotification = () => {
                 <DialogTitle>Notification saved</DialogTitle>
                 <DialogContent>
                     <Typography>
-                        Notification preferences have been set for {candidateName || "this candidate"}.
+                        Notification preferences have been set for {activeCandidate.name || "this candidate"}.
                     </Typography>
                 </DialogContent>
                 <DialogActions>
