@@ -1,10 +1,14 @@
-import { useState, FormEvent, ChangeEvent } from "react";
+import { useState, FormEvent, ChangeEvent, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import {demoCandidateId, BACKEND_URL, generateUUID} from '../utils/utils.ts';
+import {demoCandidateId, BACKEND_URL, CANDIDATE_API_URL} from '../utils/utils.ts';
 import {
     Box,
     Button,
+    Dialog,
+    DialogActions,
+    DialogContent,
+    DialogTitle,
     Paper,
     Stack,
     TextField,
@@ -16,8 +20,23 @@ const SetupNotification = () => {
     const [roles, setRoles] = useState<string>("");
     const [keywords, setKeywords] = useState<string>("");
     const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
+    const [candidateName, setCandidateName] = useState<string>("");
+    const [showSuccess, setShowSuccess] = useState<boolean>(false);
     const navigate = useNavigate();
-    // const candidateId = generateUUID();
+
+    useEffect(() => {
+        const fetchCandidateName = async () => {
+            try {
+                const { data } = await axios.get<{ full_name?: string }>(
+                    `${CANDIDATE_API_URL}/candidates/${demoCandidateId}`
+                );
+                setCandidateName(data.full_name || "");
+            } catch (error) {
+                console.error("Failed to fetch candidate info", error);
+            }
+        };
+        fetchCandidateName();
+    }, []);
 
     const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
         event.preventDefault();
@@ -29,10 +48,9 @@ const SetupNotification = () => {
 
         setIsSubmitting(true);
         try {
-            // Dummy API route for now — replace with your real endpoint.
             await axios.post(`${BACKEND_URL}/candidates/${demoCandidateId}/filter`, payload);
             console.log("Notification saved:", payload);
-            navigate("/noti/view");
+            setShowSuccess(true);
         } catch (error) {
             console.error("Failed to save notification", error);
         } finally {
@@ -42,9 +60,16 @@ const SetupNotification = () => {
 
     return (
         <Paper elevation={2} sx={{ p: 3 }}>
-            <Typography variant="h5" gutterBottom>
-                Set up notifications
-            </Typography>
+            <Stack direction="row" alignItems="baseline" spacing={1}>
+                <Typography variant="h5" gutterBottom>
+                    Set up notifications
+                </Typography>
+                {candidateName && (
+                    <Typography variant="subtitle1" color="text.secondary">
+                        for {candidateName}
+                    </Typography>
+                )}
+            </Stack>
             <Typography variant="body2" color="text.secondary" gutterBottom>
                 Add the companies, roles, and keywords you want to track. Use commas
                 to separate multiple entries.
@@ -79,6 +104,26 @@ const SetupNotification = () => {
                     </Box>
                 </Stack>
             </Box>
+            <Dialog open={showSuccess} onClose={() => setShowSuccess(false)}>
+                <DialogTitle>Notification saved</DialogTitle>
+                <DialogContent>
+                    <Typography>
+                        Notification preferences have been set for {candidateName || "this candidate"}.
+                    </Typography>
+                </DialogContent>
+                <DialogActions>
+                    <Button onClick={() => setShowSuccess(false)}>Close</Button>
+                    <Button
+                        variant="contained"
+                        onClick={() => {
+                            setShowSuccess(false);
+                            navigate("/noti/view");
+                        }}
+                    >
+                        View notifications
+                    </Button>
+                </DialogActions>
+            </Dialog>
         </Paper>
     );
 };
