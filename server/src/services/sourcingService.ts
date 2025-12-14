@@ -5,6 +5,7 @@ import type { Job, CandidateScore } from '../types/index.js';
 import { randomUUID } from 'crypto';
 import dotenv from 'dotenv';
 dotenv.config();
+
 // Initialize Apify Client
 const client = new ApifyClient({
     token: process.env.APIFY_TOKEN
@@ -26,20 +27,22 @@ export const sourceCandidatesForJob = async (job: Job): Promise<any[]> => {
     // Search LinkedIn by keywords via Apify
     const linkedInCandidates = await searchLinkedInByKeywords(role, requiredSkills, location);
 
-    // Score candidates based on ALL keywords (role, skills, location, experience)
-    const scoredCandidates = linkedInCandidates.map(candidate => {
+    // Transform candidates to match candidates.json structure
+    const transformedCandidates = linkedInCandidates.map(candidate => {
         let totalScore = 0;
-        const breakdown: any = {};
+        const breakdown_json: any[] = [];
 
         // 1. Role Match (30 points)
         const candidateRole = (candidate.headline || '').toLowerCase();
         const requiredRole = role.toLowerCase();
-        if (candidateRole.includes(requiredRole) || requiredRole.includes(candidateRole)) {
-            breakdown.roleMatch = 30;
-            totalScore += 30;
-        } else {
-            breakdown.roleMatch = 0;
-        }
+        const roleMatch = candidateRole.includes(requiredRole) || requiredRole.includes(candidateRole);
+        const roleScore = roleMatch ? 30 : 0;
+        totalScore += roleScore;
+        breakdown_json.push({
+            signal: 'role_match',
+            value: roleScore,
+            reason: roleMatch ? `Role matches: ${candidate.headline}` : 'Role does not match'
+        });
 
         // 2. Skills Match (40 points)
         const candidateSkills = candidate.skills || [];
@@ -49,52 +52,107 @@ export const sourceCandidatesForJob = async (job: Job): Promise<any[]> => {
                 req.toLowerCase().includes(skill.toLowerCase())
             )
         );
-        const skillScore = (matchedSkills.length / requiredSkills.length) * 40;
-        breakdown.skillsMatch = Math.round(skillScore);
-        breakdown.matchedSkills = matchedSkills;
+        const skillScore = requiredSkills.length > 0
+            ? (matchedSkills.length / requiredSkills.length) * 40
+            : 0;
         totalScore += skillScore;
+        breakdown_json.push({
+            signal: 'skill_match',
+            value: Math.round(skillScore),
+            reason: matchedSkills.length > 0
+                ? `Matched ${matchedSkills.length} skills: ${matchedSkills.join(', ')}`
+                : 'No direct skill matches'
+        });
 
         // 3. Location Match (15 points)
         const candidateLocation = (candidate.location || '').toLowerCase();
         const requiredLocation = location.toLowerCase();
-        if (candidateLocation.includes(requiredLocation) || requiredLocation.includes(candidateLocation) || requiredLocation === 'remote') {
-            breakdown.locationMatch = 15;
-            totalScore += 15;
-        } else {
-            breakdown.locationMatch = 0;
-        }
+        const locationMatch = candidateLocation.includes(requiredLocation) ||
+            requiredLocation.includes(candidateLocation) ||
+            requiredLocation === 'remote';
+        const locationScore = locationMatch ? 15 : 0;
+        totalScore += locationScore;
+        breakdown_json.push({
+            signal: 'location',
+            value: locationScore,
+            reason: `Location: ${candidate.location} vs ${location}`
+        });
 
         // 4. Experience Match (15 points)
         const candidateYears = candidate.experience?.length || 0;
         const requiredYears = job.extracted_keywords.min_experience_years || 0;
+        let experienceScore = 0;
         if (candidateYears >= requiredYears) {
-            breakdown.experienceMatch = 15;
-            totalScore += 15;
+            experienceScore = 15;
         } else if (requiredYears > 0) {
-            const ratio = candidateYears / requiredYears;
-            breakdown.experienceMatch = Math.round(ratio * 15);
-            totalScore += ratio * 15;
-        } else {
-            breakdown.experienceMatch = 0;
+            experienceScore = (candidateYears / requiredYears) * 15;
         }
+        totalScore += experienceScore;
+        breakdown_json.push({
+            signal: 'experience',
+            value: Math.round(experienceScore),
+            reason: `${candidateYears} years of experience (required: ${requiredYears})`
+        });
 
+        // Generate email from name if not provided by LinkedIn
+        const fullName = candidate.fullName || 'Unknown User';
+        const emailUsername = fullName.toLowerCase().replace(/\s+/g, '.');
+        const generatedEmail = `${emailUsername}@example.com`;
+        const email = candidate.email || generatedEmail; // Use real email if available
+
+        // Create bio from headline and experience
+        const experienceSummary = candidate.experience?.slice(0, 2)
+            .map((exp: any) => `${exp.position} at ${exp.companyName}`)
+            .join('. ') || '';
+        const bio = `${candidate.headline || ''}. ${experienceSummary}`;
+
+        // Generate outreach message
+        const firstName = fullName.split(' ')[0];
+        const outreachMessage = matchedSkills.length > 0
+            ? `Hi ${firstName}, I noticed your experience with ${matchedSkills.slice(0, 3).join(', ')} and thought you might be interested in our ${job.job_title} role at ${job.company_name || 'our company'}.`
+            : `Hi ${firstName}, I noticed your background and thought you might be interested in our ${job.job_title} role at ${job.company_name || 'our company'}.`;
+
+        // Return candidates.json compatible structure
         return {
-            ...candidate,
-            score: Math.round(totalScore),
-            scoreBreakdown: breakdown
+            _id: candidate.id || randomUUID(),
+            full_name: fullName,
+            email: email,
+            bio: bio,
+            github_username: candidate.github_username || '',
+            open_to_work: true, // Default to true for sourced candidates
+            keywords: {
+                role: candidate.headline || role,
+                skills: candidateSkills,
+                years_of_experience: candidateYears,
+                location: candidate.location
+            },
+            notificationSettings: [],
+            mailbox: [], // For storing saved emails from /send and /sendall APIs
+            scores: [
+                {
+                    job_id: job.jobId,
+                    score: Math.round(totalScore),
+                    breakdown_json: breakdown_json,
+                    outreach_messages: [outreachMessage],
+                    conversationHistory: [],
+                    pipelineStage: 'sourced'
+                }
+            ]
         };
     });
 
     // Sort by score descending
-    const sortedCandidates = scoredCandidates.sort((a, b) => b.score - a.score);
+    const sortedCandidates = transformedCandidates.sort((a, b) =>
+        b.scores[0].score - a.scores[0].score
+    );
 
-    console.log(`[Sourcing] Found ${sortedCandidates.length} candidates, top score: ${sortedCandidates[0]?.score || 0}`);
+    console.log(`[Sourcing] Found ${sortedCandidates.length} candidates, top score: ${sortedCandidates[0]?.scores[0]?.score || 0}`);
     return sortedCandidates;
 };
 
 /**
- * Search LinkedIn by keywords using Apify (no cookies required)
- * Uses harvestapi/linkedin-profile-search actor
+ * Search LinkedIn by keywords using Apify
+ * Uses harvestapi/linkedin-profile-search (works on free plan)
  */
 async function searchLinkedInByKeywords(role: string, skills: string[], location: string): Promise<any[]> {
     if (!process.env.APIFY_TOKEN) {
@@ -103,52 +161,58 @@ async function searchLinkedInByKeywords(role: string, skills: string[], location
     }
 
     try {
-        // Build search query focusing on skills
-        // Include all skills for better matching
         const skillsQuery = skills.join(' OR ');
         const generalSearchQuery = `(${skillsQuery}) ${role}`;
 
-        console.log(`[LinkedIn] Searching for candidates with skills: [${skills.join(', ')}]`);
-        console.log(`[LinkedIn] Role: "${role}" | Location: "${location}"`);
+        console.log(`[LinkedIn] Searching for profiles...`);
+        console.log(`[LinkedIn] Skills: [${skills.join(', ')}] | Role: "${role}" | Location: "${location}"`);
 
-        const input = {
-            generalSearchQuery: generalSearchQuery, // Search for people with these skills
-            currentJobTitles: [role], // Filter by current job title
-            locations: [location], // Geographic filter
-            maxItems: 1, // Limit results
-            mode: 'short' // Fast, basic profile data
+        const searchInput = {
+            generalSearchQuery: generalSearchQuery,
+            currentJobTitles: [role],
+            locations: [location],
+            maxItems: 10,
+            mode: 'short'
         };
 
-        const run = await client.actor('harvestapi/linkedin-profile-search').call(input);
+        const searchRun = await client.actor('harvestapi/linkedin-profile-search').call(searchInput);
 
-        if (run.status !== 'SUCCEEDED') {
-            console.error(`[LinkedIn] Search failed with status: ${run.status}`);
+        if (searchRun.status !== 'SUCCEEDED') {
+            console.error(`[LinkedIn] Search failed with status: ${searchRun.status}`);
             return generateMockCandidates(role, skills);
         }
 
-        console.log(`💾 LinkedIn search results: https://console.apify.com/storage/datasets/${run.defaultDatasetId}`);
-        const { items } = await client.dataset(run.defaultDatasetId).listItems();
-        console.log(items[0]);
-        // Transform to only scoring-relevant fields
-        return items.map((item: any) => ({
+        console.log(`💾 Search results: https://console.apify.com/storage/datasets/${searchRun.defaultDatasetId}`);
+        const { items: searchResults } = await client.dataset(searchRun.defaultDatasetId).listItems();
+
+        if (!searchResults || searchResults.length === 0) {
+            console.warn('[LinkedIn] No profiles found in search');
+            return generateMockCandidates(role, skills);
+        }
+
+        console.log(`[LinkedIn] Found ${searchResults.length} profiles`);
+
+        // Transform search results to our format
+        return searchResults.map((item: any) => ({
             id: item.publicIdentifier || randomUUID(),
             fullName: `${item.firstName || ''} ${item.lastName || ''}`.trim(),
+            email: item.email || null, // Email rarely available in search results
             headline: item.headline || '',
-            location: item.location?.linkedinText || '',
-            linkedInUrl: item.linkedinUrl || '',
+            location: item.location?.linkedinText || item.location || '',
+            linkedInUrl: item.linkedinUrl || item.url || '',
 
-            // Skills - extract names only (needed for tech match scoring)
+            // Skills
             skills: item.skills?.map((s: any) => typeof s === 'string' ? s : s.name) || [],
 
-            // Experience - for years of experience and startup scoring
+            // Experience
             experience: item.experience?.map((exp: any) => ({
-                position: exp.position,
+                position: exp.position || exp.title,
                 companyName: exp.companyName,
                 duration: exp.duration,
                 description: exp.description
             })) || [],
 
-            // Education - optional for context
+            // Education
             education: item.education?.map((edu: any) => ({
                 schoolName: edu.schoolName,
                 degree: edu.degree,
@@ -156,202 +220,106 @@ async function searchLinkedInByKeywords(role: string, skills: string[], location
             })) || []
         }));
 
-
     } catch (error) {
-        console.error('[LinkedIn] Error searching:', error);
+        console.error('[LinkedIn] Error during search:', error);
         return generateMockCandidates(role, skills);
     }
 }
 
 /**
  * Generate mock candidates for testing (when Apify is unavailable)
+ * Returns data in the same structure as LinkedIn API for consistency
  */
 function generateMockCandidates(role: string, skills: string[]): any[] {
     return [
         {
             id: randomUUID(),
-            name: 'Alex Chen',
+            fullName: 'Alex Chen',
+            email: 'alex.chen@example.com',
             headline: `Senior ${role}`,
+            location: 'Sydney, Australia',
+            linkedInUrl: 'https://linkedin.com/in/alex-chen',
             skills: [...skills.slice(0, 3), 'Git', 'Agile'],
-            openToWork: true,
-            github_username: 'alex-dev',
+            experience: [
+                {
+                    position: `Senior ${role}`,
+                    companyName: 'Tech Startup Inc',
+                    duration: '2 yrs',
+                    description: 'Leading development team'
+                },
+                {
+                    position: role,
+                    companyName: 'Digital Agency',
+                    duration: '1 yr',
+                    description: 'Building web applications'
+                }
+            ],
+            education: [
+                {
+                    schoolName: 'University of Sydney',
+                    degree: 'Bachelor of Computer Science',
+                    fieldOfStudy: 'Software Engineering'
+                }
+            ],
+            github_username: 'alex-dev'
         },
         {
             id: randomUUID(),
-            name: 'Jordan Smith',
+            fullName: 'Jordan Smith',
+            email: 'jordan.smith@example.com',
             headline: `${role} Specialist`,
+            location: 'Melbourne, Australia',
+            linkedInUrl: 'https://linkedin.com/in/jordan-smith',
             skills: [...skills.slice(1, 4), 'Docker', 'CI/CD'],
-            openToWork: false,
-            github_username: 'j-smith',
+            experience: [
+                {
+                    position: `${role} Specialist`,
+                    companyName: 'Enterprise Corp',
+                    duration: '3 yrs',
+                    description: 'Specialized development work'
+                }
+            ],
+            education: [
+                {
+                    schoolName: 'RMIT University',
+                    degree: 'Bachelor of IT',
+                    fieldOfStudy: 'Computer Science'
+                }
+            ],
+            github_username: 'j-smith'
         },
         {
             id: randomUUID(),
-            name: 'Taylor Lee',
+            fullName: 'Taylor Lee',
+            email: 'taylor.lee@example.com',
             headline: `Lead ${role}`,
+            location: 'Brisbane, Australia',
+            linkedInUrl: 'https://linkedin.com/in/taylor-lee',
             skills: skills,
-            openToWork: true,
-            github_username: 'taylor-codes',
+            experience: [
+                {
+                    position: `Lead ${role}`,
+                    companyName: 'Innovation Labs',
+                    duration: '4 yrs',
+                    description: 'Leading engineering teams'
+                },
+                {
+                    position: `Senior ${role}`,
+                    companyName: 'Software House',
+                    duration: '2 yrs',
+                    description: 'Full stack development'
+                }
+            ],
+            education: [
+                {
+                    schoolName: 'Queensland University',
+                    degree: 'Master of Software Engineering',
+                    fieldOfStudy: 'Computer Science'
+                }
+            ],
+            github_username: 'taylor-codes'
         }
     ];
 }
 
-/**
- * Enrich candidates with GitHub data using Apify
- */
-async function enrichWithGitHub(candidates: any[]): Promise<any[]> {
-    if (!process.env.APIFY_TOKEN) {
-        console.warn('[GitHub] APIFY_TOKEN missing. Using mock enrichment.');
-        return addMockGitHubData(candidates);
-    }
 
-    // Extract GitHub profile URLs from candidates
-    const githubLinks = candidates
-        .map(c => c.github_username ? `https://github.com/${c.github_username}` : null)
-        .filter(link => link !== null) as string[];
-
-    if (githubLinks.length === 0) {
-        console.warn('[GitHub] No GitHub usernames found in candidates. Using mock data.');
-        return addMockGitHubData(candidates);
-    }
-
-    try {
-        console.log(`[GitHub] Enriching ${githubLinks.length} profiles...`);
-
-        const input = {
-            repo_link: "",
-            peoples_links: githubLinks
-        };
-
-        const run = await client.actor('saswave/github-profile-scraper').call(input);
-
-        if (run.status !== 'SUCCEEDED') {
-            console.error(`[GitHub] Scraper failed with status: ${run.status}`);
-            return addMockGitHubData(candidates);
-        }
-
-        console.log(`💾 GitHub data available at: https://console.apify.com/storage/datasets/${run.defaultDatasetId}`);
-        const { items: githubData } = await client.dataset(run.defaultDatasetId).listItems();
-
-        // Merge GitHub data with candidates
-        return candidates.map(candidate => {
-            const githubProfile = githubData.find((gh: any) =>
-                gh.username === candidate.github_username ||
-                gh.profileUrl?.includes(candidate.github_username)
-            );
-
-            return {
-                ...candidate,
-                candidateId: candidate.id || randomUUID(),
-                enrichment: githubProfile ? {
-                    public_repos: githubProfile.public_repos || 0,
-                    total_stars: githubProfile.stars || githubProfile.total_stars || 0,
-                    recent_activity_days: calculateRecentActivity(githubProfile),
-                    updated_at: new Date().toISOString(),
-                } : {
-                    public_repos: 0,
-                    total_stars: 0,
-                    recent_activity_days: 365,
-                    updated_at: new Date().toISOString(),
-                }
-            };
-        });
-    } catch (error) {
-        console.error('[GitHub] Error enriching profiles:', error);
-        return addMockGitHubData(candidates);
-    }
-}
-
-/**
- * Add mock GitHub enrichment data for testing
- */
-function addMockGitHubData(candidates: any[]): any[] {
-    return candidates.map(candidate => ({
-        ...candidate,
-        candidateId: candidate.id || randomUUID(),
-        enrichment: {
-            public_repos: Math.floor(Math.random() * 50) + 5,
-            total_stars: Math.floor(Math.random() * 1000),
-            recent_activity_days: Math.floor(Math.random() * 30),
-            updated_at: new Date().toISOString(),
-        }
-    }));
-}
-
-/**
- * Calculate days since last activity from GitHub profile
- */
-function calculateRecentActivity(githubProfile: any): number {
-    // If the profile has a last_commit_date or updated_at, calculate days
-    if (githubProfile.last_commit_date) {
-        const lastCommit = new Date(githubProfile.last_commit_date);
-        const now = new Date();
-        return Math.floor((now.getTime() - lastCommit.getTime()) / (1000 * 60 * 60 * 24));
-    }
-    // Default to 30 days if no data
-    return 30;
-}
-
-/**
- * Score candidates based on relevance to job keywords
- */
-function scoreCandidates(candidates: any[], job: Job): CandidateScore[] {
-    const { skills: requiredSkills } = job.extracted_keywords;
-    const { tech_match_weight, oss_activity_weight, startup_exp_weight } = job.scoring_ratios;
-
-    return candidates.map(candidate => {
-        // Calculate tech match score
-        const candidateSkills = candidate.skills || [];
-        const matchedSkills = candidateSkills.filter((skill: string) =>
-            requiredSkills.some(req => skill.toLowerCase().includes(req.toLowerCase()))
-        );
-        const techScore = (matchedSkills.length / Math.max(requiredSkills.length, 1)) * 100;
-
-        // Calculate OSS score
-        const ossScore = Math.min((candidate.enrichment?.total_stars || 0) / 500, 1) * 100;
-
-        // Calculate startup experience score (mock for now)
-        const startupScore = Math.random() * 100;
-
-        // Weighted final score
-        const finalScore = Math.round(
-            (tech_match_weight * techScore) +
-            (oss_activity_weight * ossScore) +
-            (startup_exp_weight * startupScore)
-        );
-
-        return {
-            candidateId: candidate.candidateId,
-            full_name: candidate.name || candidate.full_name || 'Unknown',
-            headline: candidate.headline || candidate.title || '',
-            github_username: candidate.github_username || '',
-            open_to_work: candidate.openToWork || false,
-            score: Math.max(0, Math.min(100, finalScore)),
-            enrichment: candidate.enrichment,
-            breakdown_json: [
-                { signal: 'Tech Match', value: Math.round(techScore), reason: `Matched ${matchedSkills.length}/${requiredSkills.length} skills` },
-                { signal: 'OSS Activity', value: Math.round(ossScore), reason: `${candidate.enrichment?.total_stars || 0} GitHub stars` },
-                { signal: 'Startup Experience', value: Math.round(startupScore), reason: 'Based on work history' },
-            ],
-            outreach_messages: [
-                `Hi ${candidate.name || candidate.full_name}, we're impressed by your ${matchedSkills.join(', ')} skills and think you'd be a great fit for our ${job.job_title} role.`
-            ]
-        };
-    }).sort((a, b) => b.score - a.score); // Sort by score descending
-}
-
-/**
- * Generate mock candidates from profile URLs for testing
- */
-function generateMockCandidatesFromUrls(profileUrls: string[]): any[] {
-    const mockNames = ['Alex Chen', 'Jordan Smith', 'Taylor Lee', 'Sam Wilson', 'Morgan Davis'];
-
-    return profileUrls.map((url, index) => ({
-        id: randomUUID(),
-        profileUrl: url,
-        name: mockNames[index % mockNames.length],
-        headline: `Software Engineer with ${2 + index} years experience`,
-        skills: ['JavaScript', 'Python', 'React', 'Node.js', 'Docker'].slice(0, 3 + index),
-        openToWork: index % 2 === 0,
-        github_username: `user-${index}`,
-    }));
-}
