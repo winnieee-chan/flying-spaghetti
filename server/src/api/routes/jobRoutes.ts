@@ -2,8 +2,11 @@ import express, { Request, Response, NextFunction } from 'express';
 import db from '../../db/db.js';
 import { createJob } from '../../services/jobService.js';
 import { sourceCandidatesForJob } from '../../services/sourcingService.js';
-import type { Job } from '../../types/index.js';
+import { Candidate, type Job } from '../../types/index.js';
 import { RabbitMqService } from '../../services/rabbitMqService.js';
+import { readJsonFile } from '../../utils/readJson.js';
+import { CANDIDATE_FILE_PATH } from '../../utils/utils.js';
+import { writeJsonFile } from '../../utils/writeJson.js';
 
 const router = express.Router();
 
@@ -143,10 +146,12 @@ router.get('/:jobId/candidates/:candidateId', (req: JobRequest, res: Response) =
 });
 
 // POST /jobs/:jobId/candidates/sendall - Send messages to all candidates
-router.post('/:jobId/candidates/sendall', (req: JobRequest, res: Response) => {
+router.post('/:jobId/candidates/sendall', async (req: JobRequest, res: Response) => {
     if (!req.jobId) {
         return res.status(404).json({ message: "Job not found." });
     }
+
+    const {sender} = req.body;
 
     const candidates = db.getCandidatesByJobId(req.jobId);
 
@@ -166,6 +171,27 @@ router.post('/:jobId/candidates/sendall', (req: JobRequest, res: Response) => {
         };
     });
 
+    const candidateUsers = await readJsonFile<Candidate[]>(CANDIDATE_FILE_PATH);
+
+    for (const result of results) {
+        const candidateUserIdx = candidateUsers?.findIndex(candidate => candidate._id === result.candidateId);
+
+        if (!candidateUserIdx) {
+            console.log('User not found.')
+            continue;
+        }
+
+        const newEmail = {
+            date: Date.now().toLocaleString(),
+            sender: sender as string,
+            context: result.message
+        }
+
+        candidateUsers![candidateUserIdx].mailbox.push(newEmail);
+    }
+
+    await writeJsonFile(CANDIDATE_FILE_PATH, candidateUsers);
+
     res.status(200).json({
         jobId: req.jobId,
         message: `Personalized messages generated and sent to ${results.length} candidates.`,
@@ -174,8 +200,9 @@ router.post('/:jobId/candidates/sendall', (req: JobRequest, res: Response) => {
 });
 
 // POST /jobs/:jobId/candidates/:candidateId/send - Send message to specific candidate
-router.post('/:jobId/candidates/:candidateId/send', (req: JobRequest, res: Response) => {
+router.post('/:jobId/candidates/:candidateId/send', async (req: JobRequest, res: Response) => {
     const { candidateId } = req.params;
+    const { sender } = req.body;
 
     if (!req.jobId) {
         return res.status(404).json({ message: "Job not found." });
@@ -188,6 +215,33 @@ router.post('/:jobId/candidates/:candidateId/send', (req: JobRequest, res: Respo
     }
 
     const message = candidateData.outreach_messages?.[0] || `Hi ${candidateData.full_name}, we'd like to connect...`;
+
+    const candidates = await readJsonFile<Candidate[]>(CANDIDATE_FILE_PATH);
+
+    if (!candidates) {
+        return res.status(400).json({
+            message: 'Not found.'
+        })
+    }
+
+    const candidateIdx = candidates!.findIndex(candidate => candidate._id === candidateId);
+    const candidate = candidates![candidateIdx];
+
+    if (!("mailbox" in candidate)) {
+        return res.status(400).json({
+            message: 'Mailbox not defined.'
+        })
+    };
+
+    const email = {
+        date: Date.now().toLocaleString(),
+        sender: sender as string,
+        context: message as string
+    }
+
+    candidates![candidateIdx].mailbox.push(email);
+
+    await writeJsonFile(CANDIDATE_FILE_PATH, candidates);
 
     res.status(200).json({
         candidateId: candidateId,
