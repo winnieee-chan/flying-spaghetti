@@ -32,9 +32,9 @@ router.post('/:candidateId/send', (req: Request, res: Response) => {
 // GET /candidates/:candidateId - Get candidate full profile
 router.get('/:candidateId', (req: Request, res: Response) => {
     const { candidateId } = req.params;
-    
+
     const candidate = db.getCandidateById(candidateId);
-    
+
     if (!candidate) {
         return res.status(404).json({ message: "Candidate not found." });
     }
@@ -57,22 +57,22 @@ router.get('/:candidateId', (req: Request, res: Response) => {
 // GET /candidates - Get all candidates (optional: with filters)
 router.get('/', (req: Request, res: Response) => {
     const { open_to_work, min_score, job_id } = req.query;
-    
+
     // If job_id is provided, get candidates for that job
     if (job_id && typeof job_id === 'string') {
         let candidates = db.getCandidatesByJobId(job_id);
-        
+
         if (open_to_work === 'true') {
             candidates = candidates.filter(c => c.open_to_work);
         } else if (open_to_work === 'false') {
             candidates = candidates.filter(c => !c.open_to_work);
         }
-        
+
         if (min_score && typeof min_score === 'string') {
             const minScoreNum = parseFloat(min_score);
             candidates = candidates.filter(c => c.score >= minScoreNum);
         }
-        
+
         return res.status(200).json({
             job_id,
             count: candidates.length,
@@ -86,10 +86,10 @@ router.get('/', (req: Request, res: Response) => {
             }))
         });
     }
-    
+
     // If no job_id, this would require a new db method to get all candidates
-    return res.status(400).json({ 
-        message: "Please provide job_id parameter to filter candidates" 
+    return res.status(400).json({
+        message: "Please provide job_id parameter to filter candidates"
     });
 });
 

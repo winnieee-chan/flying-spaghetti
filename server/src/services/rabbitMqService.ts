@@ -3,9 +3,9 @@ import { Candidate, JobPost } from '../types/index.js';
 import { readJsonFile } from '../utils/readJson.js';
 
 export class RabbitMqService {
-    private static connection: amqp.Connection | null = null;
-    private static channel: amqp.Channel | null = null;
-    private static QUEUE_NAME = 'job_processing_queue';
+  private static connection: amqp.Connection | null = null;
+  private static channel: amqp.Channel | null = null;
+  private static QUEUE_NAME = 'job_processing_queue';
 
     static async init(): Promise<boolean> {
         try {
@@ -45,51 +45,49 @@ export class RabbitMqService {
         console.log(`[Publisher] Sent Job to Queue: ${job.role} at ${job.companyName}`);
     }
 
-    private static async processJobNotification(job: JobPost): Promise<void> {
-        const candidates = await readJsonFile<Candidate[]>('src/data/candidates.json');
+    const notificationPromises = candidates!.map(async (candidate) => {
+      const isMatch = this.checkUserMatch(candidate, job);
 
-        if (!candidates) {    
-            console.log('No user found');
-            return;
-        }
+      if (isMatch) {
+        console.log(`   MATCH: Sending email to ${candidate.email}`);
+        // TODO: Send email 
+        // await emailService.send(...) 
+      }
 
-        const notificationPromises = candidates!.map(async (candidate) => {
-            const isMatch = this.checkUserMatch(candidate, job);
+    });
 
-            if (isMatch) {
-                console.log(`   MATCH: Sending email to ${candidate.email}`);
-                // TODO: Send email 
-                // await emailService.send(...) 
-            }
+    await Promise.all(notificationPromises);
 
-        });
+  }
 
-        await Promise.all(notificationPromises);
+  private static startConsumer() {
+    console.log('👷 Worker waiting for messages...');
 
+    if (!this.channel) {
+      console.error('Channel not initialized');
+      return;
     }
 
-    private static startConsumer() {
-        console.log('👷 Worker waiting for messages...');
-    
-        if (!this.channel) {
-            console.error('Channel not initialized');
-            return;
-        }
+    this.channel.consume(this.QUEUE_NAME, (msg) => {
+      if (msg !== null) {
+        const job: JobPost = JSON.parse(msg.content.toString());
 
-        this.channel.consume(this.QUEUE_NAME, (msg) => {
-          if (msg !== null) {
-            const job: JobPost = JSON.parse(msg.content.toString());
-            
-            console.log(`\n[Worker] Received Job: ${job.role}. Processing matches...`);
-            
-            // --- BUSINES LOGIC START ---
-            this.processJobNotification(job);
-            // --- BUSINESS LOGIC END ---
-    
-            // Acknowledge message (tell RabbitMQ we are done)
-            this.channel!.ack(msg);
-          }
-        });
+        console.log(`\n[Worker] Received Job: ${job.role}. Processing matches...`);
+
+        // --- BUSINES LOGIC START ---
+        this.processJobNotification(job);
+        // --- BUSINESS LOGIC END ---
+
+        // Acknowledge message (tell RabbitMQ we are done)
+        this.channel!.ack(msg);
+      }
+    });
+  }
+
+  private static checkUserMatch(candidate: Candidate, job: JobPost): boolean {
+    // 1. If no settings, USER IS NOT A SUBSCRIBER - do NOT send notification
+    if (!candidate.notificationSettings || candidate.notificationSettings.length === 0) {
+      return false; // Changed from true to false
     }
 
     private static checkUserMatch(candidate: Candidate, job: JobPost): boolean {
